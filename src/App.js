@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Changed by uday
+          Changed by Jagruth
         </a>
       </header>
     </div>
