@@ -5,6 +5,7 @@ const initialState = {
     error: null,
     data: null,
     message: null,
+    userDetails: [],
 }
 
 export const reducer = (state=initialState, action) => {
@@ -15,11 +16,23 @@ export const reducer = (state=initialState, action) => {
         }
     }
     switch(action.type){
-        case `${types.POST_LOGIN_DETAILS}_FULFILLED`:
+        case `${types.POST_LOGIN_DETAILS}/fulfilled`:
             return{
                 ...state,
                 isLoading: false,
                 data: action.payload,
+            }
+        case `${types.GET_USER_DETAILS}/fulfilled`:
+            return{
+                ...state,
+                isLoading: false,
+                userDetails: action.payload,
+            }
+        case `${types.GET_USER_DETAILS}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                userDetails: action.payload,
             }
         default :
         return{

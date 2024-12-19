@@ -1,15 +1,32 @@
-import React from 'react'
-// import {Link} from 'react-router-dom';
+import React,{useEffect,useState} from 'react'
+import {connect} from 'react-redux';
 import Navbar from "../Shared/Navbar";
+import {getUserDetails} from '../../Redux/Actions';
 
-const Home = () => {
+const Home = (props) => {
+  const {userDetails} = props;
+  useEffect(()=>{
+    props.getUserDetails({params:{user:"jaggu"}}).then((response)=>{
+      console.log(response);
+    })
+  },[])
   return (
     <div>
       <Navbar />
       <div>Welcome to Home</div>
-      
     </div>
   )
 }
 
-export default Home
+const mapStateToProps = (state) => ({
+    isLoading: state.isLoading,
+    error: state.error,
+    data: state.data,
+    userDetails: state.userDetails,
+})
+
+const mapDispatchToProps =  {
+  getUserDetails
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

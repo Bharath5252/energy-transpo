@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {createAPICall} from '../../API/baseAPI';
-import * as types from './types';
-import * as config from '../../config/config';
+import {createAPICall} from "../../API/baseAPI";
+import * as types from "../types";
+import * as config from "../../config/config";
 
 export const createApiThunk = (name, apiConfig) => {
     return createAsyncThunk(name, async(actionParams, thunkAPI)=>{
@@ -25,4 +25,10 @@ export const createApiThunk = (name, apiConfig) => {
 export const postLoginDetails = createApiThunk(types.POST_LOGIN_DETAILS,{
     method:"POST",
     url:config.POST_LOGIN_DETAILS_URL
+})
+
+export const getUserDetails = createApiThunk(types.GET_USER_DETAILS,{
+    method:"GET",
+    url:config.GET_LOGIN_DETAILS_URL
+
 })
