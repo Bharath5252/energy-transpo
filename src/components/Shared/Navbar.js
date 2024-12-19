@@ -16,12 +16,19 @@ const Navbar = () => {
           <Link to="/viewTxn" className="menu-links">
             Transactions
           </Link>
+
+          <Link to="/userTxn" className="menu-links">
+            User Transactions
+          </Link>
+
           <Link to="/query" className="menu-links">
             Query
           </Link>
+
           <Link to="/dashboard" className="menu-links">
             Dashboard
           </Link>
+          
         </div>
         <div className="menu-r-link">
           <Link to="/login" className="menu-links">

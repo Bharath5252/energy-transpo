@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 // import { useNavigate, Link } from "react-router-dom";
 // import { Link } from 'react-router-dom';
+// import {connect } from 'react-redux';
 import Navbar from "../Shared/Navbar";
 import "./Dashboard.css";
 import Chart from "chart.js/auto";
 
 
-const Dashboard = () => {
+ const Dashboard = () => {
   // const navigate = useNavigate();
 
   const [energyTradedData, setEnergyTradedData] = useState([]);
@@ -207,7 +208,7 @@ const Dashboard = () => {
 
 
   return (
-    <div style={{backgroundColor: "#1F1D1B"}}>
+    <div style={{backgroundColor: "#1F1D1B", paddingBottom: "50px" }}>
       <Navbar />
 
       <div className="chart-container" style={{ width: "66%", margin: "20px auto", border: "1px solid #fff" }}>
