@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import {getCookie} from '../utils/utils';
 
 const isRunningLocally = () => window.location.hostname === 'localhost';
 
