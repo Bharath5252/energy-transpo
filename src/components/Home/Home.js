@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import {connect} from 'react-redux';
-import Navbar from "../Shared/Navbar";
+import Navbar from "../Shared/Navbar/Navbar";
 import {getUserDetails} from '../../Redux/Actions';
 
 const Home = (props) => {

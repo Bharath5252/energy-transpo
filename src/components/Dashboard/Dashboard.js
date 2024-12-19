@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 // import { useNavigate, Link } from "react-router-dom";
 // import { Link } from 'react-router-dom';
-// import {connect } from 'react-redux';
-import Navbar from "../Shared/Navbar";
+import Navbar from "../Shared/Navbar/Navbar";
 import "./Dashboard.css";
 import Chart from "chart.js/auto";
 

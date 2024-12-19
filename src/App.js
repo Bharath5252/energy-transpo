@@ -5,6 +5,9 @@ import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
 import UserTxn from './components/userTxn/userTxn';
 
+import CurrentTransactions from './components/Transactions/CurrentTransactions';
+import PastTransactions from './components/Transactions/PastTransactions';
+import NewTransaction from './components/Transactions/NewTransaction';
 
 
 function App() {
@@ -15,6 +18,9 @@ function App() {
         <Route path="/login" exact element={<Login  />} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/userTxn" exact element={<UserTxn /> } />
+        <Route path="/tranactions" exact element={<NewTransaction />} />
+        <Route path="/transactions/current" exact element={<CurrentTransactions />} />
+        <Route path="/transactions/past" exact element={<PastTransactions />} />
       </Routes>
     </>
   )
