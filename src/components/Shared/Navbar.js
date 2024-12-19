@@ -24,8 +24,8 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="menu-r-link">
-          <Link to="/" className="menu-r-link">
-            Logout
+          <Link to="/login" className="menu-links">
+            Login
           </Link>
         </div>
       </div>
