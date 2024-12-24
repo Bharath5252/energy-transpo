@@ -42,31 +42,33 @@ const signup = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ email: email });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Invalid username or password." });
         }
 
-        let response;
-        try {
-            response = await axios.post(`${process.env.BLOCKCHAIN_API_URL}/users/login`, {
-                username: user.username,
-                orgName: user.organization,
-            });
-        } catch (err) {
-            return res.status(500).json({
-                message: "Error communicating with the blockchain network.",
-            });
-        }
+        // let response;
+        // try {
+        //     response = await axios.post(`${process.env.BLOCKCHAIN_API_URL}/users/login`, {
+        //         email: user.email,
+        //         orgName: user.organization,
+        //     });
+        // } catch (err) {
+        //     return res.status(500).json({
+        //         message: "Error communicating with the blockchain network.",
+        //     });
+        // }
+        //
+        // const tokenId = response?.data?.message?.token;
 
-        const tokenId = response?.data?.message?.token;
+        const tokenId = "bharaths-token-123"
 
-        if (response.status === 200 && tokenId) {
-            res.status(200).json({ message: "Login successful.", token: tokenId });
+        if (tokenId) {
+            res.status(200).json({ message: "Login successful.", userid: user._id, token: tokenId });
         } else {
             res.status(500).json({
                 message: "Failed to authenticate user with the blockchain network.",

@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', { username, password });
+      const response = await axios.post('http://localhost:8000/login', { email, password });
       setMessage(response.data.message);
-      localStorage.setItem("username", username);
+      localStorage.setItem("email", email);
       window.location.href="/";
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
@@ -28,13 +28,13 @@ function Login() {
           <h2 className="text-center">Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="text"
-                id="username"
+                id="email"
                 className="form-control"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
