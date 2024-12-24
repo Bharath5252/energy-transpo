@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -49,6 +51,7 @@ function Login() {
             </div>
             <button type="submit" className="btn btn-primary w-100 mt-3">Login</button>
           </form>
+          <Typography className='justify-content-center mt-3'>Don't have an account? <Link to="/signup" className="menu-links" style={{color:'#0062AF'}}>SignUp</Link></Typography>
           {message && <div className="alert mt-3 text-center">{message}</div>}
         </div>
       </div>
