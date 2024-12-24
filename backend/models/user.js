@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const vehicle = require("./vehicle")
+const { Schema } = mongoose;
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -8,6 +10,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -21,6 +24,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
+    vehicles: [{ type: Schema.Types.ObjectId, ref: 'Vehicle' }]
 });
 
 const User = mongoose.model("User", userSchema);

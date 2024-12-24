@@ -3,6 +3,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
+const vehicleRoutes = require("./routes/vehicleRoutes")
+const userRoutes = require("./routes/userRoutes")
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.get("/", (req, res) => {
 
 // Use routes
 app.use("/api/auth", authRoutes);
+app.use("/api/vehicles", vehicleRoutes);
+app.use("/api/users", userRoutes)
 
 const PORT = process.env.PORT || 8000;
 
