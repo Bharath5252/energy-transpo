@@ -33,6 +33,7 @@ const signup = async (req, res) => {
 
         res.status(200).json({
             message: "User created successfully (mocked blockchain response).",
+            userId: savedUser._id,
             token: mockToken,
         });
 
