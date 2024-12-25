@@ -3,7 +3,7 @@ const Vehicle = require("../models/vehicle")
 const axios = require("axios");
 
 const getUser = async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.query;
 
     try {
         
@@ -31,7 +31,7 @@ const getUser = async (req, res) => {
 
 
 const getVehicles = async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.query;
 
     try {
         const user = await User.findById(userId).populate('vehicles');
