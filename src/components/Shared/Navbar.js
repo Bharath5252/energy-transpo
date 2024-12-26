@@ -28,6 +28,10 @@ const Navbar = () => {
           <Link to="/dashboard" className="menu-links">
             Dashboard
           </Link>
+
+          <Link to="/vehicle" className="menu-links">
+            Vehicle
+          </Link>
           
         </div>
         <div className="menu-r-link">

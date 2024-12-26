@@ -9,6 +9,7 @@ import CurrentTransactions from './components/Transactions/CurrentTransactions';
 import PastTransactions from './components/Transactions/PastTransactions';
 import NewTransaction from './components/Transactions/NewTransaction';
 import SignUp from './components/Login/SignUp';
+import Vehicle from './components/Vehicle Dashboard/Vehicle';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" exact element={<Login  />} />
         <Route path="/signup" exact element={<SignUp/>} />
         <Route path="/dashboard" exact element={<Dashboard />} />
+        <Route path="/vehicle" exact element={<Vehicle />} />
         <Route path="/userTxn" exact element={<UserTxn /> } />
         <Route path="/tranactions" exact element={<NewTransaction />} />
         <Route path="/transactions/current" exact element={<CurrentTransactions />} />
