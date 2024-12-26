@@ -18,6 +18,7 @@ const getUser = async (req, res) => {
                 userId: user._id,
                 username: user.username,
                 email: user.email,
+                phone: user.phone,
                 organization: user.organization,
                 balance: user.balance,
                 vehicles: user.vehicles,
