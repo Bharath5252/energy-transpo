@@ -26,7 +26,10 @@ api.interceptors.request.use(
 export const createAPICall = async({ method , url, data , params , headers}) => {
     try{
         const response = await api({ method , url, data , params , headers})
-        return response.data
+        return {
+            status: response.status,
+            data: response.data,
+        }
     }catch(error){ 
         throw{
             response: error.response?.data || 'Unknown Error',

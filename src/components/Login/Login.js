@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import {connect} from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
+import {postLoginDetails, toggleSnackbar} from '../../Redux/Actions';
+import SnackbarComp from '../Reusables/CustomSnackbar';
 
-function Login() {
+function Login(props) {
+  const history = useNavigate()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -12,12 +17,42 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', { email, password });
-      setMessage(response.data.message);
-      localStorage.setItem("email", email);
-      window.location.href="/";
+      if(email && password){
+        const payload = {
+          email:email,
+          password:password
+        }
+        await props.postLoginDetails({data:payload})
+        .then((response)=>{
+          if(response.payload.status===200){
+            localStorage.setItem("email", email);
+            localStorage.setItem("userId", response?.payload?.data?.userId);
+            history("/");
+          }
+        })
+        .catch((error)=>{ 
+          props.toggleSnackbar({
+            open: true,
+            message: error.response ? error.response.data.message : 'Server error',
+            status: false,
+          });
+        })
+        ;
+      }else{
+        props.toggleSnackbar({
+          open: true,
+          message: "Please fill email and password",
+          status: false,
+        });
+      }
+      // const response = await axios.post('http://localhost:8000/login', { email, password });
+      // setMessage(response.data.message);
     } catch (error) {
-      setMessage(error.response ? error.response.data.message : 'Server error');
+      props.toggleSnackbar({
+        open: true,
+        message: error.response ? error.response.data.message : 'Server error',
+        status: false,
+      });
     }
   };
 
@@ -33,7 +68,7 @@ function Login() {
                 type="text"
                 id="email"
                 className="form-control"
-                value={username}
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -52,11 +87,19 @@ function Login() {
             <button type="submit" className="btn btn-primary w-100 mt-3">Login</button>
           </form>
           <Typography className='justify-content-center mt-3'>Don't have an account? <Link to="/signup" className="menu-links" style={{color:'#0062AF'}}>SignUp</Link></Typography>
-          {message && <div className="alert mt-3 text-center">{message}</div>}
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+  snackBarStatus: state.snackBarStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleSnackbar: (payload) => dispatch(toggleSnackbar(payload)),
+  postLoginDetails: (payload) => dispatch(postLoginDetails(payload)),
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

@@ -6,9 +6,7 @@ import {getUserDetails} from '../../Redux/Actions';
 const Home = (props) => {
   const {userDetails} = props;
   useEffect(()=>{
-    props.getUserDetails({params:{user:"jaggu"}}).then((response)=>{
-      console.log(response);
-    })
+    props.getUserDetails({params:{userId:localStorage.getItem("userid")}})
   },[])
   return (
     <div>

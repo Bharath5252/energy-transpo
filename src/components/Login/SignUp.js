@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import {connect} from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { TextField, Typography } from '@mui/material';
+import {postSignUpDetails, toggleSnackbar} from '../../Redux/Actions';
 
-function SignUp() {
+const SignUp = (props) => {
+  const history = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [mobile,setMobile] = useState('');
@@ -61,25 +65,48 @@ function SignUp() {
         if(e.target.value!=="")handleError('confPassword','Password did not match')
         setConfPassword(e.target.value);
     }else if(e.target.value && e.target.value===password){
+        setConfPassword(e.target.value);
         emptyError();
     }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/login', { username, password });
-      setMessage(response.data.message);
-      localStorage.setItem("username", username);
-      window.location.href="/";
-    } catch (error) {
-      setMessage(error.response ? error.response.data.message : 'Server error');
+    try{
+      if (errorField.field === '' && errorField.message === '') {
+        const payload = {
+          username: username,
+          email: email,
+          mobile: mobile,
+          organization: organization,
+          password: password
+        }
+        await props.postSignUpDetails({ data: payload })
+          .then((response) => {
+            if (response.payload.status === 200) {
+              localStorage.setItem("email", email);
+              localStorage.setItem("userId", response?.payload?.data?.userId);
+              history('/login', { replace: true });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      } else {
+        props.toggleSnackbar({
+          open: true,
+          message: "Please fill all the fields properly",
+          status: false,
+        });
+      }
+    }
+    catch(error){
+      console.error(error,"error");
     }
   };
 
   return (
     <div className="container mt-5">
-        {console.log(errorField,"errorField")}
       <div className="row justify-content-center">
         <div className="col-md-4">
           <h2 className="text-center">Sign Up</h2>
@@ -94,7 +121,7 @@ function SignUp() {
                 value={username}
                 onChange={(e)=>handleCommonChange(e,"name")? setUsername(e.target.value):{}}
                 helperText={errorField.field==="name"?errorField.message:""}
-                error={(errorField.field==="name").toString()}
+                error={errorField.field==="name"}
                 required
               />
             </div>
@@ -108,7 +135,7 @@ function SignUp() {
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
                 helperText={errorField.field==="email"?errorField.message:""}
-                error={errorField.field==="email"?"true":"false"}
+                error={errorField.field==="email"?true:false}
                 onBlur={()=>handleCommonChange({target:{value:email}},"email")?{}:setEmail("")}
                 required
               />
@@ -180,4 +207,13 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+const mapStateToProps = (state) => ({
+  snackBarStatus: state.snackBarStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleSnackbar: (payload) => dispatch(toggleSnackbar(payload)),
+  postSignUpDetails: (payload) => dispatch(postSignUpDetails(payload)),
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignUp);

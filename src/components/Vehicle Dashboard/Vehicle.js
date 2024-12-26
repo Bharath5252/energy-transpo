@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { toggleSnackbar } from "../../Redux/Actions/index";
 import "./Vehicle.css";
 import logo from "./Logo.png";
 import SEAL from "./BYD_SEAL.png";
 import STATION from "./station.png";
 
 
-function Vehicle() {
+const Vehicle = (props) => {
+  const [date,setDate] = useState();
+  const { userDetails } = props;
+
+  useEffect(() => {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.toLocaleString('default', { month: 'short' });
+    const formattedDate = `${day} ${month}`;
+    setDate(formattedDate);
+  }, []);
   return (
     <div className="dashboard">
       <aside className="sidebar">
@@ -25,8 +37,8 @@ function Vehicle() {
         <header className="header">
           <input type="text" placeholder="Give a voice command" />
           <div className="user-info">
-            <span>Hello, Jake</span>
-            <span>22 May</span>
+            <span>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</span>
+            <span>{date}</span>
           </div>
         </header>
 
@@ -91,4 +103,12 @@ function Vehicle() {
   );
 }
 
-export default Vehicle;
+const mapStateToProps = (state) => ({
+  userDetails: state.userDetails,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleSnackbar: (payload) => dispatch(toggleSnackbar(payload)),
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Vehicle);

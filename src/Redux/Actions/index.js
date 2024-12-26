@@ -26,9 +26,24 @@ export const postLoginDetails = createApiThunk(types.POST_LOGIN_DETAILS,{
     method:"POST",
     url:config.POST_LOGIN_DETAILS_URL
 })
+export const postSignUpDetails = createApiThunk(types.POST_SIGNUP_DETAILS,{
+    method:"POST",
+    url:config.POST_SIGNUP_DETAILS_URL
+})
 
 export const getUserDetails = createApiThunk(types.GET_USER_DETAILS,{
     method:"GET",
     url:config.GET_LOGIN_DETAILS_URL
-
 })
+
+// export const postSignUpDetails = createApiThunk(types.POST_SIGNUP_DETAILS,{
+//     method:"POST",
+//     url:config.POST_SIGNUP_DETAILS_URL
+// })
+
+export const toggleSnackbar = (payload) => {
+    return{
+        type:types.TOGGLE_SNACKBAR,
+        payload
+    }
+}
