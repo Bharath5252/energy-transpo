@@ -5,7 +5,12 @@ const initialState = {
     error: null,
     data: null,
     message: null,
-    userDetails: [],
+    userDetails: {},
+    snackBarStatus: {
+        open: false,
+        message: '',
+        status: false,
+    },
 }
 
 export const reducer = (state=initialState, action) => {
@@ -20,19 +25,63 @@ export const reducer = (state=initialState, action) => {
             return{
                 ...state,
                 isLoading: false,
-                data: action.payload,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.POST_LOGIN_DETAILS}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.POST_SIGNUP_DETAILS}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.POST_SIGNUP_DETAILS}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
             }
         case `${types.GET_USER_DETAILS}/fulfilled`:
             return{
                 ...state,
                 isLoading: false,
-                userDetails: action.payload,
+                userDetails: action.payload?.data,
             }
         case `${types.GET_USER_DETAILS}/rejected`:
             return{
                 ...state,
                 isLoading: false,
-                userDetails: action.payload,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.TOGGLE_SNACKBAR}`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: action.payload,
             }
         default :
         return{

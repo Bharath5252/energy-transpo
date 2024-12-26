@@ -10,6 +10,7 @@ import PastTransactions from './components/Transactions/PastTransactions';
 import NewTransaction from './components/Transactions/NewTransaction';
 import SignUp from './components/Login/SignUp';
 import Vehicle from './components/Vehicle Dashboard/Vehicle';
+import SnackbarComp from './components/Reusables/CustomSnackbar';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/transactions/current" exact element={<CurrentTransactions />} />
         <Route path="/transactions/past" exact element={<PastTransactions />} />
       </Routes>
+      <SnackbarComp />
     </>
   )
 }
