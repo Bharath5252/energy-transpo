@@ -11,7 +11,17 @@ const Home = (props) => {
   return (
     <div>
       <Navbar />
-      <div>Welcome to Home</div>
+      <div style={{margin:"30px", display:"flex", flexDirection:"column", gap:"20px", width:"200px"}}>
+        {/* <div>Welcome to Home</div> */}
+        <label for="cars">Add a Vehicle:</label>
+        <select style={{width:"100%"}} id="cars" name="cars">
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="fiat">Fiat</option>
+          <option value="audi">Audi</option>
+        </select>
+        <button type="submit" className="btn btn-primary w-50">Submit</button>
+      </div>
     </div>
   )
 }
