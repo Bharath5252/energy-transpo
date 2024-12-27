@@ -70,7 +70,7 @@ const login = async (req, res) => {
         const tokenId = "bharaths-token-123"
 
         if (tokenId) {
-            res.status(200).json({ message: "Login successful.", userid: user._id, token: tokenId });
+            res.status(200).json({ message: "Login successful.", userId: user._id, token: tokenId });
         } else {
             res.status(500).json({
                 message: "Failed to authenticate user with the blockchain network.",
