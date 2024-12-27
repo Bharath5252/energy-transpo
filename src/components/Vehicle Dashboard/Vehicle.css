@@ -45,7 +45,7 @@ body {
   
   /* Main Content Styling */
   .main {
-    margin-left: 80px;
+    /* margin-left: 60px; */
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -76,18 +76,20 @@ body {
   
   .content {
     padding: 20px;
+    margin-left: 40px;
+    /* width: 500px; */
     /* display: grid;
     grid-template-columns: 2fr 1fr; */
     display: flex;
     /* flex-wrap: wrap; */
-    flex-direction: row;
+    /* flex-direction: row; */
     /* align-items: center;
     justify-content: space-between;  */
     gap: 20px;
   }
 
   .car-details {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
     padding: 15px;
     min-width: 300px;
     max-width: 600px;
@@ -102,8 +104,13 @@ body {
   .location {
     background-color: #fff;
     padding: 15px;
-    width: 100%;
+    /* min-width: 400px;
+    max-width: 600px; */
+    width:100%;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   }
   
@@ -132,6 +139,14 @@ body {
     display: flex;
     flex-direction: row;
     gap: 20px;
+  }
+
+  .box2{
+    width: 380px;
+    height: 300px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   }
 
   .battery {
@@ -197,7 +212,90 @@ body {
   .battery-text2{
     font-size: 9px;
   }
+
+  th, td {
+    text-align: center;
+    padding: 8px;
+  }
+  th {
+    font-size: 14px;
+  }
+  td {
+    font-size: 13px;
+  }
+
+  table {
+    width: 100%;
+    }
+
+     th, td{
+    border-collapse: collapse;
+    /* border-spacing: 0; */
+    /* border: 1px solid rgba(30,31,36,255); */
+    }
+
+thead{
+    display: table;
+    width: 100%;
+    /* width: calc(100% - 17px); */
+}
+    th, td {
+        width: 33.33%;
+        padding: 5px;
+        /* word-break: break-all; */
+    }
+
+    tr {
+        display: table; /* display purpose; th's border */
+        width: 100%;
+        box-sizing: border-box;
+        border-bottom: none;
+    }
+
+    td {
+        text-align: center;
+        /* border-bottom: none; */
+        /* border-left: none; */
+    }
+
+/* thead tr th {
+    height: 40px;
+    line-height: 40px;
+}
+
+table.scrolldown tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+} */
+
+tbody {
+    display: block;
+    max-height: 150px; /* e.g. */
+    overflow-y: scroll;
+}
+/* 
+tbody td,
+thead th {
+    width: 200px; 
+    border-right: 2px solid black;
+}
+
+td {
+    text-align: center;
+} 
+
+
+*/
+
+
+
 /* 
   rgba(30,31,36,255) -> side bar
 rgba(246,247,249,255) -> search bar and profile
 rgba(26,26,26,255) -> battery */
+/* 
+Type of transaction
+Energy transfered
+Price/kwh
+Contract executed
+*/  

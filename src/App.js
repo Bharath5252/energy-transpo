@@ -10,6 +10,7 @@ import PastTransactions from './components/Transactions/PastTransactions';
 import NewTransaction from './components/Transactions/NewTransaction';
 import SignUp from './components/Login/SignUp';
 import Vehicle from './components/Vehicle Dashboard/Vehicle';
+import Buy from './components/Buy/Buy';
 import SnackbarComp from './components/Reusables/CustomSnackbar';
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" exact element={<SignUp/>} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/vehicle" exact element={<Vehicle />} />
+        <Route path="/buy" exact element={<Buy />} />
         <Route path="/userTxn" exact element={<UserTxn /> } />
         <Route path="/tranactions" exact element={<NewTransaction />} />
         <Route path="/transactions/current" exact element={<CurrentTransactions />} />
