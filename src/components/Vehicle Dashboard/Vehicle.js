@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../Redux/Actions/index";
 import "./Vehicle.css";
-import logo from "./Logo.png";
+// import logo from "./Logo.png";
 import SEAL from "./BYD_SEAL.png";
 import STATION from "./station.png";
+import Sidebar from "./Sidebar";
 
 
 const Vehicle = (props) => {
@@ -20,29 +22,21 @@ const Vehicle = (props) => {
   }, []);
   return (
     <div className="dashboard">
-      <aside className="sidebar">
-        <div className="logo">
-            {/* LOGO */}
-            <img src={logo} alt="logo" />
-        </div>
-        <nav>
-          <button>🔍</button>
-          <button>🎵</button>
-          <button>⚙️</button>
-          <button>📶</button>
-        </nav>
-      </aside>
+      {/* <aside className=""> */}
+        <Sidebar />
+      {/* </aside>x */}
 
       <main className="main">
         <header className="header">
-          <input type="text" placeholder="Give a voice command" />
+          <input style={{ marginLeft: "60px" }} type="text" placeholder="Give a voice command" />
           <div className="user-info">
             <span>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</span>
             <span>{date}</span>
           </div>
         </header>
-
+        <div style={{margin:"20px 0px -20px 40px"}}><h3>Car Details</h3></div>
         <section className="content">
+
           <div className="location">
             <div class="box1">
                 <div class="battery">
@@ -76,10 +70,66 @@ const Vehicle = (props) => {
                     <div><img src={STATION} alt="Station" style={{paddingLeft:"40px",height:"125px"}}/></div>
                 </div>
             </div>
+            <div class="box2">
+                <div><h5>Transactions</h5></div>
+                <div>
+                    <table class="scrolldown">
+                        <thead>
+                            <tr style={{}}>
+                                <th>Type</th>
+                                <th>Energy Transfered (kWh)</th>
+                                <th>Price/kwh (Rupees)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Buy</td>
+                                <td>45</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sell</td>
+                                <td>63</td>
+                                <td>0.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
           </div>
 
           <div className="car-details">
-            <h3>Car Details</h3>
+            
             <div class="car-details-content">
                 <div>
                     <img src={SEAL} alt="Car" />
