@@ -31,6 +31,11 @@ export const postSignUpDetails = createApiThunk(types.POST_SIGNUP_DETAILS,{
     url:config.POST_SIGNUP_DETAILS_URL
 })
 
+export const putSignUpDetails = createApiThunk(types.POST_SIGNUP_DETAILS,{
+    method:"PUT",
+    url:config.GET_LOGIN_DETAILS_URL
+})
+
 export const getUserDetails = createApiThunk(types.GET_USER_DETAILS,{
     method:"GET",
     url:config.GET_LOGIN_DETAILS_URL

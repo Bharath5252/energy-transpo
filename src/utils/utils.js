@@ -33,3 +33,15 @@ export const carList = () => {
         });
     return {};
 };
+
+export const handleFileChange = (event, callback) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      callback(base64String);
+    };
+    reader.readAsDataURL(file);
+  }
+};

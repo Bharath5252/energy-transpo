@@ -9,7 +9,7 @@ const Navbar = () => {
           {/* <Link to="/admin" className="menu-links">
           </Link> */}
 
-          <Link to="/" className="menu-links">
+          <Link to="/home" className="menu-links">
             Home
           </Link>
           
@@ -33,8 +33,8 @@ const Navbar = () => {
           </Link> */}
         </div>
         <div className="menu-r-link">
-          <Link to="/login" className="menu-links">
-            Login
+          <Link to="/profile" className="menu-links">
+            Profile
           </Link>
         </div>
       </div>
