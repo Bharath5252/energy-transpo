@@ -12,15 +12,17 @@ import SignUp from './components/Login/SignUp';
 import Vehicle from './components/Vehicle Dashboard/Vehicle';
 import Buy from './components/Buy/Buy';
 import SnackbarComp from './components/Reusables/CustomSnackbar';
+import Profile from './components/Profile/Profile';
 
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" exact element={<Home />} />
-        <Route path="/login" exact element={<Login  />} />
+        <Route path="/" exact element={<Login  />} />
         <Route path="/signup" exact element={<SignUp/>} />
+        <Route path="/home" exact element={<Home />} />
+        <Route path="/profile" exact element={<Profile />} />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/vehicle" exact element={<Vehicle />} />
         <Route path="/buy" exact element={<Buy />} />

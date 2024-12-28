@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react'
 import {connect} from 'react-redux';
 import Navbar from "../Shared/Navbar/Navbar";
 import {getUserDetails} from '../../Redux/Actions';
+import Profile from '../Profile/Profile';
 
 const Home = (props) => {
   const {userDetails} = props;
@@ -12,7 +13,7 @@ const Home = (props) => {
     <div>
       <Navbar />
       <div style={{margin:"30px", display:"flex", flexDirection:"column", gap:"20px", width:"200px"}}>
-        {/* <div>Welcome to Home</div> */}
+        <div>Welcome to Home</div>
         <label for="cars">Add a Vehicle:</label>
         <select style={{width:"100%"}} id="cars" name="cars">
           <option value="volvo">Volvo</option>

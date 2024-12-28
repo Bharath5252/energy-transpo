@@ -22,6 +22,7 @@ const getUser = async (req, res) => {
                 organization: user.organization,
                 balance: user.balance,
                 vehicles: user.vehicles,
+                icon: user.icon,
             },
         });
     } catch (error) {

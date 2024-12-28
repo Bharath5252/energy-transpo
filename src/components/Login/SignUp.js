@@ -86,7 +86,7 @@ const SignUp = (props) => {
             if (response.payload.status === 200) {
               localStorage.setItem("email", email);
               localStorage.setItem("userId", response?.payload?.data?.userId);
-              history('/login', { replace: true });
+              history('/', { replace: true });
             }
           })
           .catch((error) => {
@@ -179,7 +179,7 @@ const SignUp = (props) => {
                 onChange={(e)=>setPassword(e.target.value)}
                 helperText={errorField.field==="password"?errorField.message:""}
                 error={errorField.field==="password"}
-                onBlur={()=>handleCommonChange({target:{value:password}},"password")?{}:{}}
+                onBlur={()=>handleCommonChange({target:{value:password}},"password")?{}:setPassword("")}
                 required
               />
             </div>
