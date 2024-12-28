@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
+    icon: {
+        type: String,
+        required: false,
+    },
     vehicles: [{ type: Schema.Types.ObjectId, ref: 'Vehicle' }]
 });
 
