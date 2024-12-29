@@ -24,13 +24,8 @@ const Navbar = () => {
           <Link to="/query" className="menu-links">
             Query
           </Link>
-
-          <Link to="/dashboard" className="menu-links">
-            Dashboard
-          </Link>
-
-          <Link to="/vehicle" className="menu-links">
-            Vehicle
+          <Link to="/vehicleDashboard" className="menu-links">
+            Vehicle Dashboard
           </Link>
           
         </div>

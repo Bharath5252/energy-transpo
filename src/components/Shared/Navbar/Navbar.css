@@ -5,6 +5,8 @@
     justify-content: space-between;
     align-items: center;
     background-color: black;
+    padding-left: 4rem;
+    height: 3.5rem;
     padding: 10px;
   }
 

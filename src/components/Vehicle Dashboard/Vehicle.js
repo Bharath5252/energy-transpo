@@ -7,6 +7,7 @@ import "./Vehicle.css";
 import SEAL from "./BYD_SEAL.png";
 import STATION from "./station.png";
 import Sidebar from "./Sidebar";
+import VehicleNavbar from "./VehicleNavbar";
 
 
 const Vehicle = (props) => {
@@ -27,13 +28,7 @@ const Vehicle = (props) => {
       {/* </aside>x */}
 
       <main className="main">
-        <header className="header">
-          <input style={{ marginLeft: "60px" }} type="text" placeholder="Give a voice command" />
-          <div className="user-info">
-            <span>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</span>
-            <span>{date}</span>
-          </div>
-        </header>
+        <VehicleNavbar userDetails={userDetails}/>
         <div style={{margin:"20px 0px -20px 40px"}}><h3>Car Details</h3></div>
         <section className="content">
 

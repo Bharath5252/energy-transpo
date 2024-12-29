@@ -27,7 +27,7 @@ function Login(props) {
           if(response.payload.status===200){
             localStorage.setItem("email", email);
             localStorage.setItem("userId", response?.payload?.data?.userId);
-            history("/home");
+            history("/home", { replace: true });
           }
         })
         .catch((error)=>{ 

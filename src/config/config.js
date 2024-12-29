@@ -9,3 +9,5 @@ const BASE_URL3 = HOST_URL+'/api/vehicles';
 export const POST_LOGIN_DETAILS_URL = `${BASE_URL1}/login`;
 export const POST_SIGNUP_DETAILS_URL = `${BASE_URL1}/signup`;
 export const GET_LOGIN_DETAILS_URL = `${BASE_URL2}`;
+export const POST_ADD_VEHICLE_URL = `${BASE_URL3}/add`;
+export const POST_DELETE_VEHICLE_URL = `${BASE_URL3}/delete`;

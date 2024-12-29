@@ -9,7 +9,7 @@ const TransactionNavbar = () => {
           {/* <Link to="/admin" className="menu-links">
           </Link> */}
 
-          <Link to="/tranactions" className="menu-links">
+          <Link to="/transactions" className="menu-links">
             New Transaction
           </Link>
           <Link to="/transactions/current" className="menu-links">
@@ -23,8 +23,8 @@ const TransactionNavbar = () => {
           </Link>
         </div>
         <div className="menu-r-link">
-          <Link to="/login" className="menu-links">
-            Login
+          <Link to="/profile" className="menu-links">
+            Profile
           </Link>
         </div>
       </div>

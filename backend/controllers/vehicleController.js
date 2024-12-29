@@ -4,10 +4,10 @@ const axios = require("axios");
 
 
 const addVehicle = async (req, res) => {
-    const { userId, vehicleDomain, vehicleName, vehicleModel, batteryCapacity, currentCapacity } = req.body;
+    const { userId, vehicleDomain, vehicleName, vehicleModel, batteryCapacity, currentCapacity, nickName } = req.body;
 
     try {
-        if (!userId || !vehicleDomain || !vehicleName || !vehicleModel || !batteryCapacity) {
+        if (!userId || !vehicleDomain || !vehicleName || !vehicleModel || !batteryCapacity || !nickName) {
             return res.status(400).json({ message: "Missing required fields." });
         }
 
@@ -17,6 +17,7 @@ const addVehicle = async (req, res) => {
         }
 
         const newVehicle = new Vehicle({
+            nickName,
             vehicleDomain,
             vehicleName,
             vehicleModel,

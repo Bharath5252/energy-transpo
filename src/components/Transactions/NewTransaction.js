@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import {connect} from 'react-redux';
+import {toggleSnackbar,getUserDetails} from '../../Redux/Actions';
 import TransactionNavbar from '../Shared/TransactionNavbar'
+import Sidebar from '../Vehicle Dashboard/Sidebar';
+import * as utils from '../../utils/utils';
 
-const NewTransaction = () => {
+const NewTransaction = (props) => {
   const [transactionType, setTransactionType] = useState("");
   const [transactionStatus, setTransactionStatus] = useState(false);
   const [availableEnergy, setAvailableEnergy] = useState("");
@@ -10,6 +14,19 @@ const NewTransaction = () => {
   const [sellContract, setSellContract] = useState("");
   const [requiredEnergy, setRequiredEnergy] = useState("");
   const [maxPrice, setMaxPrice] = useState("")
+  const [vehicles,setVehicles] = useState([]);
+  const {userDetails} = props;
+
+  useEffect(() => {
+    if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+    if(userDetails?.user?.vehicles){
+      setVehicles(userDetails?.user?.vehicles)
+    }
+  },[])
+
+  useEffect(() => {
+    setVehicles(userDetails?.user?.vehicles)
+  },[userDetails])
 
   const handleEmptyAllFields = () => {
     setAvailableEnergy('');
@@ -21,6 +38,7 @@ const NewTransaction = () => {
   }
   return (
     <div>
+        <Sidebar />
         <TransactionNavbar/>
         <div style={{display:'flex', flexDirection:'column',alignItems:'center',margin:'1rem',width:'100%',height:'100%'}}>
             <h3 style={{fontWeight:'700'}}>New Transaction</h3>
@@ -31,10 +49,26 @@ const NewTransaction = () => {
                 setTransactionStatus(false)
                 handleEmptyAllFields();
                 }} className="form-control">
+                <option value="">None</option>
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
               </select>
               {!transactionStatus && transactionType!=="" && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>setTransactionStatus(true)}>Submit</button>}
+              {/* {transactionType!=="" && 
+              <div>
+                <label htmlFor="Car" style={{fontWeight:'600',marginTop:'1rem'}}>Select Car</label>
+                <select style={{width:'100%'}} value={transactionType} onChange={(e)=>{
+                  setTransactionType(e.target.value)
+                  setTransactionStatus(false)
+                  handleEmptyAllFields();
+                  }} className="form-control">
+                  <option value="">None</option>
+                  {utils.arrayLengthChecker(vehicles) && vehicles?.map((vehicle)=>(
+                    <option value={vehicle?.id}>`${vehicle?.vehicleName} ${vehicle?.vehicleDomain} ${vehicle?.vehicleModel}`</option>
+                  ))}
+                </select>
+              </div>
+              } */}
               {transactionType === 'Buy'&& transactionStatus && <>
                 <label htmlFor="rE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Required Energy:</label>
                 <input
@@ -95,10 +129,19 @@ const NewTransaction = () => {
               </>}
               {transactionType!=='' && transactionStatus && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>setTransactionStatus(true)}>Submit</button>}
             </div>
-
         </div>
     </div>
   )
 }
 
-export default NewTransaction
+const mapStateToProps = (state) => ({
+  snackBarStatus: state.snackBarStatus,
+  userDetails:state.userDetails,
+});
+
+const mapDispatchToProps = {
+  toggleSnackbar,
+  getUserDetails,
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(NewTransaction)

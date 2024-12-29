@@ -3,6 +3,10 @@ const User = require("./user");
 const { Schema } = mongoose;
 
 const vehicleSchema = new mongoose.Schema({
+    nickName:{
+        type: String,
+        required: true
+    },
     vehicleDomain: {
         type: String,
         required: true

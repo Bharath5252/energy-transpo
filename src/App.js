@@ -13,6 +13,8 @@ import Vehicle from './components/Vehicle Dashboard/Vehicle';
 import Buy from './components/Buy/Buy';
 import SnackbarComp from './components/Reusables/CustomSnackbar';
 import Profile from './components/Profile/Profile';
+import VehicleInventory from './components/Vehicle Dashboard/VehicleInventory';
+import AddVehicle from './components/Vehicle Dashboard/AddVehicle';
 
 
 function App() {
@@ -20,14 +22,17 @@ function App() {
     <>
       <Routes>
         <Route path="/" exact element={<Login  />} />
+        <Route path="/login" exact element={<Login  />} />
         <Route path="/signup" exact element={<SignUp/>} />
         <Route path="/home" exact element={<Home />} />
         <Route path="/profile" exact element={<Profile />} />
-        <Route path="/dashboard" exact element={<Dashboard />} />
-        <Route path="/vehicle" exact element={<Vehicle />} />
+        <Route path="/vehicleDashboard" exact element={<Vehicle />} />
+        <Route path="/vehicleDashboard/add" exact element={<AddVehicle />} />
+        <Route path="/vehicleDashboard/inventory" exact element={<VehicleInventory/>} />
         <Route path="/buy" exact element={<Buy />} />
         <Route path="/userTxn" exact element={<UserTxn /> } />
-        <Route path="/tranactions" exact element={<NewTransaction />} />
+        <Route path="/dashboard" exact element={<Dashboard />} />
+        <Route path="/transactions" exact element={<NewTransaction />} />
         <Route path="/transactions/current" exact element={<CurrentTransactions />} />
         <Route path="/transactions/past" exact element={<PastTransactions />} />
       </Routes>
