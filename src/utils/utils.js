@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { database, ref, set, onValue, get } from '../database/firebase';
+import * as types from '../Redux/types';
 
 export const getCookie = (cname) => {
     let name = cname + '=';
@@ -16,24 +16,6 @@ export const getCookie = (cname) => {
     return '';
 };
 
-export const carList = () => {
-    const carsRef = ref(database, 'cars_data');
-    get(carsRef)
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                console.log('Data:', data);
-                return data;
-            } else {
-                console.log('No data available');
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
-    return {};
-};
-
 export const handleFileChange = (event, callback) => {
   const file = event.target.files[0];
   if (file) {
@@ -45,3 +27,7 @@ export const handleFileChange = (event, callback) => {
     reader.readAsDataURL(file);
   }
 };
+
+export const arrayLengthChecker = (arr) => {
+  return arr && Array.isArray(arr) && arr?.length>0;
+}

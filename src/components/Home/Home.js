@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Navbar from "../Shared/Navbar/Navbar";
 import {getUserDetails} from '../../Redux/Actions';
 import Profile from '../Profile/Profile';
+import Sidebar from '../Vehicle Dashboard/Sidebar';
 
 const Home = (props) => {
   const {userDetails} = props;
@@ -11,6 +12,7 @@ const Home = (props) => {
   },[])
   return (
     <div>
+      <Sidebar/>
       <Navbar />
       <div style={{margin:"30px", display:"flex", flexDirection:"column", gap:"20px", width:"200px"}}>
         <div>Welcome to Home</div>

@@ -10,21 +10,18 @@ const Sidebar = () => {
   return (
     <Menu>
       {/* <img style={{width:"50px"}} src={logo} alt="logo" /> */}
-            <Link to="/" className="menu-links">
+          <Link to="/home" className="menu-links">
             Home
           </Link>
           
-          <Link to="/tranactions" className="menu-links">
+          <Link to="/transactions" className="menu-links">
             Transactions
           </Link>
           <Link to="/query" className="menu-links">
             Query
           </Link>
-          <Link to="/dashboard" className="menu-links">
-            Dashboard
-          </Link>
-          <Link to="/vehicle" className="menu-links">
-            Vehicle
+          <Link to="/vehicleDashboard" className="menu-links">
+            Vehicle Dashboard
           </Link>
           <Link to="/buy" className='menu-links'>
             Buy

@@ -83,6 +83,52 @@ export const reducer = (state=initialState, action) => {
                 isLoading: false,
                 snackBarStatus: action.payload,
             }
+        case `${types.GET_CAR_LIST}`:
+            return{
+                ...state,
+                isLoading: false,
+                carDetails: action.payload,
+            }
+        case `${types.POST_ADD_VEHICLE}/fulfilled`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.POST_ADD_VEHICLE}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.POST_DELETE_VEHICLE}/fulfilled`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.POST_DELETE_VEHICLE}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
         default :
         return{
             ...state,
