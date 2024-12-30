@@ -5,8 +5,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Shared/Navbar/Navbar";
 import "./Dashboard.css";
 import Chart from "chart.js/auto";
-import TransactionNavbar from "../Shared/TransactionNavbar";
-import Sidebar from "../Vehicle Dashboard/Sidebar";
+import TransactionNavbar from "../Transactions/TransactionNavbar";
 
 
  const Dashboard = () => {
@@ -210,7 +209,6 @@ import Sidebar from "../Vehicle Dashboard/Sidebar";
 
   return (
     <div style={{backgroundColor: "#1F1D1B", paddingBottom: "50px" }}>
-      <Sidebar/>
       <TransactionNavbar />
       <div className="chart-container" style={{ width: "66%", margin: "20px auto", border: "1px solid #fff" }}>
         <canvas id="energyTradedChart" width="400" height="200"></canvas>

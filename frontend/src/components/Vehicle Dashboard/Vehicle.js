@@ -24,11 +24,10 @@ const Vehicle = (props) => {
   return (
     <div className="dashboard">
       {/* <aside className=""> */}
-        <Sidebar />
       {/* </aside>x */}
 
       <main className="main">
-        <VehicleNavbar userDetails={userDetails}/>
+        <VehicleNavbar/>
         <div style={{margin:"20px 0px -20px 40px"}}><h3>Car Details</h3></div>
         <section className="content">
 

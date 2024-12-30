@@ -1,8 +1,11 @@
 import React from 'react'
+import TransactionNavbar from './TransactionNavbar'
 
 const CurrentTransactions = () => {
   return (
-    <div>CurrentTransactions</div>
+    <div>
+      <TransactionNavbar/>
+    </div>
   )
 }
 

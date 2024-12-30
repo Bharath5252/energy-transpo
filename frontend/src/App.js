@@ -10,7 +10,6 @@ import PastTransactions from './components/Transactions/PastTransactions';
 import NewTransaction from './components/Transactions/NewTransaction';
 import SignUp from './components/Login/SignUp';
 import Vehicle from './components/Vehicle Dashboard/Vehicle';
-import Buy from './components/Buy/Buy';
 import SnackbarComp from './components/Reusables/CustomSnackbar';
 import Profile from './components/Profile/Profile';
 import VehicleInventory from './components/Vehicle Dashboard/VehicleInventory';
@@ -29,7 +28,6 @@ function App() {
         <Route path="/vehicleDashboard" exact element={<Vehicle />} />
         <Route path="/vehicleDashboard/add" exact element={<AddVehicle />} />
         <Route path="/vehicleDashboard/inventory" exact element={<VehicleInventory/>} />
-        <Route path="/buy" exact element={<Buy />} />
         <Route path="/userTxn" exact element={<UserTxn /> } />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/transactions" exact element={<NewTransaction />} />
