@@ -46,7 +46,9 @@ const VehicleInventory = (props) => {
             }}>
               Car NickName: {vehicle?.nickName}
               <br/>
-              Car Seal: {vehicle?.vehicleDomain}
+              Car Domain: {vehicle?.vehicleDomain}
+              <br/>
+              Car Name: {vehicle?.vehicleName}
               <br/>
               Car Model: {vehicle?.vehicleModel}  
               <br/>

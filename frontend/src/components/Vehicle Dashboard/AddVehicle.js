@@ -44,7 +44,7 @@ const AddVehicle = (props) => {
 
   const handleSubmit = () => {
     if(nickName===""){
-      props.toggleSnackbar({open:true, message:'Nick Name should not be empty', status:'false'})
+      props.toggleSnackbar({open:true, message:'Nick Name should not be empty', status:false})
       return;
     }
     if(car==="" || seal==="" || modelYear===""){
@@ -53,8 +53,8 @@ const AddVehicle = (props) => {
     }
     const payload = {
       userId:localStorage.getItem("userId"),
-      vehicleName:car,
-      vehicleDomain:seal,
+      vehicleDomain:car,
+      vehicleName:seal,
       vehicleModel:modelYear,
       batteryCapacity:charge,
       nickName:nickName,
@@ -80,7 +80,7 @@ const AddVehicle = (props) => {
             <Typography style={{width:'auto', marginRight:'0.5rem'}}><b>NickName:</b></Typography>
             <TextField size='small' type="text" id="cars" className="form-control" value={nickName} onChange={(e)=>setNickName(e.target.value)} required/>
           </div>
-          <label for="cars"><b>Select a Car:</b></label>
+          <label for="cars"><b>Select a Car Domain:</b></label>
           <select style={{ width: "100%", height:'2rem'}} value={car} onChange={handleChangeCar} id="cars" name="cars">
             <option value="">None</option>
             {carCollection && utils.arrayLengthChecker(Object.keys(carCollection)) && Object.keys(carCollection)?.map((carItem) => (
@@ -89,7 +89,7 @@ const AddVehicle = (props) => {
           </select>
           {car && car!=="" && 
             <Paper style={{ width: "80%", marginTop: "1rem", padding: "1rem", boxShadow:'2px 2px 4px black',borderRadius:'10px'}}>
-              <label for="carSeal"><b>Select a Car Seal:</b></label>
+              <label for="carSeal"><b>Select a Car Name:</b></label>
               <select style={{ width: "100%", height: '2rem' }} value={seal} onChange={handleChangeSeal} id="carSeal" name="carSeal">
                 <option value="">None</option>
                 {carCollection && carCollection[car]?.cars && utils.arrayLengthChecker(Object.keys(carCollection[car]?.cars)) && Object.keys(carCollection[car]?.cars)?.map((sealItem) => (
