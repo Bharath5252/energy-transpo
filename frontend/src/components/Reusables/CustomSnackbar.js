@@ -4,7 +4,7 @@ import GreenTick from "../assets/Images/greenTick.svg";
 import Cross from "../assets/Images/cross.svg";
 import { Snackbar } from "@mui/material";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { toggleSnackbar } from "../../Redux/Actions/index";
+import { toggleSnackbar } from "../../Redux/Actions";
 
 const SnackbarComp = (props) => {
   const dispatch = useDispatch();

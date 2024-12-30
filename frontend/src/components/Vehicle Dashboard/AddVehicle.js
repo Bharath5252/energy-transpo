@@ -5,7 +5,7 @@ import Navbar from "../Shared/Navbar/Navbar";
 import {getUserDetails, carList, postAddVehicle,toggleSnackbar} from '../../Redux/Actions';
 import * as utils from '../../utils/utils'
 import { Paper, TextField, Typography } from '@mui/material';
-import Sidebar from '../Vehicle Dashboard/Sidebar';
+import Sidebar from './Sidebar';
 import VehicleNavbar from './VehicleNavbar';
 
 const AddVehicle = (props) => {

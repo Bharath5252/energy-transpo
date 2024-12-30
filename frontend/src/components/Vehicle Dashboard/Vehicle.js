@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../Redux/Actions/index";
+import { toggleSnackbar } from "../../Redux/Actions";
 import "./Vehicle.css";
 // import logo from "./Logo.png";
 import SEAL from "./BYD_SEAL.png";
