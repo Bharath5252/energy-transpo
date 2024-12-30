@@ -13,7 +13,6 @@ const Sidebar = () => {
           <Link to="/home" className="menu-links">
             Home
           </Link>
-          
           <Link to="/transactions" className="menu-links">
             Transactions
           </Link>
@@ -22,9 +21,6 @@ const Sidebar = () => {
           </Link>
           <Link to="/vehicleDashboard" className="menu-links">
             Vehicle Dashboard
-          </Link>
-          <Link to="/buy" className='menu-links'>
-            Buy
           </Link>
     </Menu>
   );

@@ -33,8 +33,7 @@ const VehicleInventory = (props) => {
   }
   return (
     <div>
-        <Sidebar/>
-        <VehicleNavbar userDetails={userDetails}/>
+        <VehicleNavbar/>
         <div style={{margin:"30px", display:"flex",flexWrap:'wrap', width:"-webkit-fill-available"}}>
           {utils.arrayLengthChecker(userVehicles) ? userVehicles?.map((vehicle)=>(
             <Paper sx={{margin:"1rem", padding:"20px", boxShadow:"2px 2px 4px black", borderRadius:"10px", width:'30%', 

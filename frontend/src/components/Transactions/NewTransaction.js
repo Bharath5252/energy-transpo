@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {connect} from 'react-redux';
 import {toggleSnackbar,getUserDetails} from '../../Redux/Actions';
-import TransactionNavbar from '../Shared/TransactionNavbar'
-import Sidebar from '../Vehicle Dashboard/Sidebar';
+import TransactionNavbar from '../Transactions/TransactionNavbar'
 import * as utils from '../../utils/utils';
 
 const NewTransaction = (props) => {
@@ -38,8 +37,7 @@ const NewTransaction = (props) => {
   }
   return (
     <div>
-        <Sidebar />
-        <TransactionNavbar/>
+        <TransactionNavbar/> 
         <div style={{display:'flex', flexDirection:'column',alignItems:'center',margin:'1rem',width:'100%',height:'100%'}}>
             <h3 style={{fontWeight:'700'}}>New Transaction</h3>
             <div style={{width:'40%'}} className="form-group">

@@ -1,8 +1,11 @@
 import React from 'react'
+import TransactionNavbar from './TransactionNavbar'
 
 const PastTransactions = () => {
   return (
-    <div>PastTransactions</div>
+    <div>
+      <TransactionNavbar/>
+    </div>
   )
 }
 

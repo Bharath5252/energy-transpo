@@ -17,7 +17,6 @@ const AddVehicle = (props) => {
   const [nickName, setNickName] = useState('')
   const [carCollection,setCarCollection] = useState({});
   useEffect(()=>{
-    props.getUserDetails({params:{userId:localStorage.getItem("userId")}});
     props.carList();
   },[])
   useEffect(()=>{
@@ -73,8 +72,7 @@ const AddVehicle = (props) => {
 
   return (
     <div>
-      <Sidebar/>
-      <VehicleNavbar userDetails={userDetails}/>
+      <VehicleNavbar/>
       <div style={{margin:"30px", display:"flex", flexDirection:"column", width:"-webkit-fill-available", alignItems:"center"}}>
         <div style={{display:'flex',justifyContent:'center',fontSize:'24px', fontWeight:"700"}}>Add your car details</div>
         <Paper style={{ width: "60%", margin: "1rem 0rem", padding: "1rem", boxShadow:'2px 2px 4px black', borderRadius:'10px'}}>
