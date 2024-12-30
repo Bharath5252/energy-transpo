@@ -14,6 +14,7 @@ const NewTransaction = (props) => {
   const [requiredEnergy, setRequiredEnergy] = useState("");
   const [maxPrice, setMaxPrice] = useState("")
   const [vehicles,setVehicles] = useState([]);
+  const [vehicleSelected,setVehicle] = useState("");
   const {userDetails} = props;
 
   useEffect(() => {
@@ -46,27 +47,24 @@ const NewTransaction = (props) => {
                 setTransactionType(e.target.value)
                 setTransactionStatus(false)
                 handleEmptyAllFields();
+                setVehicle("")
                 }} className="form-control">
                 <option value="">None</option>
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
               </select>
               {!transactionStatus && transactionType!=="" && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>setTransactionStatus(true)}>Submit</button>}
-              {/* {transactionType!=="" && 
+              {transactionType!=="" && transactionStatus && 
               <div>
                 <label htmlFor="Car" style={{fontWeight:'600',marginTop:'1rem'}}>Select Car</label>
-                <select style={{width:'100%'}} value={transactionType} onChange={(e)=>{
-                  setTransactionType(e.target.value)
-                  setTransactionStatus(false)
-                  handleEmptyAllFields();
-                  }} className="form-control">
+                <select style={{width:'100%'}} value={vehicleSelected} onChange={(e)=>setVehicle(e.target.value)} className="form-control">
                   <option value="">None</option>
                   {utils.arrayLengthChecker(vehicles) && vehicles?.map((vehicle)=>(
-                    <option value={vehicle?.id}>`${vehicle?.vehicleName} ${vehicle?.vehicleDomain} ${vehicle?.vehicleModel}`</option>
+                    <option value={vehicle?.id}>{vehicle?.vehicleName} {vehicle?.vehicleDomain} {vehicle?.vehicleModel}</option>
                   ))}
                 </select>
               </div>
-              } */}
+              }
               {transactionType === 'Buy'&& transactionStatus && <>
                 <label htmlFor="rE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Required Energy:</label>
                 <input

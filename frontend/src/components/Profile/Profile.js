@@ -145,9 +145,10 @@ const Profile = (props) => {
             //   if(pasSetUp)payload.password = password;
             await props.putSignUpDetails({ data: payload })
                 .then((response) => {
+                    console.log(response,"response")
                     if (response.payload.status === 200) {
                         localStorage.setItem("email", email);
-                        localStorage.setItem("userId", response?.payload?.data?.userId);
+                        localStorage.setItem("userId", response?.payload?.data?.user?.userId);
                         setEdit(false);
                     }
                 })
