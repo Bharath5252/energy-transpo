@@ -3,6 +3,31 @@ const Vehicle = require("../models/vehicle")
 const axios = require("axios");
 
 
+const getVehicleInfo = async (req, res) => {
+    try {
+        const { vehicleId } = req.query;
+
+        if (!vehicleId) {
+            return res.status(400).json({ message: "Vehicle ID is required." });
+        }
+
+        const vehicle = await Vehicle.findById(vehicleId);
+
+        if (!vehicle) {
+            return res.status(404).json({ message: "Vehicle not found." });
+        }
+
+        res.status(200).json({
+            message: "Vehicle information retrieved successfully.",
+            vehicle,
+        });
+    } catch (error) {
+        console.error("Error fetching vehicle info:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+
 const addVehicle = async (req, res) => {
     const { userId, vehicleDomain, vehicleName, vehicleModel, batteryCapacity, currentCapacity, nickName } = req.body;
 
@@ -103,4 +128,4 @@ const deleteVehicle = async (req, res) => {
     }
 };
 
-module.exports = { addVehicle, deleteVehicle }
+module.exports = { getVehicleInfo, addVehicle, deleteVehicle }
