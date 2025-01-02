@@ -69,52 +69,37 @@ const Vehicle = (props) => {
                 <div>
                     <table class="scrolldown">
                         <thead>
-                            <tr style={{}}>
-                                <th>Type</th>
-                                <th>Energy Transfered (kWh)</th>
-                                <th>Price/kwh (Rupees)</th>
+                            <tr class="trbody">
+                                <th class="thtd">Energy Transfered (kWh)</th>
+                                <th class="thtd">Price/kwh (Rupees)</th>
+                                <th class="thtd">Type</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Buy</td>
-                                <td>45</td>
-                                <td>0.5</td>
+                        <tbody class="tbody">
+                            <tr class="trbody">
+                                <td class="thtd">Buy</td>
+                                <td class="thtd">45</td>
+                                <td class="thtd">0.5</td>
                             </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
+                            <tr class="trbody">
+                                <td class="thtd">Sell</td>
+                                <td class="thtd">63</td>
+                                <td class="thtd">0.5</td>
                             </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
+                            <tr class="trbody">
+                                <td class="thtd">Sell</td>
+                                <td class="thtd">63</td>
+                                <td class="thtd">0.5</td>
                             </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
+                            <tr class="trbody">
+                                <td class="thtd">Sell</td>
+                                <td class="thtd">63</td>
+                                <td class="thtd">0.5</td>
                             </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
-                            </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
-                            </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
-                            </tr>
-                            <tr>
-                                <td>Sell</td>
-                                <td>63</td>
-                                <td>0.5</td>
+                            <tr class="trbody">
+                                <td class="thtd">Sell</td>
+                                <td class="thtd">63</td>
+                                <td class="thtd">0.5</td>
                             </tr>
                         </tbody>
                     </table>
