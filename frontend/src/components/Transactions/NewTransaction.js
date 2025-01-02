@@ -6,6 +6,7 @@ import * as utils from '../../utils/utils';
 
 const NewTransaction = (props) => {
   const [transactionType, setTransactionType] = useState("");
+  const [boolvehicle, setBoolVehicle] = useState(0);
   const [transactionStatus, setTransactionStatus] = useState(false);
   const [availableEnergy, setAvailableEnergy] = useState("");
   const [biddingAmount, setBiddingAmount] = useState("");
@@ -27,6 +28,10 @@ const NewTransaction = (props) => {
   useEffect(() => {
     setVehicles(userDetails?.user?.vehicles)
   },[userDetails])
+
+  const handleDropdownChange = (event) => {
+    setBoolVehicle(Number(event.target.value));
+  };
 
   const handleEmptyAllFields = () => {
     setAvailableEnergy('');
@@ -56,6 +61,28 @@ const NewTransaction = (props) => {
               {!transactionStatus && transactionType!=="" && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>setTransactionStatus(true)}>Submit</button>}
               {transactionType!=="" && transactionStatus && 
               <div>
+                <label htmlFor="vehicle-grid-selector" style={{fontWeight:'600',marginTop:'1rem'}}>
+                  Select Source:
+                </label>
+                <select
+                  id="vehicle-grid-selector"
+                  value={boolvehicle}
+                  onChange={handleDropdownChange}
+                  style={{ width:'100%' }}
+                  className="form-control"
+                >
+                  <option value="0" disabled>
+                    Select
+                  </option>
+                  <option value="1">Vehicle</option>
+                  <option value="2">Grid</option>
+                </select>
+                
+              </div>
+              }
+              {boolvehicle==1 &&
+              <>
+                <div>
                 <label htmlFor="Car" style={{fontWeight:'600',marginTop:'1rem'}}>Select Car</label>
                 <select style={{width:'100%'}} value={vehicleSelected} onChange={(e)=>setVehicle(e.target.value)} className="form-control">
                   <option value="">None</option>
@@ -64,7 +91,7 @@ const NewTransaction = (props) => {
                   ))}
                 </select>
               </div>
-              }
+              </>}
               {transactionType === 'Buy'&& transactionStatus && <>
                 <label htmlFor="rE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Required Energy:</label>
                 <input
