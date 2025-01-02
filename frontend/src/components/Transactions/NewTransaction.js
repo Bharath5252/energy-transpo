@@ -45,7 +45,7 @@ const NewTransaction = (props) => {
     <div>
         <TransactionNavbar/> 
         <div style={{display:'flex', flexDirection:'column',alignItems:'center',margin:'1rem',width:'100%',height:'100%'}}>
-            <h3 style={{fontWeight:'700'}}>New Transaction</h3>
+            <h3 style={{fontWeight:'700'}}>New Request</h3>
             <div style={{width:'40%'}} className="form-group">
               <label htmlFor="transactionType" style={{fontWeight:'600',marginTop:'1rem'}}>Buy or Sell?</label>
               <select style={{width:'100%'}} value={transactionType} onChange={(e)=>{

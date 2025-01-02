@@ -66,6 +66,7 @@ const PastTransactions = () => {
       <TransactionNavbar />
 
       <div style={{ margin: "4rem 2rem 4rem 4rem" }}>
+        <h2>Past Transactions</h2>
         <div style={{ marginBottom: "1rem" }}>
           <label htmlFor="transactionDropdown">Filter by Transaction Type:</label>
           <select
