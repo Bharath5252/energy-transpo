@@ -19,7 +19,7 @@ exports.getAllTrades = async (req, res) => {
     }
 };
 
-exports.cancelPost = async (req, res) => {
+exports.cancelTrade = async (req, res) => {
     try {
         const { tradeId } = req.query;
 
@@ -35,7 +35,7 @@ exports.cancelPost = async (req, res) => {
     }
 };
 
-exports.cancelAcceptedPost = async (req, res) => {
+exports.cancelAcceptedTrade = async (req, res) => {
     try {
         const { tradeId } = req.query;
 
@@ -83,6 +83,26 @@ exports.acceptTrade = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.getAcceptedTrades = async (req, res) => {
+    try {
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required." });
+        }
+
+        const trades = await Trade.find({
+            state: "accepted",
+            $or: [{ userId }, { acceptedUserId: userId }],
+        });
+
+        res.status(200).json(trades);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 
 exports.getTradesByUser = async (req, res) => {

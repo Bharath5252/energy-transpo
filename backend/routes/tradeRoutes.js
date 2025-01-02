@@ -1,13 +1,14 @@
 const express = require("express");
-const { cancelPost, createTrade, getAllTrades, acceptTrade, getTradesByUser, cancelAcceptedPost, getTradesNearby } = require("../controllers/tradeController");
+const { cancelTrade, createTrade, getAllTrades, acceptTrade, getTradesByUser, cancelAcceptedTrade, getTradesNearby, getAcceptedTrades } = require("../controllers/tradeController");
 const router = express.Router();
 
-router.delete("/cancel", cancelPost);
+router.delete("/cancel", cancelTrade);
 router.post("/", createTrade);
 router.get("/", getAllTrades);
 router.put("/accept", acceptTrade);
 router.get("/user", getTradesByUser);
-router.put("/cancel-accepted", cancelAcceptedPost);
+router.put("/cancel-accepted", cancelAcceptedTrade);
 router.get("/nearby", getTradesNearby);
+router.get("/accepted", getAcceptedTrades);
 
 module.exports = router;
