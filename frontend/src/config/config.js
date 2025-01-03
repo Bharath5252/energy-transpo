@@ -5,9 +5,15 @@ const HOST_URL = isRunningLocally ? "http://localhost:8000" : '';
 const BASE_URL1 = HOST_URL+'/api/auth';
 const BASE_URL2 = HOST_URL+'/api/users';
 const BASE_URL3 = HOST_URL+'/api/vehicles';
+const BASE_URL4 = HOST_URL+'/api/trades';
 
 export const POST_LOGIN_DETAILS_URL = `${BASE_URL1}/login`;
 export const POST_SIGNUP_DETAILS_URL = `${BASE_URL1}/signup`;
 export const GET_LOGIN_DETAILS_URL = `${BASE_URL2}`;
 export const POST_ADD_VEHICLE_URL = `${BASE_URL3}/add`;
 export const POST_DELETE_VEHICLE_URL = `${BASE_URL3}/delete`;
+export const POST_NEW_REQUEST_URL = `${BASE_URL4}`;
+export const GET_ALL_TRADES_URL = `${BASE_URL4}`;
+export const DELETE_TRADE_URL = `${BASE_URL4}/cancel`;
+export const PUT_ACCCEPT_DETAILS_URL = `${BASE_URL4}/accept`;
+export const GET_ACCEPT_DETAILS_URL = `${BASE_URL4}/accepted`;

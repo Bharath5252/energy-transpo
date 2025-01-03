@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
+import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import TransactionNavbar from "./TransactionNavbar";
+import {getAcceptedTrades, getUserDetails, toggleSnackbar} from '../../Redux/Actions/index'
 import "./PastTransactions.css";
 import car from "./charging.jpeg" 
-import { set } from "firebase/database";
 
-const CurrentTransactions = () => {
+const CurrentTransactions = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("");
@@ -13,6 +14,18 @@ const CurrentTransactions = () => {
   const [animate, setAnimate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(0);
+  const [acceptedTrades, setAcceptedTrades] = useState([]);
+
+  const {userDetails, acceptTrades} = props
+
+  useEffect(() => {
+    if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+    props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}})
+  },[])
+
+  useEffect(()=>{
+    setAcceptedTrades(acceptTrades);
+  },[acceptTrades])
 
   const handleButtonClick = (row) => {
     setSelectedRow(row);
@@ -126,4 +139,17 @@ const CurrentTransactions = () => {
   );
 };
 
-export default CurrentTransactions;
+const mapStateToProps = (state) => ({
+  isLoading: state.isLoading,
+  userDetails: state.userDetails,
+  allTrades:state.allTrades,
+  acceptTrades:state.acceptTrades,
+})
+
+const mapDispatchToProps =  {
+  toggleSnackbar,
+  getUserDetails,
+  getAcceptedTrades
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentTransactions)

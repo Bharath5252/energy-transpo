@@ -11,6 +11,8 @@ const initialState = {
         message: '',
         status: false,
     },
+    allTrades:[],
+    acceptTrades:[],
 }
 
 export const reducer = (state=initialState, action) => {
@@ -129,6 +131,99 @@ export const reducer = (state=initialState, action) => {
                     status: false,
                 },
             }
+        case `${types.POST_NEW_REQUEST}/fulfilled`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.POST_NEW_REQUEST}/rejected`:
+            return{
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.GET_ALL_TRADES}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                allTrades: action.payload?.data,
+            }
+        case `${types.GET_ALL_TRADES}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.DELETE_TRADE}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.DELETE_TRADE}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.PUT_ACCCEPT_DETAILS}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.PUT_ACCCEPT_DETAILS}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.GET_ACCEPT_DETAILS}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                acceptTrades: action.payload?.data,
+            }
+        case `${types.GET_ACCEPT_DETAILS}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        
         default :
         return{
             ...state,
