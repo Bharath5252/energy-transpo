@@ -78,7 +78,7 @@ exports.acceptTrade = async (req, res) => {
 
         const updatedTrade = await trade.save();
 
-        res.status(200).json(updatedTrade);
+        res.status(200).json({ message: "Trade accepted successfully.", updatedTrade: updatedTrade });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
