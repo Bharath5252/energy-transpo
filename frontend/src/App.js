@@ -14,6 +14,7 @@ import SnackbarComp from './components/Reusables/CustomSnackbar';
 import Profile from './components/Profile/Profile';
 import VehicleInventory from './components/Vehicle Dashboard/VehicleInventory';
 import AddVehicle from './components/Vehicle Dashboard/AddVehicle';
+import Posts from './components/Transactions/Posts';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/transactions" exact element={<NewTransaction />} />
         <Route path="/transactions/current" exact element={<CurrentTransactions />} />
+        <Route path="/transactions/post" exact element={<Posts />} />
         <Route path="/transactions/past" exact element={<PastTransactions />} />
       </Routes>
       <SnackbarComp />

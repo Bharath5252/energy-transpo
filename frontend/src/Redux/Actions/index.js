@@ -49,6 +49,30 @@ export const postDeleteVehicle = createApiThunk(types.POST_DELETE_VEHICLE,{
     method:"POST",
     url:config.POST_DELETE_VEHICLE_URL
 })
+export const createPost = createApiThunk(types.POST_NEW_REQUEST,{
+    method:"POST",
+    url:config.POST_NEW_REQUEST_URL
+})
+
+export const getAllTrades = createApiThunk(types.GET_ALL_TRADES,{
+    method:"GET",
+    url:config.GET_ALL_TRADES_URL
+})
+
+export const deleteTrade = createApiThunk(types.DELETE_TRADE,{
+    method:"DELETE",
+    url:config.DELETE_TRADE_URL
+})
+
+export const acceptTrade = createApiThunk(types.PUT_ACCCEPT_DETAILS,{
+    method:"PUT",
+    url:config.PUT_ACCCEPT_DETAILS_URL
+})
+
+export const getAcceptedTrades = createApiThunk(types.GET_ACCEPT_DETAILS,{
+    method:"GET",
+    url:config.GET_ACCEPT_DETAILS_URL
+})
 
 export const toggleSnackbar = (payload) => {
     return{
