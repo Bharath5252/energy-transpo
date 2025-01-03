@@ -4,7 +4,7 @@ exports.createTrade = async (req, res) => {
     try {
         const trade = new Trade(req.body);
         const savedTrade = await trade.save();
-        res.status(201).json(savedTrade);
+        res.status(200).json({ message: "Trade posted successfully.", trade: savedTrade });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -12,7 +12,7 @@ exports.createTrade = async (req, res) => {
 
 exports.getAllTrades = async (req, res) => {
     try {
-        const trades = await Trade.find({ state: "posted" });
+        const trades = await Trade.find({ state: "posted" }).populate("vehicleId");
         res.status(200).json(trades);
     } catch (error) {
         res.status(500).json({ error: error.message });

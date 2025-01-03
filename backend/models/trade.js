@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const tradeSchema = new mongoose.Schema({
     userId: { type: String, required: true },
-    vehicleId: { type: String, required: true },
+    vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle', required: true },
     typeOfPost: { type: Number, enum: [1, 2], required: true },
     typeOfOrder: { type: String, enum: ["Buy", "Sell"], required: true },
     energy: { type: Number, required: true },

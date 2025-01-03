@@ -20,11 +20,11 @@ const vehicleSchema = new mongoose.Schema({
         required: true
     },
     batteryCapacity: {
-        type: String,
+        type: Number,
         required: true
     },
     currentCapacity: {
-        type: String
+        type: Number
     },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
