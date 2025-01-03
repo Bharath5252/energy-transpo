@@ -90,6 +90,7 @@ const NewTransaction = (props) => {
 
   return (
     <div>
+      {console.log(vehicleSelected,"vehicleSelected")}
         <TransactionNavbar/> 
         <div style={{display:'flex', flexDirection:'column',alignItems:'center',margin:'2rem',width:'100%',height:'100%'}}>
             <h3 style={{fontWeight:'700'}}>New Request</h3>
@@ -134,7 +135,7 @@ const NewTransaction = (props) => {
                 <select style={{width:'100%'}} value={vehicleSelected} onChange={(e)=>setVehicle(e.target.value)} className="form-control">
                   <option value="">None</option>
                   {utils.arrayLengthChecker(vehicles) && vehicles?.map((vehicle)=>(
-                    <option value={vehicle?.id}>{vehicle?.vehicleName} {vehicle?.vehicleDomain} {vehicle?.vehicleModel} - {vehicle?.nickName}</option>
+                    <option key={vehicle?._id} value={vehicle?._id}>{vehicle?.vehicleName} {vehicle?.vehicleDomain} {vehicle?.vehicleModel} - {vehicle?.nickName}</option>
                   ))}
                 </select>
               </div>
