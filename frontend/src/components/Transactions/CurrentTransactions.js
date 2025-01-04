@@ -1,10 +1,11 @@
 import React, { use, useEffect, useState } from "react";
 import {connect} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
+import {Link,} from 'react-router-dom';
 import TransactionNavbar from "./TransactionNavbar";
-import {getAcceptedTrades, getUserDetails, toggleSnackbar} from '../../Redux/Actions/index'
+import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats} from '../../Redux/Actions/index'
 import "./PastTransactions.css";
-import car from "./charging.jpeg" 
+import car from "./charging.jpeg";
+import * as utils from '../../utils/utils';
 
 const CurrentTransactions = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
@@ -14,6 +15,7 @@ const CurrentTransactions = (props) => {
   const [animate, setAnimate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(0);
+  const userId = localStorage.getItem("userId");
   const [acceptedTrades, setAcceptedTrades] = useState([]);
 
   const {userDetails, acceptTrades} = props
@@ -28,15 +30,33 @@ const CurrentTransactions = (props) => {
   },[acceptTrades])
 
   const handleButtonClick = (row) => {
-    setSelectedRow(row);
-    setLoading(true); 
-    setAnimate(true);  
-
-    setTimeout(() => {
-      setLoading(false);  
-      setSuccess(1);
-      // setAnimate(false);  
-    }, 3000);  
+    const preCheckPayload = {
+      senderId : row.typeOfOrder==="Sell"?row.userId:row.acceptedUserId,
+      receiverId : row.typeOfOrder==="Sell"?row.acceptedUserId:row.userId,
+      senderVehicle : row.typeOfOrder==="Sell"?row.vehicleId:row.acceptantVehicleId,
+      receiverVehicle : row.typeOfOrder==="Sell"?row.acceptantVehicleId:row.vehicleId,
+      committedEnergy : row.energy,
+      chargePerUnit : row.chargePerUnit,
+    }
+    props.preCheckTransaction({data:preCheckPayload}).then((response)=>{
+      if(response.payload.status===200){
+        preCheckPayload.typeOfTransaction = row.typeOfPost;
+        preCheckPayload.credits = row.energy*row.chargePerUnit;
+        props.initiateTransaction({data:preCheckPayload}).then((response)=>{
+          if(response.payload.status===200){
+            setSelectedRow(row);
+            setLoading(true);
+            setAnimate(true);
+  
+            setTimeout(() => {
+              setLoading(false);
+              setSuccess(1);
+              // setAnimate(false);  
+            }, 3000); 
+          }
+        })
+      }
+    })
   };
   const rows = [
     {
@@ -69,9 +89,9 @@ const CurrentTransactions = (props) => {
     },
   ];
 
-  const filteredRows = rows.filter(
+  const filteredRows = acceptedTrades.filter(
     (row) =>
-      (transactionFilter === "All" || row.transaction === transactionFilter) &&
+      (transactionFilter === "All" || (row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy") === transactionFilter) &&
       (statusFilter === "All" || row.status === statusFilter) &&
       (dateFilter === "" || row.date === dateFilter)
   );
@@ -81,7 +101,6 @@ const CurrentTransactions = (props) => {
   return (
     <div>
       <TransactionNavbar />
-
       {loading && (
         <div className="loading-screen">
           <img style={{width:'300px'}} src={car} alt="Loading..." />
@@ -121,11 +140,11 @@ const CurrentTransactions = (props) => {
             <tbody>
               {filteredRows.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.transaction}</td>
-                  <td>{row.name}</td>
-                  <td>{row.committedEnergy} kWh</td>
-                  <td>{row.price} rupees/kWh</td>
-                  <td>{row.date}</td>
+                  <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
+                  <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
+                  <td>{row.energy} kWh</td>
+                  <td>{row.chargePerUnit} rupees/kWh</td>
+                  <td>{utils.dateFormat(row.createdAt)}</td>
                   <td><button onClick={() => handleButtonClick(row)}>
         Initiate
       </button></td>
@@ -149,7 +168,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps =  {
   toggleSnackbar,
   getUserDetails,
-  getAcceptedTrades
+  getAcceptedTrades,
+  cancelAcceptedTrade,
+  preCheckTransaction,
+  initiateTransaction,
+  updateTransactionStats,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentTransactions)

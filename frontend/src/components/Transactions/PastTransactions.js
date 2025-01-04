@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TransactionNavbar from "./TransactionNavbar";
 import "./PastTransactions.css";
+import {connect} from 'react-redux';
+import {toggleSnackbar,getUserDetails, getTransactionHistoryByUser} from '../../Redux/Actions';
 
-const PastTransactions = () => {
+const PastTransactions = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("");
+  const [userTransactionHis, setUserTransactionHis] = useState([]);
+
+  const {userTransactionHistory} = props
+
+  useEffect(() => { 
+    props.getTransactionHistoryByUser({params:{userId:localStorage.getItem("userId")}})
+  },[])
+
+  useEffect(()=>{
+    setUserTransactionHis(userTransactionHistory);
+  },[userTransactionHistory])
 
   const rows = [
     {
@@ -64,7 +77,6 @@ const PastTransactions = () => {
   return (
     <div>
       <TransactionNavbar />
-
       <div style={{ margin: "4rem 2rem 4rem 4rem" }}>
         <h2>Past Transactions</h2>
         <div style={{ marginBottom: "1rem" }}>
@@ -130,4 +142,17 @@ const PastTransactions = () => {
   );
 };
 
-export default PastTransactions;
+
+const mapStateToProps = (state) => ({
+  isLoading: state.isLoading,
+  userDetails: state.userDetails,
+  userTransactionHistory: state.userTransactionHistory,
+})
+
+const mapDispatchToProps =  {
+  toggleSnackbar,
+  getUserDetails,
+  getTransactionHistoryByUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PastTransactions)

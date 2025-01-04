@@ -1,6 +1,3 @@
-import { database, ref, set, onValue, get } from '../database/firebase';
-import * as types from '../Redux/types';
-
 export const getCookie = (cname) => {
     let name = cname + '=';
     let ca = document.cookie.split(';');
@@ -30,4 +27,9 @@ export const handleFileChange = (event, callback) => {
 
 export const arrayLengthChecker = (arr) => {
   return arr && Array.isArray(arr) && arr?.length>0;
+}
+
+export const dateFormat = (data) => {
+  const date = new Date(data);
+  return date?.toISOString().split('T')[0];
 }

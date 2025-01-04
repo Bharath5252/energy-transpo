@@ -13,6 +13,7 @@ const initialState = {
     },
     allTrades:[],
     acceptTrades:[],
+    userTransactionHistory:[],
 }
 
 export const reducer = (state=initialState, action) => {
@@ -223,7 +224,102 @@ export const reducer = (state=initialState, action) => {
                     status: false,
                 },
             }
-        
+        case `${types.CANCEL_ACCEPT_TRADE}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.CANCEL_ACCEPT_TRADE}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.PRE_CHECK_TRANSACTION}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.PRE_CHECK_TRANSACTION}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.INITIATE_TRANSACTION}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.INITIATE_TRANSACTION}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.UPDATE_TRANSACTION}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.UPDATE_TRANSACTION}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.USER_TRANSACTION_HISTORY}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                userTransactionHistory: action.payload?.data,
+            }
+        case `${types.USER_TRANSACTION_HISTORY}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
         default :
         return{
             ...state,
