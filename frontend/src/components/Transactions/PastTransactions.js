@@ -3,6 +3,7 @@ import TransactionNavbar from "./TransactionNavbar";
 import "./PastTransactions.css";
 import {connect} from 'react-redux';
 import {toggleSnackbar,getUserDetails, getTransactionHistoryByUser} from '../../Redux/Actions';
+import * as utils from '../../utils/utils';
 
 const PastTransactions = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
@@ -10,6 +11,7 @@ const PastTransactions = (props) => {
   const [dateFilter, setDateFilter] = useState("");
   const [userTransactionHis, setUserTransactionHis] = useState([]);
 
+  const userId = localStorage.getItem("userId");
   const {userTransactionHistory} = props
 
   useEffect(() => { 
@@ -67,11 +69,11 @@ const PastTransactions = (props) => {
     setDateFilter(event.target.value);
   };
 
-  const filteredRows = rows.filter(
+  const filteredRows = userTransactionHis.filter(
     (row) =>
-      (transactionFilter === "All" || row.transaction === transactionFilter) &&
-      (statusFilter === "All" || row.status === statusFilter) &&
-      (dateFilter === "" || row.date === dateFilter)
+      (transactionFilter === "All" || (row.senderId._id===userId?"Sell":"Buy") === transactionFilter) &&
+      (statusFilter === "All" || row.transactionStatus === statusFilter) &&
+      (dateFilter === "" || row.updatedAt === dateFilter)
   );
 
   return (
@@ -124,16 +126,21 @@ const PastTransactions = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row, index) => (
+              {utils.arrayLengthChecker(filteredRows) ? filteredRows.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.transaction}</td>
-                  <td>{row.name}</td>
+                  <td>{row.senderId._id===userId?"Sell":"Buy"}</td>
+                  <td>{row.senderId._id===userId?row.senderId?.username:row.receiverId?.username}</td>
                   <td>{row.committedEnergy} kWh</td>
-                  <td>{row.transactedEnergy} kWh</td>
-                  <td>{row.status}</td>
-                  <td>{row.date}</td>
+                  <td>{row.transferredEnergy} kWh</td>
+                  <td>{row.transactionStatus}</td>
+                  <td>{utils.dateFormat(row.updatedAt)}</td>
                 </tr>
-              ))}
+              ))
+              :
+              <tr> 
+                <td colSpan="6">No Transactions Found</td>
+              </tr>
+            }
             </tbody>
           </table>
         </div>
