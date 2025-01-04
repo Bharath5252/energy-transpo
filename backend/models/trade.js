@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const tradeSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: String, required: true },
     vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle', required: true },
     typeOfPost: { type: Number, enum: [1, 2], required: true },
     typeOfOrder: { type: String, enum: ["Buy", "Sell"], required: true },
@@ -9,7 +9,7 @@ const tradeSchema = new mongoose.Schema({
     chargePerUnit: { type: Number, required: true },
     state: { type: String, enum: ["posted", "accepted"], default: "posted" },
     acceptantVehicleId: { type: String, default: null },
-    acceptedUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    acceptedUserId: { type: String,default: null },
     acceptedTime: { type: Date, default: null },
     selectedContract: { type: String, enum: ["Manual", "Automatic"], required: true },
     location: {

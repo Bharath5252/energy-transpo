@@ -1,4 +1,5 @@
 const Trade = require("../models/trade");
+const User = require("../models/user");
 
 exports.createTrade = async (req, res) => {
     try {
@@ -95,9 +96,21 @@ exports.getAcceptedTrades = async (req, res) => {
         const trades = await Trade.find({
             state: "accepted",
             $or: [{ userId }, { acceptedUserId: userId }],
-        });
+        })
 
-        res.status(200).json(trades);
+        const tradesWithUsernames = await Promise.all(trades.map(async (trade) => {
+            const user = await User.findById(trade.userId);
+            const acceptedUser = trade.acceptedUserId ? await User.findById(trade.acceptedUserId) : null;
+
+            return {
+                ...trade.toObject(),
+                username: user ? user.username : null,
+                acceptedUsername: acceptedUser ? acceptedUser.username : null,
+            };
+        }));
+
+
+        res.status(200).json(tradesWithUsernames);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
