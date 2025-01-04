@@ -27,8 +27,9 @@ exports.initiateTransaction = async (req, res) => {
         });
 
         const savedTransaction = await transaction.save();
-        res.status(201).json({
+        res.status(200).json({
             message: "Transaction initiated.",
+            transactionId: savedTransaction._id,
             transaction: savedTransaction,
         });
     } catch (error) {
