@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {connect} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,6 +13,12 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(()=>{
+    if(localStorage.getItem("email")!==null && localStorage.getItem("userId")!==null){
+      history("/home", { replace: true });
+    }
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();

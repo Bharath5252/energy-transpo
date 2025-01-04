@@ -74,6 +74,28 @@ export const getAcceptedTrades = createApiThunk(types.GET_ACCEPT_DETAILS,{
     url:config.GET_ACCEPT_DETAILS_URL
 })
 
+export const cancelAcceptedTrade = createApiThunk(types.CANCEL_ACCEPT_TRADE,{
+    method:"PUT",
+    url:config.CANCEL_ACCEPT_TRADE_URL
+})
+
+export const preCheckTransaction = createApiThunk(types.PRE_CHECK_TRANSACTION,{
+    method:"POST",
+    url:config.PRE_CHECK_TRANSACTION_URL
+})
+export const initiateTransaction = createApiThunk(types.INITIATE_TRANSACTION,{
+    method:"POST",
+    url:config.INITIATE_TRANSACTION_URL
+})
+export const updateTransactionStats = createApiThunk(types.UPDATE_TRANSACTION,{
+    method:"PUT",
+    url:config.UPDATE_TRANSACTION_URL
+})
+export const getTransactionHistoryByUser = createApiThunk(types.USER_TRANSACTION_HISTORY,{
+    method:"GET",
+    url:config.USER_TRANSACTION_HISTORY_URL
+})
+
 export const toggleSnackbar = (payload) => {
     return{
         type:types.TOGGLE_SNACKBAR,
@@ -110,5 +132,6 @@ export const carList = () => {
                 type:types.GET_CAR_LIST,
                 payload:{}
             })
+            getUserDetails({params:{userId:localStorage.getItem("userId")}})
     }
 };

@@ -31,7 +31,7 @@ const VehicleNavbar = (props) => {
             <Link to="/vehicleDashboard/add" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Add Vehicle</Link>
           </div>
           <div className="user-info">
-          <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</Link>
+          <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {localStorage.getItem("userName")?localStorage.getItem("userName"):"User"}</Link>
             <span>{date}</span>
           </div>
         </header>

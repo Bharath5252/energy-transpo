@@ -10,6 +10,10 @@ const Wallet = (props) => {
   useEffect(() => {
     props.getUserDetails({
       params: { userId: localStorage.getItem("userId") },
+    }).then((response)=>{
+      if(response.payload.status===200){
+       localStorage.setItem("userName",response?.payload?.data?.user?.username);
+      }
     });
   }, []);
 

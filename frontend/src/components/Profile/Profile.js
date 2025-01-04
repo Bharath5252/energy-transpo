@@ -6,9 +6,12 @@ import userProfile from '../assets/Images/userProfile.jpg';
 import * as utils from '../../utils/utils';
 import AvatarCircle from '../Reusables/Avatar';
 import Navbar from '../Shared/Navbar/Navbar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
     const {userDetails} = props;
+    const history = useNavigate()
     const [name,setName] = useState(userDetails?.user?.username?userDetails?.user?.username:'');
     const [email,setEmail] = useState(userDetails?.user?.email?userDetails?.user?.email:'');
     const [mobile,setMobile] = useState(userDetails?.user?.phone?userDetails?.user?.phone:'');
@@ -29,6 +32,9 @@ const Profile = (props) => {
         {title:'organization',pattern:"^.*$",maxLength:15, pMsg:"Only alphabets are allowed"},
         {title:'password',pattern:"^.*$",minLength:8, maxLength:0,pMsg:""},
     ]
+    useEffect(()=>{
+        if(!userDetails.user)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+    },[])
 
     useEffect(() => {
         if(userDetails?.user?.username){
@@ -101,6 +107,11 @@ const Profile = (props) => {
       }
     };
 
+    const handleLogout = () => {
+        history("/", { replace: true });
+        localStorage.clear();
+    }
+
     const handleSubmit = async (e) => {
         if (!edit) {
             setEdit(true);
@@ -145,7 +156,6 @@ const Profile = (props) => {
             //   if(pasSetUp)payload.password = password;
             await props.putSignUpDetails({ data: payload })
                 .then((response) => {
-                    console.log(response,"response")
                     if (response.payload.status === 200) {
                         localStorage.setItem("email", email);
                         localStorage.setItem("userId", response?.payload?.data?.user?.userId);
@@ -257,7 +267,12 @@ const Profile = (props) => {
                     error={errorField.field==="confPassword"}
                     required
                 />} */}
-                <Button style={{width:'100%'}} onClick={handleSubmit}>{edit?"Save":"Edit"}</Button>
+                <div style={{display:'flex',width:'100%',justifyContent:'space-between'}}>
+                <Button style={{flexGrow:1}} onClick={handleSubmit}>{edit?"Save":"Edit"}</Button>
+                {!edit && <Button style={{flexGrow:1}} onClick={handleLogout}>LOGOUT
+                <LogoutIcon style={{marginLeft:'0.5rem'}}/>
+                </Button>}
+                </div>
             </Paper>
         </div>
     </div>

@@ -47,14 +47,19 @@ const Posts = (props) => {
     }
 
     const handleAccept = (request) => {
-        if(!acceptStatus){
+        if(request._id!==acceptStatus){
             setAcceptStatus(request._id);
+            setVehicle("");
             props.toggleSnackbar({open:true,message:'Select the vehicle',status:true})
+            return
+        }
+        if(vehicleSelected===""){
+            props.toggleSnackbar({open:true,message:'Please select a vehicle',status:false})
             return
         }
         const payload = {
             acceptedUserId:localStorage.getItem("userId"),
-            acceptedVehicleId:vehicleSelected,
+            acceptantVehicleId:vehicleSelected,
         }
         props.acceptTrade({params:{tradeId:request._id},data:payload}).then((response)=>{
             if(response.payload.status===200){
@@ -115,7 +120,7 @@ const Posts = (props) => {
         </div>
         {PeerPosts && <div style={{margin:"30px", display:"flex",flexWrap:'wrap', width:"-webkit-fill-available"}}>
           {utils.arrayLengthChecker(requests) ? requests?.map((request)=>(
-            <Paper sx={{margin:"1rem", padding:"20px", boxShadow:"2px 2px 4px black", borderRadius:"10px", width:'30%', 
+            <Paper style={{margin:"1rem", padding:"20px", boxShadow:"2px 2px 4px black", borderRadius:"10px", width:'30%', 
             " .DeleteContainer": {
               opacity: 0,
             },
@@ -145,7 +150,7 @@ const Posts = (props) => {
                 </select>
                 </div>
               }
-              <div className='Delete-Container' style={{display:'flex'}}>
+              <div class='Delete-Container' style={{display:'flex'}}>
                 <Button style={{padding:0, marginTop:'1rem'}} onClick={()=>handleAccept(request)}>
                   <AddTaskOutlinedIcon style={{marginRight:'0.5rem'}}/>
                   Accept Trade

@@ -32,7 +32,7 @@ const Navbar = (props) => {
           {/* <Link to="/wallet" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Wallet</Link> */}
         </div>
         <div className="user-info">
-        <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</Link>
+        <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {localStorage.getItem("userName")?localStorage.getItem("userName"):"User"}</Link>
           <span>{date}</span>
         </div>
       </header>
