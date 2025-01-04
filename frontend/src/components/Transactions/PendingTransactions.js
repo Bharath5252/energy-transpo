@@ -1,11 +1,13 @@
-import React, { use, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
 import {Link,} from 'react-router-dom';
+import {Tooltip} from '@mui/material';
 import TransactionNavbar from "./TransactionNavbar";
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats} from '../../Redux/Actions/index'
 import "./PastTransactions.css";
 import car from "./charging.jpeg";
 import * as utils from '../../utils/utils';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 const CurrentTransactions = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
@@ -44,20 +46,31 @@ const CurrentTransactions = (props) => {
         preCheckPayload.credits = row.energy*row.chargePerUnit;
         props.initiateTransaction({data:preCheckPayload}).then((response)=>{
           if(response.payload.status===200){
+            const trnsId = response.payload?.data?.transactionId
             setSelectedRow(row);
             setLoading(true);
             setAnimate(true);
-  
+            setTimeout(() => {
+              props.updateTransactionStats({params:{transactionId:trnsId},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit}})
+            }, 9000);
             setTimeout(() => {
               setLoading(false);
               setSuccess(1);
               // setAnimate(false);  
-            }, 3000); 
+            }, 10000); 
           }
         })
       }
     })
   };
+
+  const handleDeleteClick = (row) => {
+    props.cancelAcceptedTrade({params:{tradeId:row._id}}).then((response)=>{
+      if(response.payload.status===200){
+        props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}})
+      }
+    })
+  }
   const rows = [
     {
       transaction: "Buy",
@@ -114,9 +127,9 @@ const CurrentTransactions = (props) => {
         <div className="loading-screen">
         <h4>Transaction Complete</h4>
         <p>
-            Your <span style={{color: "green"}}>{selectedRow.transaction}</span> transaction has been completed successfully.
+            Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.committedEnergy} kWh of energy transferred at {selectedRow.price} rupees/kWh.</p>
+      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit} rupees/kWh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -138,18 +151,29 @@ const CurrentTransactions = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row, index) => (
+              {utils.arrayLengthChecker(filteredRows) ? filteredRows.map((row, index) => (
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
                   <td>{row.energy} kWh</td>
                   <td>{row.chargePerUnit} rupees/kWh</td>
                   <td>{utils.dateFormat(row.createdAt)}</td>
-                  <td><button onClick={() => handleButtonClick(row)}>
-        Initiate
-      </button></td>
+                  <td style={{display:'flex'}}>
+                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>Initiate</button>
+                    {row.state==="accepted" && <div style={{flexGrow:1}}>
+                      <Tooltip title="backoff trade">
+                        <DeleteForeverOutlinedIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleDeleteClick(row)}/>
+                      </Tooltip>
+                    </div>}
+                  </td>
                 </tr>
-              ))}
+              ))
+              :
+              <tr>
+                <td colSpan="6">No Active Accepted Trades</td>
+              </tr>
+            
+            }
             </tbody>
           </table>
         </div>

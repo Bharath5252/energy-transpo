@@ -308,7 +308,7 @@ export const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                userTransactionHistory: action.payload?.data,
+                userTransactionHistory: action.payload?.data?.transactions,
             }
         case `${types.USER_TRANSACTION_HISTORY}/rejected`:
             return {
