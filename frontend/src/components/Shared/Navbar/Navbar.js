@@ -29,6 +29,7 @@ const Navbar = (props) => {
           <Link to="/transactions" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Transactions</Link>
           <Link to="/query" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Query</Link>
           <Link to="/vehicleDashboard" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Vehicle Dashboard</Link>
+          {/* <Link to="/wallet" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Wallet</Link> */}
         </div>
         <div className="user-info">
         <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {userDetails?.user?.username?userDetails?.user?.username:"User"}</Link>
