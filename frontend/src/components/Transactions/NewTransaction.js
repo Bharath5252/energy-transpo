@@ -90,7 +90,7 @@ const NewTransaction = (props) => {
 
   return (
     <div>
-      {console.log(vehicleSelected,"vehicleSelected")}
+      {/* {console.log(vehicleSelected,"vehicleSelected")} */}
         <TransactionNavbar/> 
         <div style={{display:'flex', flexDirection:'column',alignItems:'center',margin:'2rem',width:'100%',height:'100%'}}>
             <h3 style={{fontWeight:'700'}}>New Request</h3>

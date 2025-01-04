@@ -15,6 +15,7 @@ import Profile from './components/Profile/Profile';
 import VehicleInventory from './components/Vehicle Dashboard/VehicleInventory';
 import AddVehicle from './components/Vehicle Dashboard/AddVehicle';
 import Posts from './components/Transactions/Posts';
+import Wallet from './components/Wallet/Wallet';
 
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
         <Route path="/" exact element={<Login  />} />
         <Route path="/login" exact element={<Login  />} />
         <Route path="/signup" exact element={<SignUp/>} />
-        <Route path="/home" exact element={<Home />} />
+        <Route path="/home" exact element={<Wallet />} />
+        {/* <Route path="/wallet" exact element={<Wallet/>} /> */}
         <Route path="/profile" exact element={<Profile />} />
         <Route path="/vehicleDashboard" exact element={<Vehicle />} />
         <Route path="/vehicleDashboard/add" exact element={<AddVehicle />} />
