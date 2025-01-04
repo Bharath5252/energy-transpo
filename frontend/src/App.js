@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
 import UserTxn from './components/userTxn/userTxn';
 
-import CurrentTransactions from './components/Transactions/CurrentTransactions';
+import PendingTransactions from './components/Transactions/PendingTransactions';
 import PastTransactions from './components/Transactions/PastTransactions';
 import NewTransaction from './components/Transactions/NewTransaction';
 import SignUp from './components/Login/SignUp';
@@ -34,7 +34,7 @@ function App() {
         <Route path="/userTxn" exact element={<UserTxn /> } />
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/transactions" exact element={<NewTransaction />} />
-        <Route path="/transactions/current" exact element={<CurrentTransactions />} />
+        <Route path="/transactions/pending" exact element={<PendingTransactions />} />
         <Route path="/transactions/post" exact element={<Posts />} />
         <Route path="/transactions/past" exact element={<PastTransactions />} />
       </Routes>

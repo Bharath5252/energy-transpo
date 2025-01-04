@@ -28,7 +28,7 @@ const TransactionNavbar = (props) => {
             <input style={{ marginLeft: "60px", height:'2rem'}} type="text" placeholder="Give a voice command" />
             <Link to="/transactions" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>New Request</Link>
             <Link to="/transactions/post" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Posts</Link>
-            <Link to="/transactions/current" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Pending Transactions</Link>
+            <Link to="/transactions/pending" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Pending Transactions</Link>
             <Link to="/transactions/past" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Transactions History</Link>
             <Link to="/dashboard" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Dashboard</Link>
           </div>
