@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
     balance: {
         type: Number,
         required: false,
+        default: 1000000
     },
     icon: {
         type: String,
