@@ -22,7 +22,7 @@ const Posts = (props) => {
     const {allTrades, userDetails} = props
 
     useEffect(()=>{
-        if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+        if(!userDetails.user)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
         props.getAllTrades()
     },[])
     useEffect(()=>{
@@ -150,7 +150,7 @@ const Posts = (props) => {
                 </select>
                 </div>
               }
-              <div class='Delete-Container' style={{display:'flex'}}>
+              <div className='Delete-Container' style={{display:'flex'}}>
                 <Button style={{padding:0, marginTop:'1rem'}} onClick={()=>handleAccept(request)}>
                   <AddTaskOutlinedIcon style={{marginRight:'0.5rem'}}/>
                   Accept Trade

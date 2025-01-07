@@ -16,6 +16,9 @@ import VehicleInventory from './components/Vehicle Dashboard/VehicleInventory';
 import AddVehicle from './components/Vehicle Dashboard/AddVehicle';
 import Posts from './components/Transactions/Posts';
 import Wallet from './components/Wallet/Wallet';
+import HomeGrid from './components/HomeMangement/HomeGrid';
+import HomeGridPending from './components/HomeMangement/HomeGridPending';
+import HomeGridHistory from './components/HomeMangement/HomeGridHistory';
 
 
 function App() {
@@ -37,6 +40,10 @@ function App() {
         <Route path="/transactions/pending" exact element={<PendingTransactions />} />
         <Route path="/transactions/post" exact element={<Posts />} />
         <Route path="/transactions/past" exact element={<PastTransactions />} />
+        <Route path="/homeGrid" exact element={<HomeGrid />} />
+        <Route path="/homeGrid/pending" exact element={<HomeGridPending />} />
+        <Route path="/homeGrid/past" exact element={<HomeGridHistory />} />
+
       </Routes>
       <SnackbarComp />
     </>

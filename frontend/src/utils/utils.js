@@ -33,3 +33,8 @@ export const dateFormat = (data) => {
   const date = new Date(data);
   return date?.toISOString().split('T')[0];
 }
+
+export const dateFormat2 = (data) => {
+  const date = new Date(data);
+  return `${date?.toISOString().split('T')[0]} ${date?.toISOString().split('T')[1]}`;
+}

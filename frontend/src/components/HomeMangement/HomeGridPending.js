@@ -2,14 +2,14 @@ import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
 import {Link,} from 'react-router-dom';
 import {Tooltip} from '@mui/material';
-import TransactionNavbar from "./TransactionNavbar";
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats} from '../../Redux/Actions/index'
-import "./PastTransactions.css";
-import car from "./charging.jpeg";
+import "../Transactions/PastTransactions.css";
+import car from "../Transactions/charging.jpeg";
 import * as utils from '../../utils/utils';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import HomeManagementNavbar from "./HomeManagementNavbar";
 
-const CurrentTransactions = (props) => {
+const HomePendingRequest = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("");
@@ -23,13 +23,13 @@ const CurrentTransactions = (props) => {
   const {userDetails, acceptTrades} = props
 
   useEffect(() => {
-    if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+    if(!userDetails.user)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
     props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}})
   },[])
 
   useEffect(()=>{
     if(utils.arrayLengthChecker(acceptTrades)){
-        setAcceptedTrades(acceptTrades.filter((item)=>item?.typeOfPost===1));
+        setAcceptedTrades(acceptTrades.filter((item)=>item?.typeOfPost===2));
     }
   },[acceptTrades])
 
@@ -115,7 +115,7 @@ const CurrentTransactions = (props) => {
 
   return (
     <div>
-      <TransactionNavbar />
+      <HomeManagementNavbar />
       {loading && (
         <div className="loading-screen">
           <img style={{width:'300px'}} src={car} alt="Loading..." />
@@ -148,8 +148,8 @@ const CurrentTransactions = (props) => {
                 <th>Name</th>
                 <th>Committed Energy</th>
                 <th>Status</th>
-                <th>Date</th>
-                <th>Initiate</th>
+                <th>Execution Date</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -159,9 +159,9 @@ const CurrentTransactions = (props) => {
                   <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
                   <td>{row.energy} kWh</td>
                   <td>{row.chargePerUnit} rupees/kWh</td>
-                  <td>{utils.dateFormat(row.createdAt)}</td>
+                  <td>{utils.dateFormat2(row.executionTime)}</td>
                   <td style={{display:'flex'}}>
-                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>{row.state==="accepted"?'Initiate':row.state==='inProgress'?'InProgress':''}</button>
+                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>Initiate</button>
                     {row.state==="accepted" && <div style={{flexGrow:1}}>
                       <Tooltip title="backoff trade">
                         <DeleteForeverOutlinedIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleDeleteClick(row)}/>
@@ -201,4 +201,4 @@ const mapDispatchToProps =  {
   updateTransactionStats,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrentTransactions)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePendingRequest)
