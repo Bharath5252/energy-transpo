@@ -19,6 +19,9 @@ const Sidebar = () => {
           {/* <Link to="/query" className="menu-links">
             Query
           </Link> */}
+          <Link to="/homeGrid" className="menu-links">
+            Home Management
+          </Link>
           <Link to="/vehicleDashboard" className="menu-links">
             Vehicle Inventory
           </Link>

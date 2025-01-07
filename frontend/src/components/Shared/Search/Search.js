@@ -18,6 +18,9 @@ const Search = () => {
     { name: "Pending Transactions", link: "/transactions/pending"},
     { name: "Transactions History", link: "/transactions/past"},
     { name: "Past Transactions", link: "/transactions/past"},
+    { name: "Home Management", link: "/homeGrid"},
+    { name: "Pending Home Transactions", link: "/homeGrid/pending"},
+    { name: "Home Transactions History", link: "/homeGrid/past"},
   ];
 
   const handleInputChange = (e) => {
