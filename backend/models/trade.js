@@ -12,6 +12,7 @@ const tradeSchema = new mongoose.Schema({
     acceptedUserId: { type: String,default: null },
     acceptedTime: { type: Date, default: null },
     selectedContract: { type: String, enum: ["Manual", "Automatic"], required: true },
+    executionTime: { type: Date, default: null },
     location: {
         type: { type: String, enum: ["Point"], required: true },
         coordinates: {

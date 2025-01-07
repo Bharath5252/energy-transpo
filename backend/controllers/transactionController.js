@@ -57,7 +57,7 @@ exports.preCheckTransaction = async (req, res) => {
         const receiver = await User.findById(receiverId);
         
         const senderVehicleData = await Vehicle.findById(senderVehicle);
-        const receiverVehicleData = await Vehicle.findById(receiverVehicle);;
+        const receiverVehicleData = await Vehicle.findById(receiverVehicle);
 
         if (!sender || !receiver || !senderVehicleData || !receiverVehicleData) {
             return res.status(404).json({ message: "User or vehicle not found." });
