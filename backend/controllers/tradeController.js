@@ -4,7 +4,11 @@ const User = require("../models/user");
 exports.createTrade = async (req, res) => {
     try {
         const trade = new Trade(req.body);
+        if(trade.typeOfPost===2) {
+            trade.state = "accepted";
+        }
         const savedTrade = await trade.save();
+
         res.status(200).json({ message: "Trade posted successfully.", trade: savedTrade });
     } catch (error) {
         res.status(500).json({ error: error.message });
