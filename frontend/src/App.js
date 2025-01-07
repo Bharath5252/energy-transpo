@@ -31,7 +31,7 @@ function App() {
         <Route path="/vehicleDashboard" exact element={<Vehicle />} />
         <Route path="/vehicleDashboard/add" exact element={<AddVehicle />} />
         <Route path="/vehicleDashboard/inventory" exact element={<VehicleInventory/>} />
-        <Route path="/userTxn" exact element={<UserTxn /> } />
+        {/* <Route path="/userTxn" exact element={<UserTxn /> } /> */}
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/transactions" exact element={<NewTransaction />} />
         <Route path="/transactions/pending" exact element={<PendingTransactions />} />
