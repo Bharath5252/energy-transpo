@@ -2,6 +2,7 @@
 .wallet-page {
     background-color: #f9f9f9; /* Soft white background */
     min-height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -13,7 +14,7 @@
   .wallet-layout {
     display: flex;
     gap: 50px;
-    width: 100%;
+    /* width: 100%; */
     max-width: 1200px;
   }
   

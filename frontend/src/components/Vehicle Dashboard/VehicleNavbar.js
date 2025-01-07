@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import Sidebar from './Sidebar';
 import {getUserDetails} from '../../Redux/Actions';
+import Search from '../Shared/Search/Search';
 
 const VehicleNavbar = (props) => {
     const {userDetails} = props;
@@ -25,9 +26,10 @@ const VehicleNavbar = (props) => {
         <Sidebar/>
         <header className="header">
           <div className="user-info" style={{alignItems:'center'}}>
-            <input style={{ marginLeft: "60px", height:'2rem'}} type="text" placeholder="Give a voice command" />
-            <Link to="/vehicleDashboard" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Vehicle Dashboard</Link>
+            <Search />
+            <Link to="/home" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Home</Link>
             <Link to="/vehicleDashboard/inventory" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Vehicle Inventory</Link>
+            <Link to="/vehicleDashboard" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Vehicle Dashboard</Link>
             <Link to="/vehicleDashboard/add" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Add Vehicle</Link>
           </div>
           <div className="user-info">

@@ -16,11 +16,11 @@ const Sidebar = () => {
           <Link to="/transactions" className="menu-links">
             Transactions
           </Link>
-          <Link to="/query" className="menu-links">
+          {/* <Link to="/query" className="menu-links">
             Query
-          </Link>
+          </Link> */}
           <Link to="/vehicleDashboard" className="menu-links">
-            Vehicle Dashboard
+            Vehicle Inventory
           </Link>
     </Menu>
   );

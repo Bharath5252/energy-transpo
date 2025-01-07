@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Sidebar from '../Vehicle Dashboard/Sidebar';
 import { getUserDetails } from '../../Redux/Actions';
 import { Link } from 'react-router-dom';
+import Search from '../Shared/Search/Search';
 
 const TransactionNavbar = (props) => {
     const {userDetails} = props;
@@ -25,7 +26,8 @@ const TransactionNavbar = (props) => {
         <Sidebar/>
         <header className="header">
           <div className="user-info" style={{alignItems:'center'}}>
-            <input style={{ marginLeft: "60px", height:'2rem'}} type="text" placeholder="Give a voice command" />
+            <Search />
+            <Link to="/home" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Home</Link>
             <Link to="/transactions" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>New Request</Link>
             <Link to="/transactions/post" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Posts</Link>
             <Link to="/transactions/pending" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Pending Transactions</Link>
