@@ -8,8 +8,6 @@ import Search from '../Search/Search';
 const Navbar = (props) => {
   const { userDetails } = props;
   const [date, setDate] = useState();
-  const [searchInput, setSearchInput] = useState("");
-  const [filteredPrompts, setFilteredPrompts] = useState([]);
 
   const prompts = [
     { name: "Home", link: "/home" },
@@ -37,23 +35,10 @@ const Navbar = (props) => {
     if (!userDetails) props.getUserDetails({ params: { userId: localStorage.getItem("userId") } });
   }, []);
 
-  const handleInputChange = (e) => {
-    const input = e.target.value;
-    setSearchInput(input);
-
-    if (input === "") {
-      setFilteredPrompts([]);
-    } else {
-      const matches = prompts.filter((prompt) =>
-        prompt.name.toLowerCase().includes(input.toLowerCase())
-      );
-      setFilteredPrompts(matches);
-    }
-  };
 
   return (
     <div>
-      <Sidebar />
+      <Sidebar/>
       <header className="header">
         <div className="user-info" style={{ alignItems: 'center' }}>
           <Search />
