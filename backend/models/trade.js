@@ -6,7 +6,7 @@ const tradeSchema = new mongoose.Schema({
     typeOfPost: { type: Number, enum: [1, 2], required: true },
     typeOfOrder: { type: String, enum: ["Buy", "Sell"], required: true },
     energy: { type: Number, required: true },
-    chargePerUnit: { type: Number, required: true },
+    chargePerUnit: { type: Number, required: false },
     state: { type: String, enum: ["posted", "accepted"], default: "posted" },
     acceptantVehicleId: { type: String, default: null },
     acceptedUserId: { type: String,default: null },
