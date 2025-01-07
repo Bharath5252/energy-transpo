@@ -9,20 +9,6 @@ const Navbar = (props) => {
   const { userDetails } = props;
   const [date, setDate] = useState();
 
-  const prompts = [
-    { name: "Home", link: "/home" },
-    { name: "Transactions", link: "/transactions" },
-    { name: "Vehicle Dashboard", link: "/vehicleDashboard" },
-    { name: "Vehicle Inventory", link: "/vehicleDashboard/inventory" },
-    { name: "Profile", link: "/profile" },
-    { name: "Wallet", link: "/home" },
-    { name: "Add a vehicle", link: "/vehicleDashboard/add"},
-    { name: "Posts", link: "/transactions/post"},
-    { name: "Pending Transactions", link: "/transactions/pending"},
-    { name: "Transactions History", link: "/transactions/past"},
-    { name: "Past Transactions", link: "/transactions/past"},
-  ];
-
   useEffect(() => {
     const today = new Date();
     const day = today.getDate();
