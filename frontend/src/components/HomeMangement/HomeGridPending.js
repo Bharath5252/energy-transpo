@@ -145,9 +145,8 @@ const HomePendingRequest = (props) => {
             <thead>
               <tr>
                 <th>Transaction Type</th>
-                <th>Name</th>
+                <th>Vehicle Name</th>
                 <th>Committed Energy</th>
-                <th>Status</th>
                 <th>Execution Date</th>
                 <th>Action</th>
               </tr>
@@ -156,12 +155,11 @@ const HomePendingRequest = (props) => {
               {utils.arrayLengthChecker(filteredRows) ? filteredRows.map((row, index) => (
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
-                  <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
-                  <td>{row.energy} kWh</td>
-                  <td>{row.chargePerUnit} rupees/kWh</td>
-                  <td>{utils.dateFormat2(row.executionTime)}</td>
+                  <td>{row?.vehicleName}</td>
+                  <td>{row?.energy} kWh</td>
+                  <td>{utils.dateFormat2(row?.executionTime)}</td>
                   <td style={{display:'flex'}}>
-                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>Initiate</button>
+                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>Edit</button>
                     {row.state==="accepted" && <div style={{flexGrow:1}}>
                       <Tooltip title="backoff trade">
                         <DeleteForeverOutlinedIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleDeleteClick(row)}/>

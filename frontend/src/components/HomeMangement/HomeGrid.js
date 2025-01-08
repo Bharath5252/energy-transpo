@@ -207,8 +207,16 @@ const highestTariff = findExtremeTariffDateTime(start, end, "high");
       }
     }
     if(payload.selectedContract==="Manual")payload.executionTime=time;
-    if(payload.selectedContract==="Automatic" && transactionType==="Buy")payload.executionTime=findExtremeTariffDateTime(start, end, "low").dateTime;
-    if(payload.selectedContract==="Automatic" && transactionType==="Sell")payload.executionTime=findExtremeTariffDateTime(start, end, "high").dateTime;
+    if(payload.selectedContract==="Automatic" && transactionType==="Buy"){
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low")
+      payload.executionTime= dateTime;
+      payload.chargePerUnit= tariff
+    }
+    if(payload.selectedContract==="Automatic" && transactionType==="Sell"){
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "high")
+      payload.executionTime= dateTime;
+      payload.chargePerUnit= tariff
+    }
     props.createPost({data:payload}).then((response)=>{
       if(response.payload.status===200 || response.payload.status===201){
         setTransactionType("")

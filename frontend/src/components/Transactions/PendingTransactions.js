@@ -46,14 +46,14 @@ const CurrentTransactions = (props) => {
       if(response.payload.status===200){
         preCheckPayload.typeOfTransaction = row.typeOfPost;
         preCheckPayload.credits = row.energy*row.chargePerUnit;
-        props.initiateTransaction({data:preCheckPayload}).then((response)=>{
+        props.initiateTransaction({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
           if(response.payload.status===200){
             const trnsId = response.payload?.data?.transactionId
             setSelectedRow(row);
             setLoading(true);
             setAnimate(true);
             setTimeout(() => {
-              props.updateTransactionStats({params:{transactionId:trnsId},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit}})
+              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:localStorage.getItem("userId"),receiverId:row.userId}})
             }, 9000);
             setTimeout(() => {
               setLoading(false);
