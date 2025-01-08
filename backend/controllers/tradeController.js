@@ -1,5 +1,6 @@
 const Trade = require("../models/trade");
 const User = require("../models/user");
+const Vehicle = require("../models/vehicle");
 
 exports.createTrade = async (req, res) => {
     try {
@@ -14,6 +15,36 @@ exports.createTrade = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+exports.editTrade = async (req, res) => {
+    try {
+        const { tradeId } = req.params;
+        const updates = req.body;
+
+        if (!tradeId) {
+            return res.status(400).json({ message: "Trade ID is required." });
+        }
+
+        const updatedTrade = await Trade.findByIdAndUpdate(
+            tradeId,
+            { $set: updates },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedTrade) {
+            return res.status(404).json({ message: "Trade not found." });
+        }
+
+        res.status(200).json({
+            message: "Trade updated successfully.",
+            trade: updatedTrade
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 exports.getAllTrades = async (req, res) => {
     try {
@@ -98,18 +129,22 @@ exports.getAcceptedTrades = async (req, res) => {
         }
 
         const trades = await Trade.find({
-            state: "accepted",
+            state: { $in: ["accepted", "inProgress"] },
             $or: [{ userId }, { acceptedUserId: userId }],
         })
 
         const tradesWithUsernames = await Promise.all(trades.map(async (trade) => {
             const user = await User.findById(trade.userId);
             const acceptedUser = trade.acceptedUserId ? await User.findById(trade.acceptedUserId) : null;
+            const vehicle = await Vehicle.findById(trade.vehicleId);
+
+            const name = vehicle ? `${vehicle?.vehicleDomain} ${vehicle.vehicleName} ${vehicle.vehicleModel} - ${vehicle.nickName}` : null;
 
             return {
                 ...trade.toObject(),
                 username: user ? user.username : null,
                 acceptedUsername: acceptedUser ? acceptedUser.username : null,
+                vehicleName: name,
             };
         }));
 

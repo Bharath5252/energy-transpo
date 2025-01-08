@@ -1,9 +1,25 @@
 const Transaction = require("../models/transaction");
 const User = require("../models/user");
 const Vehicle = require("../models/vehicle");
+const Trade = require("../models/trade");
 
 exports.initiateTransaction = async (req, res) => {
     try {
+        tradeId = req.query.tradeId;
+
+        if (!tradeId) {
+            return res.status(400).json({ message: "Trade ID is required." });
+        }
+
+        const trade = await Trade.findById(tradeId);
+        if (!trade) {
+            return res.status(404).json({ message: "Trade not found." });
+        }
+
+        if (trade.state !== "accepted") {
+            return res.status(400).json({ message: "Trade is not in 'accepted' state." });
+        }
+
         const {
             typeOfTransaction,
             senderId,
@@ -26,7 +42,11 @@ exports.initiateTransaction = async (req, res) => {
             chargePerUnit,
         });
 
+        trade.state = "inProgress";
+        await trade.save();
+
         const savedTransaction = await transaction.save();
+
         res.status(200).json({
             message: "Transaction initiated.",
             transactionId: savedTransaction._id,
@@ -95,11 +115,17 @@ exports.preCheckTransaction = async (req, res) => {
 exports.updateTransactionStats = async (req, res) => {
     try {
         const { transactionId } = req.query;
+        const { tradeId } = req.query;
         const { transferredEnergy, transactionStatus, chargePerUnit } = req.body;
 
         const transaction = await Transaction.findById(transactionId);
         if (!transaction) {
             return res.status(404).json({ message: "Transaction not found." });
+        }
+
+        const trade = await Trade.findById(tradeId);
+        if (!trade) {
+            return res.status(404).json({ message: "Trade not found." });
         }
 
         const sender = await User.findById(transaction.senderId);
@@ -121,6 +147,9 @@ exports.updateTransactionStats = async (req, res) => {
 
             transaction.transferredEnergy = transferredEnergy;
             transaction.transactionStatus = transactionStatus || transaction.transactionStatus;
+
+            trade.state = "completed";
+            await trade.save();
 
             await sender.save();
             await receiver.save();

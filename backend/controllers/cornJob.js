@@ -12,8 +12,7 @@ const triggerScheduledJobs = async () => {
 
     trades.forEach(trade => {
         console.log(`Triggering job for trade ID: ${trade._id}`);
-        trade.state = "accepted";
-        trade.save();
+        // subsequent trades will be triggered by the job itself
     });
 };
 
