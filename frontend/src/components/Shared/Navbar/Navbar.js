@@ -33,6 +33,7 @@ const Navbar = (props) => {
           {/* <Link to="/query" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Query</Link> */}
           <Link to="/homeGrid" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Home Management</Link>
           <Link to="/vehicleDashboard/inventory" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Vehicle Inventory</Link>
+          <Link to="/liveStream" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Live Stream</Link>
           {/* <Link to="/wallet" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Wallet</Link> */}
         </div>
         <div className="user-info">
