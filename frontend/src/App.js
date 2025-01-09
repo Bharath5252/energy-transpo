@@ -19,6 +19,7 @@ import Wallet from './components/Wallet/Wallet';
 import HomeGrid from './components/HomeMangement/HomeGrid';
 import HomeGridPending from './components/HomeMangement/HomeGridPending';
 import HomeGridHistory from './components/HomeMangement/HomeGridHistory';
+import LiveStream from './livestream';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/login" exact element={<Login  />} />
         <Route path="/signup" exact element={<SignUp/>} />
         <Route path="/home" exact element={<Wallet />} />
+        <Route path="/liveStream" exact element={<LiveStream />} />
         {/* <Route path="/wallet" exact element={<Wallet/>} /> */}
         <Route path="/profile" exact element={<Profile />} />
         <Route path="/vehicleDashboard" exact element={<Vehicle />} />
