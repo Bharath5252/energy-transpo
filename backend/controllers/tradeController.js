@@ -19,7 +19,7 @@ exports.createTrade = async (req, res) => {
 
 exports.editTrade = async (req, res) => {
     try {
-        const { tradeId } = req.params;
+        const { tradeId } = req.query;
         const updates = req.body;
 
         if (!tradeId) {

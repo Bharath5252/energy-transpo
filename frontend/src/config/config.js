@@ -1,6 +1,6 @@
 const isRunningLocally = () => window.location.hostname === 'localhost';
 
-const HOST_URL = isRunningLocally ? "http://localhost:8000" : '';
+const HOST_URL = isRunningLocally() ? "http://localhost:8000" : '';
 
 const BASE_URL1 = HOST_URL+'/api/auth';
 const BASE_URL2 = HOST_URL+'/api/users';
@@ -23,3 +23,4 @@ export const PRE_CHECK_TRANSACTION_URL = `${BASE_URL5}/pre-check`;
 export const INITIATE_TRANSACTION_URL = `${BASE_URL5}/initiate`;
 export const UPDATE_TRANSACTION_URL = `${BASE_URL5}/update`;
 export const USER_TRANSACTION_HISTORY_URL = `${BASE_URL5}/history`;
+export const EDIT_TRADE_URL = `${BASE_URL4}/edit`;

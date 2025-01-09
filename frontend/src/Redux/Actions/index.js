@@ -95,6 +95,10 @@ export const getTransactionHistoryByUser = createApiThunk(types.USER_TRANSACTION
     method:"GET",
     url:config.USER_TRANSACTION_HISTORY_URL
 })
+export const editTrade = createApiThunk(types.EDIT_TRADE,{
+    method:"POST",
+    url:config.EDIT_TRADE_URL
+})
 
 export const toggleSnackbar = (payload) => {
     return{

@@ -320,6 +320,26 @@ export const reducer = (state=initialState, action) => {
                     status: false,
                 },
             }
+        case `${types.EDIT_TRADE}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.EDIT_TRADE}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
         default :
         return{
             ...state,

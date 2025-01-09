@@ -139,7 +139,7 @@ const NewTransaction = (props) => {
                 <select style={{width:'100%'}} value={vehicleSelected} onChange={(e)=>handleVehicleChange(e.target.value)} className="form-control">
                   <option value="">None</option>
                   {utils.arrayLengthChecker(vehicles) && vehicles?.map((vehicle)=>(
-                    <option key={vehicle?._id} value={vehicle?._id}>{vehicle?.vehicleName} {vehicle?.vehicleDomain} {vehicle?.vehicleModel} - {vehicle?.nickName}</option>
+                    <option key={vehicle?._id} value={vehicle?._id}>{vehicle?.vehicleDomain} {vehicle?.vehicleName} {vehicle?.vehicleModel} - {vehicle?.nickName}</option>
                   ))}
                 </select>
               </div>
