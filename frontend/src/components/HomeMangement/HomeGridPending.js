@@ -187,8 +187,8 @@ const HomePendingRequest = (props) => {
                   }
                   <td style={{display:'flex'}}>
                     {row.state==="accepted" && editTradeId===row._id && <div style={{flexGrow:1}}>
-                      <Tooltip title="backoff trade">
-                        <ArrowBackIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleClearEdit(row)}/>
+                      <Tooltip title="back">
+                        <ArrowBackIcon style={{ cursor:'pointer'}} onClick={() => handleClearEdit(row)}/>
                       </Tooltip>
                     </div>
                     }
