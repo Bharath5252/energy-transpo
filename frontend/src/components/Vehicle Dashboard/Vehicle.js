@@ -1,18 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../Redux/Actions";
+import { toggleSnackbar, getUserDetails } from "../../Redux/Actions";
 import "./Vehicle.css";
-// import logo from "./Logo.png";
-import SEAL from "./BYD_SEAL.png";
-import STATION from "./station.png";
-import Sidebar from "./Sidebar";
 import VehicleNavbar from "./VehicleNavbar";
+import * as utils from '../../utils/utils';
+import vehiclesData from '../../MOCK_DATA.json';
+// import { convertLength } from "@mui/material/styles/cssUtils";
 
 
 const Vehicle = (props) => {
   const [date,setDate] = useState();
-  const { userDetails } = props;
+  const { userDetails, vehicleSelected } = props;
+  const [userVehicles, setUserVehicles] = useState({});
+
+  useEffect(() => {
+        if(Object.keys(vehicleSelected).length===0){
+            props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+        }
+    },[])
+    useEffect(() => { 
+        const user = userDetails?.user?.vehicles? userDetails?.user?.vehicles:[];
+        if(utils.arrayLengthChecker(user) && Object.keys(vehicleSelected).length===0){
+            setUserVehicles(user[0]);
+        }
+    },[userDetails])
+
+    useEffect(() => {
+        setUserVehicles(vehicleSelected);
+    },[vehicleSelected])
+
+    // const vehicle = props.location.state?.vehicle;
+
+    // console.log(vehicle);
 
   useEffect(() => {
     const today = new Date();
@@ -21,6 +41,21 @@ const Vehicle = (props) => {
     const formattedDate = `${day} ${month}`;
     setDate(formattedDate);
   }, []);
+
+  const [matchedVehicle, setMatchedVehicle] = useState(null);
+
+  useEffect(() => {
+    console.log(userVehicles);
+    const match = vehiclesData.find(
+        (data) =>
+          data.car === userVehicles?.vehicleDomain &&
+          data.car_model === userVehicles?.vehicleName
+      );
+      setMatchedVehicle(match);
+    // console.log(match);
+  }, [userVehicles]);
+
+
   return (
     <div className="dashboard">
       {/* <aside className=""> */}
@@ -43,16 +78,16 @@ const Vehicle = (props) => {
                         <div>
                             <div class="battery-text-container">
                                 <div>
-                                    <div class="battery-text1">405 km</div>
-                                    <div class="battery-text2">Left</div>
+                                    <div class="battery-text1">{matchedVehicle?.battery_percent}%</div>
+                                    <div class="battery-text2">Charge Left</div>
                                 </div>
                                 <div>
-                                    <div class="battery-text1">35</div>
-                                    <div class="battery-text2">chargings</div>
+                                    <div class="battery-text1">{matchedVehicle?.car_current_battery} kWh</div>
+                                    <div class="battery-text2">Energy Left</div>
                                 </div>
                                 <div>
-                                    <div class="battery-text1">5915 km</div>
-                                    <div class="battery-text2">Distance travelled</div>
+                                    <div class="battery-text1">{matchedVehicle?.car_battery} kWh</div>
+                                    <div class="battery-text2">Battery capacity</div>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +96,7 @@ const Vehicle = (props) => {
                 <div class="battery">
                     <div style={{marginBottom:"-6px"}}><h5>Station</h5></div>
                     <div style={{fontSize: "10px"}}>See location →</div>
-                    <div><img src={STATION} alt="Station" style={{paddingLeft:"40px",height:"125px"}}/></div>
+                    <div><img src="/images/station.png" alt="Station" style={{paddingLeft:"40px",height:"125px"}}/></div>
                 </div>
             </div>
             <div class="box2">
@@ -111,21 +146,17 @@ const Vehicle = (props) => {
             
             <div class="car-details-content">
                 <div>
-                    <img src={SEAL} alt="Car" />
+                    <img src={`/images/cars/${userVehicles?.vehicleDomain}_${userVehicles?.vehicleName}.png`} alt="Car" />
+                    {/* <img src={VehicleImg} alt="Car" /> */}
                 </div>
                 <div>
-                    <h5><b>BYD SEAL</b></h5>
+                    <h5>{userVehicles?.vehicleDomain}</h5>
                 </div>
                 <div>
-                    <h6>83KWH AT Performance Edition</h6>
+                    <h6>{userVehicles?.vehicleName}</h6>
                 </div>
             </div>
           </div>
-          
-
-          
-
-          
         </section>
       </main>
     </div>
@@ -134,10 +165,12 @@ const Vehicle = (props) => {
 
 const mapStateToProps = (state) => ({
   userDetails: state.userDetails,
+  vehicleSelected: state.vehicleSelected,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleSnackbar: (payload) => dispatch(toggleSnackbar(payload)),
-});
+const mapDispatchToProps = {
+  toggleSnackbar,
+  getUserDetails,
+};
 
 export default connect(mapStateToProps,mapDispatchToProps)(Vehicle);

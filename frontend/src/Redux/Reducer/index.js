@@ -14,6 +14,7 @@ const initialState = {
     allTrades:[],
     acceptTrades:[],
     userTransactionHistory:[],
+    vehicleSelected:{},
 }
 
 export const reducer = (state=initialState, action) => {
@@ -85,6 +86,12 @@ export const reducer = (state=initialState, action) => {
                 ...state,
                 isLoading: false,
                 snackBarStatus: action.payload,
+            }
+        case `${types.SET_VEHICLE}`:
+            return{
+                ...state,
+                isLoading: false,
+                vehicleSelected: action.payload,
             }
         case `${types.GET_CAR_LIST}`:
             return{
