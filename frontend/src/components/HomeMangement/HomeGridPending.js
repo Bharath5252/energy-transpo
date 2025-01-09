@@ -50,7 +50,8 @@ const HomePendingRequest = (props) => {
       return;
     }
     const payload = {
-      executionTime:time
+      executionTime:time,
+      chargePerUnit:utils.calculateTariff(new Date(time)).toFixed(2)
     }
     props.editTrade({params:{tradeId:row._id},data:payload}).then((response)=>{
       if(response.payload.status===200){

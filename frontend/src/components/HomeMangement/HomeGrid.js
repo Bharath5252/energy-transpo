@@ -110,40 +110,6 @@ function findExtremeTariffDateTime(startDate, endDate, extremeType = "low") {
     };
 }
 
-function calculateTariff(dateTime) {
-  /**
-   * Function to calculate the electricity tariff for a given date and time.
-   *
-   * Parameters:
-   * - dateTime (Date): A JavaScript Date object representing the specific date and time.
-   *
-   * Returns:
-   * - Number: The calculated tariff (e.g., in INR/kWh).
-   */
-  const hour = dateTime.getHours();
-  const weekday = dateTime.getDay(); // 0 = Sunday, 6 = Saturday
-
-  // Tariff logic
-  if (weekday === 0 || weekday === 6) { // Weekend (Saturday/Sunday)
-      if (hour >= 2 && hour <= 5) { // Early morning
-          return Math.random() * (3.0 - 2.0) + 2.0; // Low tariff
-      } else if (hour >= 18 && hour <= 21) { // Evening peak
-          return Math.random() * (10.0 - 8.0) + 8.0; // High tariff
-      } else {
-          return Math.random() * (6.0 - 4.0) + 4.0; // Moderate tariff
-      }
-  } else { // Weekday
-      if (hour >= 2 && hour <= 5) { // Early morning
-          return Math.random() * (2.5 - 1.5) + 1.5; // Low tariff
-      } else if (hour >= 18 && hour <= 21) { // Evening peak
-          return Math.random() * (12.0 - 9.0) + 9.0; // High tariff
-      } else {
-          return Math.random() * (7.0 - 3.0) + 3.0; // Moderate tariff
-      }
-  }
-}
-
-
 // Example usage
 const start = new Date();
 const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
@@ -236,7 +202,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
     }
     if(payload.selectedContract==="Manual"){
       payload.executionTime=time;
-      payload.chargePerUnit=calculateTariff(new Date(time)).toFixed(2);
+      payload.chargePerUnit=utils.calculateTariff(new Date(time)).toFixed(2);
     }
     if(payload.selectedContract==="Automatic" && transactionType==="Buy"){
       const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low")
