@@ -2,12 +2,13 @@ import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
 import {Link,} from 'react-router-dom';
 import {Tooltip} from '@mui/material';
-import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats} from '../../Redux/Actions/index'
+import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats, editTrade} from '../../Redux/Actions/index'
 import "../Transactions/PastTransactions.css";
 import car from "../Transactions/charging.jpeg";
 import * as utils from '../../utils/utils';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import HomeManagementNavbar from "./HomeManagementNavbar";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const HomePendingRequest = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
@@ -19,6 +20,8 @@ const HomePendingRequest = (props) => {
   const [success, setSuccess] = useState(0);
   const userId = localStorage.getItem("userId");
   const [acceptedTrades, setAcceptedTrades] = useState([]);
+  const [editTradeId, setEditTradeId] = useState("");
+  const [time, setTime] = useState("");
 
   const {userDetails, acceptTrades} = props
 
@@ -34,37 +37,40 @@ const HomePendingRequest = (props) => {
   },[acceptTrades])
 
   const handleButtonClick = (row) => {
-    const preCheckPayload = {
-      senderId : row.typeOfOrder==="Sell"?row.userId:row.acceptedUserId,
-      receiverId : row.typeOfOrder==="Sell"?row.acceptedUserId:row.userId,
-      senderVehicle : row.typeOfOrder==="Sell"?row.vehicleId:row.acceptantVehicleId,
-      receiverVehicle : row.typeOfOrder==="Sell"?row.acceptantVehicleId:row.vehicleId,
-      committedEnergy : row.energy,
-      chargePerUnit : row.chargePerUnit,
+    if(row.state==="inProgress"){
+      props.toggleSnackbar({open:'true',message:'Trade is in progress',status:false});
+      return;
     }
-    props.preCheckTransaction({data:preCheckPayload}).then((response)=>{
+    if(editTradeId!==row._id){
+      setEditTradeId(row._id);
+      return;
+    }
+    if(time===""){
+      props.toggleSnackbar({open:'true',message:'Please Enter the Time of execution',status:false});
+      return;
+    }
+    const payload = {
+      executionTime:time
+    }
+    props.editTrade({params:{tradeId:row._id},data:payload}).then((response)=>{
       if(response.payload.status===200){
-        preCheckPayload.typeOfTransaction = row.typeOfPost;
-        preCheckPayload.credits = row.energy*row.chargePerUnit;
-        props.initiateTransaction({data:preCheckPayload}).then((response)=>{
-          if(response.payload.status===200){
-            const trnsId = response.payload?.data?.transactionId
-            setSelectedRow(row);
-            setLoading(true);
-            setAnimate(true);
-            setTimeout(() => {
-              props.updateTransactionStats({params:{transactionId:trnsId},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit}})
-            }, 9000);
-            setTimeout(() => {
-              setLoading(false);
-              setSuccess(1);
-              // setAnimate(false);  
-            }, 10000); 
-          }
-        })
+        setEditTradeId("");
+        setTime("");
+        props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}});
       }
     })
   };
+
+  const handleTimeChange = (e) => {
+    const selectedTime = new Date(e.target.value);
+    const currentTime = new Date();
+
+    if (selectedTime > currentTime) {
+      setTime(e.target.value);
+    } else {
+      props.toggleSnackbar({open:'true',message:"Please select a date and time in the future.",status:false});
+    }
+}
 
   const handleDeleteClick = (row) => {
     props.cancelAcceptedTrade({params:{tradeId:row._id}}).then((response)=>{
@@ -73,6 +79,12 @@ const HomePendingRequest = (props) => {
       }
     })
   }
+
+  const handleClearEdit = (row) => {
+    setEditTradeId("");
+    setTime("");
+  }
+
   const rows = [
     {
       transaction: "Buy",
@@ -157,10 +169,31 @@ const HomePendingRequest = (props) => {
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row?.vehicleName}</td>
                   <td>{row?.energy} kWh</td>
-                  <td>{utils.dateFormat2(row?.executionTime)}</td>
+                  {editTradeId===row._id?
+                    <td>
+                      <input
+                        size='large'
+                        type="datetime-local"
+                        id="time"
+                        name="time"
+                        value={time}
+                        style={{ marginLeft: '1rem' }}
+                        onChange={(e) => { handleTimeChange(e) }}
+                        required
+                      />
+                    </td>
+                    :
+                    <td>{utils.dateFormat2(row?.executionTime)}</td>
+                  }
                   <td style={{display:'flex'}}>
-                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>Edit</button>
-                    {row.state==="accepted" && <div style={{flexGrow:1}}>
+                    {row.state==="accepted" && editTradeId===row._id && <div style={{flexGrow:1}}>
+                      <Tooltip title="back">
+                        <ArrowBackIcon style={{ cursor:'pointer'}} onClick={() => handleClearEdit(row)}/>
+                      </Tooltip>
+                    </div>
+                    }
+                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>{editTradeId===row._id?'Save':row.state==='accepted'?'Edit':row.state==='inProgress'?Inprogress:''}</button>
+                    {row.state==="accepted" && editTradeId!==row._id && <div style={{flexGrow:1}}>
                       <Tooltip title="backoff trade">
                         <DeleteForeverOutlinedIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleDeleteClick(row)}/>
                       </Tooltip>
@@ -197,6 +230,7 @@ const mapDispatchToProps =  {
   preCheckTransaction,
   initiateTransaction,
   updateTransactionStats,
+  editTrade
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePendingRequest)
