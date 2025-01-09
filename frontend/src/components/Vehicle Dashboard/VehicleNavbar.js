@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import Sidebar from './Sidebar';
+import Sidebar from '../Shared/Sidebar/Sidebar';
 import {getUserDetails} from '../../Redux/Actions';
 import Search from '../Shared/Search/Search';
 

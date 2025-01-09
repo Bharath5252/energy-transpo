@@ -1,7 +1,7 @@
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import logo from "./BYD_SEAL.png";
+// import logo from "./BYD_SEAL.png";
 import './Sidebar.css';
 
 // const CustomBurgerIcon = () => <img style={{width:"50px"}} src={logo} alt="logo" />;

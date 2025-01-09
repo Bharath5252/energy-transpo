@@ -107,6 +107,13 @@ export const toggleSnackbar = (payload) => {
     }
 }
 
+export const setVehicle = (payload) => {
+    return{
+        type:types.SET_VEHICLE,
+        payload
+    }
+}
+
 export const carList = () => {
     return async (dispatch) =>{
         const carsRef = ref(database, 'cars_data');

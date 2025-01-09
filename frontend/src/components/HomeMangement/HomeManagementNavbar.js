@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import {connect} from 'react-redux';
-import Sidebar from '../Vehicle Dashboard/Sidebar';
+import Sidebar from '../Shared/Sidebar/Sidebar';
 import { getUserDetails } from '../../Redux/Actions';
 import { Link } from 'react-router-dom';
 import Search from '../Shared/Search/Search';
