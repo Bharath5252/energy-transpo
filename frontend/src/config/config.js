@@ -24,3 +24,4 @@ export const INITIATE_TRANSACTION_URL = `${BASE_URL5}/initiate`;
 export const UPDATE_TRANSACTION_URL = `${BASE_URL5}/update`;
 export const USER_TRANSACTION_HISTORY_URL = `${BASE_URL5}/history`;
 export const EDIT_TRADE_URL = `${BASE_URL4}/edit`;
+export const CHECK_TRANSACTION_STATUS_URL = `${BASE_URL5}/checkStatus`;
