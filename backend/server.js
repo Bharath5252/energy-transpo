@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB connection
-mongoose.connect("mongodb://localhost:27017/test", {
+mongoose.connect("mongodb+srv://primefury:Duggii%405252@info-trade.cxgh0.mongodb.net/?retryWrites=true&w=majority&appName=Info-Trade", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
