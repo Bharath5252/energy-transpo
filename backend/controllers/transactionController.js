@@ -5,7 +5,7 @@ const Trade = require("../models/trade");
 
 exports.initiateTransaction = async (req, res) => {
     try {
-        tradeId = req.query.tradeId;
+        const tradeId = req.query.tradeId;
 
         if (!tradeId) {
             return res.status(400).json({ message: "Trade ID is required." });

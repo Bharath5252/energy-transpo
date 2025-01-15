@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {Link,} from 'react-router-dom';
 import {Tooltip} from '@mui/material';
 import TransactionNavbar from "./TransactionNavbar";
-import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats} from '../../Redux/Actions/index'
+import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, 
+  initiateTransaction, updateTransactionStats, checkTrnStatus} from '../../Redux/Actions/index'
 import "./PastTransactions.css";
 import car from "./charging.jpeg";
 import * as utils from '../../utils/utils';
@@ -42,6 +43,25 @@ const CurrentTransactions = (props) => {
       committedEnergy : row.energy,
       chargePerUnit : row.chargePerUnit,
     }
+    if(row.state==="inProgress"){
+      props.checkTrnStatus({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
+        if(response.payload.status===200){
+          const trnsId = response.payload?.data?.transactionId
+            setSelectedRow(row);
+            setLoading(true);
+            setAnimate(true);
+            setTimeout(() => {
+              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:preCheckPayload.senderId,receiverId:preCheckPayload.receiverId}})
+            }, 9000);
+            setTimeout(() => {
+              setLoading(false);
+              setSuccess(1);
+              // setAnimate(false);  
+            }, 9000);
+        }
+      })
+      return;
+    }
     props.preCheckTransaction({data:preCheckPayload}).then((response)=>{
       if(response.payload.status===200){
         preCheckPayload.typeOfTransaction = row.typeOfPost;
@@ -53,13 +73,13 @@ const CurrentTransactions = (props) => {
             setLoading(true);
             setAnimate(true);
             setTimeout(() => {
-              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:localStorage.getItem("userId"),receiverId:row.userId}})
+              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:preCheckPayload.senderId,receiverId:preCheckPayload.receiverId}})
             }, 9000);
             setTimeout(() => {
               setLoading(false);
               setSuccess(1);
               // setAnimate(false);  
-            }, 10000); 
+            }, 9000);
           }
         })
       }
@@ -199,6 +219,7 @@ const mapDispatchToProps =  {
   preCheckTransaction,
   initiateTransaction,
   updateTransactionStats,
+  checkTrnStatus
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentTransactions)

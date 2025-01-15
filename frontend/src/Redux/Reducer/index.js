@@ -15,6 +15,7 @@ const initialState = {
     acceptTrades:[],
     userTransactionHistory:[],
     vehicleSelected:{},
+    transactionStatus:{},
 }
 
 export const reducer = (state=initialState, action) => {
@@ -338,6 +339,22 @@ export const reducer = (state=initialState, action) => {
                 },
             }
         case `${types.EDIT_TRADE}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.CHECK_TRANSACTION_STATUS}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                transactionStatus: action.payload?.data,
+            }
+        case `${types.CHECK_TRANSACTION_STATUS}/rejected`:
             return {
                 ...state,
                 isLoading: false,

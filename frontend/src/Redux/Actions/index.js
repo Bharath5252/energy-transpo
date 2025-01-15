@@ -99,6 +99,10 @@ export const editTrade = createApiThunk(types.EDIT_TRADE,{
     method:"POST",
     url:config.EDIT_TRADE_URL
 })
+export const checkTrnStatus = createApiThunk(types.CHECK_TRANSACTION_STATUS,{
+    method:"POST",
+    url:config.CHECK_TRANSACTION_STATUS_URL
+})
 
 export const toggleSnackbar = (payload) => {
     return{
