@@ -142,8 +142,8 @@ exports.updateTransactionStats = async (req, res) => {
                 return res.status(400).json({ message: "Insufficient funds in sender's wallet." });
             }
 
-            sender.balance -= energyCost;
-            receiver.balance += energyCost;
+            sender.balance += energyCost;
+            receiver.balance -= energyCost;
 
             transaction.transferredEnergy = transferredEnergy;
             transaction.transactionStatus = transactionStatus || transaction.transactionStatus;

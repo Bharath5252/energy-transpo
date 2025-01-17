@@ -7,11 +7,15 @@ const Transaction = require('../models/transaction');
 
 const triggerScheduledJobs = async () => {
     const now = new Date();
+    now.setSeconds(0, 0);
+    console.log("UTC time: ", now.toISOString())
+
     const trades = await Trade.find({
         typeOfPost: 2,
-        time: { $lte: now },
+        executionTime: { $lte: now.toISOString() },
         state: "accepted"
     });
+    console.log(`Found ${trades.length} trades to process`);
 
     for (const trade of trades) {
         try {
@@ -96,6 +100,10 @@ const triggerScheduledJobs = async () => {
 
 // Cron job running every minute to check for due trades
 cron.schedule('* * * * *', () => {
-    console.log("Running scheduled trade job check...");
-    triggerScheduledJobs();
+    try {
+        console.log("Running scheduled trade job check...");
+        triggerScheduledJobs()
+    } catch (error) {
+        console.error("Error during cron job execution:", error);
+    }
 });

@@ -7,6 +7,9 @@ const vehicleRoutes = require("./routes/vehicleRoutes")
 const userRoutes = require("./routes/userRoutes")
 const tradeRoutes = require("./routes/tradeRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
+const ticketRoutes = require("./routes/ticketRoutes")
+
+require("./controllers/cronJob");
 
 const app = express();
 
@@ -24,7 +27,7 @@ mongoose.connect("mongodb+srv://primefury:Duggii%405252@info-trade.cxgh0.mongodb
         useUnifiedTopology: true,
     })
     .then(() => {
-        console.log("Connected to MongoDB locally");
+        console.log("Connected to MongoDB Server");
     })
     .catch((err) => {
         console.error("MongoDB connection error", err);
@@ -42,6 +45,7 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/users", userRoutes)
 app.use("/api/trades", tradeRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/tickets", ticketRoutes)
 
 const PORT = process.env.PORT || 8000;
 
