@@ -36,3 +36,44 @@
     transform: rotate(360deg);
   }
 }
+
+.rcw-widget-container {
+  width: 420px !important; 
+  /* max-height: 600px !important;  */
+  position: fixed !important; 
+  /* bottom: 20px; 
+  right: 20px;  */
+  z-index: 10;
+  /* background-color: #000 !important;  */
+  /* color: #fff !important; */
+}
+
+/* .rcw-message-list .rcw-message {
+  background-color: #fff !important; 
+  color: #000 !important; 
+}
+
+.rcw-message-list .rcw-message.rcw-user-message {
+  background-color: #333 !important; 
+  color: #fff !important; 
+}
+
+
+.rcw-input-container {
+  background-color: #333 !important; 
+}
+
+.rcw-send-button {
+  background-color: #fff !important; 
+  color: #000 !important; 
+}
+
+.rcw-quick-replies-container .rcw-quick-reply {
+  background-color: #555 !important; 
+  color: #fff !important; 
+} 
+  
+.rcw-quick-replies-container .rcw-quick-reply:hover {
+  background-color: #444 !important;
+}
+ */
