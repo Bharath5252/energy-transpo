@@ -44,4 +44,33 @@ const getAllTickets = async (req, res) => {
     }
 };
 
-module.exports = { createTicket, getTicketById, getAllTickets };
+const updateTicket = async (req, res) => {
+    try {
+        const { ticketId } = req.params; // Ticket ID passed as a URL parameter
+        const { response } = req.body; // Response sent in the request body
+
+        // Find the ticket by ID
+        const ticket = await Ticket.findById(ticketId);
+        if (!ticket) {
+            return res.status(404).json({ message: "Ticket not found." });
+        }
+
+        const user = await User.findById(ticket.userId);
+        const userName = user ? user.username : "";
+
+        ticket.response = response;
+        ticket.updatedAt = new Date();
+        const updatedTicket = await ticket.save();
+
+        res.status(200).json({
+            message: "Ticket updated successfully.",
+            ticket: updatedTicket,
+            userName: userName,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating ticket.", error: error.message });
+    }
+};
+
+module.exports = { createTicket, getTicketById, getAllTickets, updateTicket };

@@ -191,4 +191,17 @@ exports.getTransactionHistoryByUser = async (req, res) => {
     }
 };
 
+exports.getAllTransactions = async (req, res) => {
+    try {
+        const transactions = await Transaction.find()
+            .populate("senderId receiverId senderVehicle receiverVehicle")
+            .sort({ createdAt: -1 });
 
+        res.status(200).json({
+            message: "All transactions fetched successfully.",
+            transactions: transactions,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
