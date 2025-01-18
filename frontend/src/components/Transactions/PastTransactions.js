@@ -71,7 +71,7 @@ const PastTransactions = (props) => {
 
   const filteredRows = userTransactionHis.filter(
     (row) =>
-      (transactionFilter === "All" || (row.senderId._id===userId?"Sell":"Buy") === transactionFilter) &&
+      (transactionFilter === "All" || (row.senderId?._id===userId?"Sell":"Buy") === transactionFilter) &&
       (statusFilter === "All" || row.transactionStatus === statusFilter) &&
       (dateFilter === "" || row.updatedAt === dateFilter)
   );
@@ -129,8 +129,8 @@ const PastTransactions = (props) => {
             <tbody>
               {utils.arrayLengthChecker(filteredRows) ? filteredRows.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.senderId._id===userId?"Sell":"Buy"}</td>
-                  <td>{row.senderId._id===userId?row.senderId?.username:row.receiverId?.username}</td>
+                  <td>{row.senderId?._id===userId?"Sell":"Buy"}</td>
+                  <td>{row.senderId?._id===userId?row.senderId?.username:row.receiverId?.username}</td>
                   <td>{row.committedEnergy} Wh</td>
                   <td>{row.transferredEnergy} Wh</td>
                   <td>{row.transactionStatus}</td>
