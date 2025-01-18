@@ -35,7 +35,7 @@ const getTicketById = async (req, res) => {
 
 const getAllTickets = async (req, res) => {
     try {
-        const tickets = await Ticket.find();
+        const tickets = await Ticket.find().populate("userId");
 
         res.status(200).json({ tickets });
     } catch (error) {
@@ -55,9 +55,7 @@ const updateTicket = async (req, res) => {
             return res.status(404).json({ message: "Ticket not found." });
         }
 
-        const user = await User.findById(ticket.userId);
-        const userName = user ? user.username : "";
-
+        // Update the ticket's response and timestamp
         ticket.response = response;
         ticket.updatedAt = new Date();
         const updatedTicket = await ticket.save();
@@ -65,7 +63,6 @@ const updateTicket = async (req, res) => {
         res.status(200).json({
             message: "Ticket updated successfully.",
             ticket: updatedTicket,
-            userName: userName,
         });
     } catch (error) {
         console.error(error);
