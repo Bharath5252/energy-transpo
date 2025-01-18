@@ -7,6 +7,7 @@ const BASE_URL2 = HOST_URL+'/api/users';
 const BASE_URL3 = HOST_URL+'/api/vehicles';
 const BASE_URL4 = HOST_URL+'/api/trades';
 const BASE_URL5 = HOST_URL+'/api/transactions';
+const BASE_URL6 = HOST_URL+'/api/tickets';
 
 export const POST_LOGIN_DETAILS_URL = `${BASE_URL1}/login`;
 export const POST_SIGNUP_DETAILS_URL = `${BASE_URL1}/signup`;
@@ -25,3 +26,4 @@ export const UPDATE_TRANSACTION_URL = `${BASE_URL5}/update`;
 export const USER_TRANSACTION_HISTORY_URL = `${BASE_URL5}/history`;
 export const EDIT_TRADE_URL = `${BASE_URL4}/edit`;
 export const CHECK_TRANSACTION_STATUS_URL = `${BASE_URL5}/checkStatus`;
+export const CREATE_HELP_URL =  `${BASE_URL6}/create`;
