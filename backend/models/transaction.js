@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const transactionSchema = new mongoose.Schema(
     {
         typeOfTransaction: { type: Number, required: true }, // 1 or 2
-        senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        senderVehicle: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle", required: true },
-        receiverVehicle: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle", required: true },
+        senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        senderVehicle: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
+        receiverVehicle: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
         committedEnergy: { type: Number, required: true },
         transferredEnergy: { type: Number, default: 0 },
         transactionStatus: { type: String, enum: ["Completed", "Incomplete", "InProgress", "Failed"], default: "InProgress" },
