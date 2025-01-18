@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import { getUserDetails } from '../../../Redux/Actions';
 import Search from '../Search/Search';
+import { Typography } from '@mui/material';
 
 const Navbar = (props) => {
   const { userDetails } = props;
@@ -18,7 +19,7 @@ const Navbar = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!userDetails) props.getUserDetails({ params: { userId: localStorage.getItem("userId") } });
+    if (!userDetails.user) props.getUserDetails({ params: { userId: localStorage.getItem("userId") } });
   }, []);
 
 
@@ -35,10 +36,12 @@ const Navbar = (props) => {
           <Link to="/vehicleDashboard/inventory" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Vehicle Inventory</Link>
           <Link to ="/admin" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Admin</Link>
           <Link to="/liveStream" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Live Stream</Link>
+          <Link to="/support" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Help & Support</Link>
           {/* <Link to="/wallet" style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Wallet</Link> */}
         </div>
         <div className="user-info">
-          <Link to='/profile' style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Hello, {localStorage.getItem("userName") ? localStorage.getItem("userName") : "User"}</Link>
+          <Link to='/profile' style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Hello, {userDetails?.user?.username ? userDetails?.user?.username : localStorage.getItem("userName")? localStorage.getItem("userName"): "User"}</Link>
+          <Link to='#' style={{ color: 'black', textDecoration: 'none' }}> {userDetails?.user?.balance ? `${userDetails?.user?.balance} 💰` :localStorage.getItem("balance") ? `${localStorage.getItem("balance")} 💰` : ""}</Link>
           <span>{date}</span>
         </div>
       </header>

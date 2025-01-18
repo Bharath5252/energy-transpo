@@ -144,7 +144,7 @@ const HomePendingRequest = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit} rupees/kWh.</p>
+      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} rupees/Wh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -169,7 +169,7 @@ const HomePendingRequest = (props) => {
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row?.vehicleName}</td>
-                  <td>{row?.energy} kWh</td>
+                  <td>{row?.energy} Wh</td>
                   {editTradeId===row._id?
                     <td>
                       <input
@@ -193,7 +193,7 @@ const HomePendingRequest = (props) => {
                       </Tooltip>
                     </div>
                     }
-                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>{editTradeId===row._id?'Save':row.state==='accepted'?'Edit':row.state==='inProgress'?Inprogress:''}</button>
+                    <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>{editTradeId===row._id?'Save':row.state==='accepted'?'Edit':row.state==='inProgress'?'Inprogress':''}</button>
                     {row.state==="accepted" && editTradeId!==row._id && <div style={{flexGrow:1}}>
                       <Tooltip title="backoff trade">
                         <DeleteForeverOutlinedIcon style={{color:'red', cursor:'pointer'}} onClick={() => handleDeleteClick(row)}/>

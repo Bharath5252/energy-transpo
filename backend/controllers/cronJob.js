@@ -5,7 +5,7 @@ const User = require('../models/user');
 const Transaction = require('../models/transaction');
 
 
-const triggerScheduledJobs = async () => {
+const triggerScheduledJobs = async() => {
     const now = new Date();
     now.setSeconds(0, 0);
     console.log("UTC time: ", now.toISOString())

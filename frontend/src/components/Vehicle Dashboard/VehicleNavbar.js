@@ -18,7 +18,7 @@ const VehicleNavbar = (props) => {
   }, []);
 
   useEffect(() => {
-    if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
+    if(!userDetails.user)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
   },[])
 
   return (
@@ -33,7 +33,8 @@ const VehicleNavbar = (props) => {
             <Link to="/vehicleDashboard/add" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Add Vehicle</Link>
           </div>
           <div className="user-info">
-          <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {localStorage.getItem("userName")?localStorage.getItem("userName"):"User"}</Link>
+            <Link to='/profile' style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Hello, {userDetails?.user?.username ? userDetails?.user?.username : localStorage.getItem("userName")? localStorage.getItem("userName"): "User"}</Link>
+            <Link to='#' style={{ color: 'black', textDecoration: 'none' }}> {userDetails?.user?.balance ? `${userDetails?.user?.balance} 💰` :localStorage.getItem("balance") ? `${localStorage.getItem("balance")} 💰` : ""}</Link>
             <span>{date}</span>
           </div>
         </header>

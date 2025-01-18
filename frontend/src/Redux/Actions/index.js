@@ -104,6 +104,11 @@ export const checkTrnStatus = createApiThunk(types.CHECK_TRANSACTION_STATUS,{
     url:config.CHECK_TRANSACTION_STATUS_URL
 })
 
+export const createHelp = createApiThunk(types.CREATE_HELP,{
+    method:"POST",
+    url:config.CREATE_HELP_URL
+})
+
 export const toggleSnackbar = (payload) => {
     return{
         type:types.TOGGLE_SNACKBAR,

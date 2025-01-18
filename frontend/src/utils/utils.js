@@ -31,7 +31,11 @@ export const arrayLengthChecker = (arr) => {
 
 export const dateFormat = (data) => {
   const date = new Date(data);
-  return date?.toISOString().split('T')[0];
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${day}-${month}-${year}`;
 }
 
 export const dateFormat2 = (data) => {
@@ -44,8 +48,17 @@ export const dateFormat2 = (data) => {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+  const formattedDate = `${day}-${month}-${year}, ${hours}:${minutes}`;
   return formattedDate;
+}
+
+export const timeFormat = (data) => {
+  const date = new Date(data);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  const formattedTime = `${hours}:${minutes}`
+  return formattedTime;
 }
 
 export const calculateTariff = (dateTime) => {
@@ -56,7 +69,7 @@ export const calculateTariff = (dateTime) => {
    * - dateTime (Date): A JavaScript Date object representing the specific date and time.
    *
    * Returns:
-   * - Number: The calculated tariff (e.g., in INR/kWh).
+   * - Number: The calculated tariff (e.g., in INR/Wh).
    */
   const hour = dateTime.getHours();
   const weekday = dateTime.getDay(); // 0 = Sunday, 6 = Saturday

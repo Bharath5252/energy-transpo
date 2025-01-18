@@ -15,7 +15,7 @@ const Posts = (props) => {
     const [userPosts, setUserPosts] = useState([]);
     const [requests, setRequests] = useState([]);
     const [YourPosts, setYourPosts] = useState(true);
-    const [PeerPosts, setPeerPosts] = useState(false);
+    const [PeerPosts, setPeerPosts] = useState(true);
     const [vehicles,setVehicles] = useState([]);
     const [vehicleSelected,setVehicle] = useState("");
     const [acceptStatus,setAcceptStatus] = useState("")

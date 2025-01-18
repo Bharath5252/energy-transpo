@@ -364,6 +364,26 @@ export const reducer = (state=initialState, action) => {
                     status: false,
                 },
             }
+        case `${types.CREATE_HELP}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.CREATE_HELP}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
         default :
         return{
             ...state,

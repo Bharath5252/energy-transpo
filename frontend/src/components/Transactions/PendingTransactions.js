@@ -151,7 +151,7 @@ const CurrentTransactions = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit} rupees/kWh.</p>
+      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} rupees/Wh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -159,16 +159,19 @@ const CurrentTransactions = (props) => {
       
 
       <div className={animate ? 'fade-out' : ''} style={{ margin: "4rem 2rem 4rem 4rem" }}>
-        <h2>Pending Transactions</h2>
+        <div style={{display:'flex',alignItems:'center'}}>
+          <h2>Pending Transactions</h2>
+        </div>
         <div className="table-container">
           <table className="past-transactions-table">
             <thead>
               <tr>
                 <th>Transaction Type</th>
-                <th>Name</th>
+                <th>Transaction With</th>
                 <th>Committed Energy</th>
-                <th>Status</th>
+                <th>Charge per unit</th>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Initiate</th>
               </tr>
             </thead>
@@ -177,9 +180,10 @@ const CurrentTransactions = (props) => {
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
-                  <td>{row.energy} kWh</td>
-                  <td>{row.chargePerUnit} rupees/kWh</td>
+                  <td>{row.energy} Wh</td>
+                  <td>{row.chargePerUnit} coins/Wh</td>
                   <td>{utils.dateFormat(row.createdAt)}</td>
+                  <td>{utils.timeFormat(row.createdAt)}</td>
                   <td style={{display:'flex'}}>
                     <button style={{flexGrow:1}} onClick={() => handleButtonClick(row)}>{row.state==="accepted"?'Initiate':row.state==='inProgress'?'InProgress':''}</button>
                     {row.state==="accepted" && <div style={{flexGrow:1}}>

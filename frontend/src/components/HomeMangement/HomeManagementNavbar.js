@@ -31,10 +31,10 @@ const HomeNavbar = (props) => {
             <Link to="/homeGrid" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>New Home Mangement Request</Link>
             <Link to="/homeGrid/pending" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Pending Home Mangement Requests</Link>
             <Link to="/homeGrid/past" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Home Mangement History</Link>
-            <Link to="/dashboard" style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Dashboard</Link>
           </div>
           <div className="user-info">
-            <Link to='/profile' style={{color:'black', textDecoration:'none', marginLeft:'1rem'}}>Hello, {localStorage.getItem("userName")?localStorage.getItem("userName"):"User"}</Link>
+          <Link to='/profile' style={{ color: 'black', textDecoration: 'none', marginLeft: '1rem' }}>Hello, {userDetails?.user?.username ? userDetails?.user?.username : localStorage.getItem("userName")? localStorage.getItem("userName"): "User"}</Link>
+          <Link to='#' style={{ color: 'black', textDecoration: 'none' }}> {userDetails?.user?.balance ? `${userDetails?.user?.balance} 💰` :localStorage.getItem("balance") ? `${localStorage.getItem("balance")} 💰` : ""}</Link>
             <span>{date}</span>
           </div>
         </header>

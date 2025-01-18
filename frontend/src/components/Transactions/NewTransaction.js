@@ -53,7 +53,7 @@ const NewTransaction = (props) => {
       return false;
     }
     if(value>vehicleCap){
-      props.toggleSnackbar({open:'true',message:`Vehicle Capacity is ${vehicleCap} kWh`,status:false});
+      props.toggleSnackbar({open:'true',message:`Vehicle Capacity is ${vehicleCap} Wh`,status:false});
       return false;
     }
     return true;
@@ -145,7 +145,7 @@ const NewTransaction = (props) => {
               </div>
               </>}
               {transactionType === 'Buy'&& transactionStatus && vehicleSelected!=="" && <>
-                <label htmlFor="rE" style={{fontWeight:'600', marginTop:'1rem', width:'100%'}}>Required Energy*:</label>
+                <label htmlFor="rE" style={{fontWeight:'600', marginTop:'1rem', width:'100%'}}>Required Energy(in Wh)*:</label>
                 <input
                     type="number"
                     id="rE"
@@ -154,7 +154,7 @@ const NewTransaction = (props) => {
                     onChange={(e) => energyBool(e.target.value)?setRequiredEnergy(e.target.value):{}}
                     required
                 />
-                <label htmlFor="mP" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Max price per kWh*:</label>
+                <label htmlFor="mP" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Max price per Wh*:</label>
                 <input
                     type="number"
                     id="bA"
@@ -165,7 +165,7 @@ const NewTransaction = (props) => {
                 />
               </>}
               {transactionType === 'Sell' && transactionStatus && vehicleSelected!=="" && <>
-                <label htmlFor="aE" style={{fontWeight:'600', marginTop:'1rem', width:'100%'}}>Available Energy*:</label>
+                <label htmlFor="aE" style={{fontWeight:'600', marginTop:'1rem', width:'100%'}}>Available Energy(in Wh)*:</label>
                 <input
                     type="number"
                     id="aE"
@@ -174,7 +174,7 @@ const NewTransaction = (props) => {
                     onChange={(e) => energyBool(e.target.value)?setAvailableEnergy(e.target.value):{}}
                     required
                 />
-                <label htmlFor="bA" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Bidding Amount per kWh*:</label>
+                <label htmlFor="bA" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Bidding Amount per Wh*:</label>
                 <input
                     type="number"
                     id="bA"

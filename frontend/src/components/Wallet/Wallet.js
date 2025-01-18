@@ -13,14 +13,15 @@ const Wallet = (props) => {
     }).then((response)=>{
       if(response.payload.status===200){
        localStorage.setItem("userName",response?.payload?.data?.user?.username);
+       localStorage.setItem("balance",response?.payload?.data?.user?.balance);
       }
     });
   }, []);
 
   const transactions = [
-    { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 kWh" },
-    { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 kWh" },
-    { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 kWh" },
+    { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 Wh" },
+    { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 Wh" },
+    { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 Wh" },
   ];
 
   return (
@@ -34,10 +35,10 @@ const Wallet = (props) => {
               <h1 className="wallet-title">Your Wallet</h1>
               <div className="wallet-balance">
                 <div className="wallet-amount">
-                  <span>Coins:</span> <strong>1000 💰</strong>
+                  <span>Coins:</span> <strong>{userDetails?.user?.balance?userDetails?.user?.balance:"____"} 💰</strong>
                 </div>
                 <div className="wallet-amount">
-                  <span>Energy:</span> <strong>10 kWh ⚡</strong>
+                  <span>Energy:</span> <strong>10 Wh ⚡</strong>
                 </div>
               </div>
               <button className="wallet-action">Recharge</button>

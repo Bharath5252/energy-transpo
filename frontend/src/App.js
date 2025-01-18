@@ -21,6 +21,7 @@ import HomeGridPending from "./components/HomeMangement/HomeGridPending";
 import HomeGridHistory from "./components/HomeMangement/HomeGridHistory";
 import LiveStream from "./livestream";
 import AdminPage from "./components/Admin/Admin";
+import HelpnSupport from './components/HelpnSupport/HelpnSupport';
 import {
   Widget,
   addResponseMessage,
@@ -48,6 +49,7 @@ const prompts = [
   { name: "Pending Home Transactions", link: "/homeGrid/pending" },
   { name: "Home Transactions History", link: "/homeGrid/past" },
 ];
+
 
 function App() {
   const navigate = useNavigate();
@@ -147,6 +149,8 @@ function App() {
         <Route path="/signup" exact element={<SignUp />} />
         <Route path="/home" exact element={<Wallet />} />
         <Route path="/liveStream" exact element={<LiveStream />} />
+        <Route path="/support" exact element={<HelpnSupport />} />
+        {/* <Route path="/wallet" exact element={<Wallet/>} /> */}
         <Route path="/profile" exact element={<Profile />} />
         <Route path="/vehicleDashboard" exact element={<Vehicle />} />
         <Route path="/vehicleDashboard/add" exact element={<AddVehicle />} />
