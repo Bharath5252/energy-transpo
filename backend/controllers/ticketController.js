@@ -46,8 +46,8 @@ const getAllTickets = async (req, res) => {
 
 const updateTicket = async (req, res) => {
     try {
-        const { ticketId } = req.params; // Ticket ID passed as a URL parameter
-        const { response } = req.body; // Response sent in the request body
+        const { ticketId } = req.query;
+        const { response } = req.body;
 
         // Find the ticket by ID
         const ticket = await Ticket.findById(ticketId);

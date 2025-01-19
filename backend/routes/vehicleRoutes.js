@@ -4,6 +4,6 @@ const { getVehicleInfo, addVehicle, deleteVehicle } = require("../controllers/ve
 
 router.post("/add", addVehicle);
 router.post("/delete", deleteVehicle);
-router.get("/:vehicleId", getVehicleInfo);
+router.get("/", getVehicleInfo);
 
 module.exports = router;

@@ -3,8 +3,8 @@ const router = express.Router();
 const { createTicket, getTicketById, getAllTickets, updateTicket } = require("../controllers/ticketController");
 
 router.post("/create", createTicket);
-router.get("/:userId", getTicketById)
+router.get("/", getTicketById)
 router.get("/", getAllTickets);
-router.put("/:ticketId", updateTicket);
+router.put("/", updateTicket);
 
 module.exports = router;
