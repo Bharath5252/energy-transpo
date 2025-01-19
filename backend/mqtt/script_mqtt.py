@@ -2,6 +2,32 @@ import time
 import paho.mqtt.client as mqtt
 import json
 import random
+import sys
+
+
+# Parse command-line arguments
+if len(sys.argv) > 1:
+    connected = sys.argv[1].lower() == 'true'
+    sender_id = sys.argv[2]
+    receiver_id = sys.argv[3]
+    sender_current_capacity = int(sys.argv[4])
+    receiver_current_capacity = int(sys.argv[5])
+    energy_amount = int(sys.argv[6])
+    rate_of_transfer = float(sys.argv[7])
+    total_capacity = int(sys.argv[8])
+    trade_id = sys.argv[9]
+else:
+    # Fallback to default values if no arguments are passed
+    connected = True
+    sender_id = "1234"
+    receiver_id = "4321"
+    sender_current_capacity = 120
+    receiver_current_capacity = 1
+    energy_amount = 40
+    rate_of_transfer = 0.1
+    total_capacity = 120
+    trade_id = "trade_001"
+
 
 # MQTT broker details
 broker_address = "localhost"  # Replace with your MQTT broker address
@@ -11,19 +37,20 @@ username = "admin"
 password = "admin"
 
 # Create an MQTT client instance
-client = mqtt.Client()
+# client = mqtt.Client()
+client = mqtt.Client(protocol=mqtt.MQTTv5)
 
 # Set username and password
 client.username_pw_set(username, password)
 
 # Flag to track connection status
-connected = False
+mqtt_connected = False
 
 # Callback function for connection success
 def on_connect(client, userdata, flags, rc):
-    global connected
+    global mqtt_connected
     if rc == 0:
-        connected = True
+        mqtt_connected = True
         print("Connected to MQTT broker.")
     else:
         print(f"Failed to connect, return code {rc}")
@@ -40,21 +67,21 @@ except Exception as e:
 
 # Function to publish a message with a random temperature value between 1270 and 1290
 def publish_telemetry_data(
-        connected=True,
-        sender_id="1234",
-        receiver_id="4321",
-        sender_current_capacity=120,
-        receiver_current_capacity=1,
-        energy_amount=40,
-        rate_of_transfer=0.1,
-        total_capacity=120,  # Default total capacity
-        trade_id="trade_001",  # Unique trade ID
+        connected,
+        sender_id,
+        receiver_id,
+        sender_current_capacity,
+        receiver_current_capacity,
+        energy_amount,
+        rate_of_transfer,
+        total_capacity,
+        trade_id
 ):
     print("Energy transfer started")
     sender_current_capacity = int(sender_current_capacity)  # Ensure sender_cur_capacity is an integer
     receiver_current_capacity = int(receiver_current_capacity)  # Ensure receiver_current_capacity is an integer
     energy_amount = int(energy_amount)  # Ensure energy_amount is an integer
-    dynamic_topic = f"telemetry/{trade_id}"  # Dynamic topic with trade ID
+    dynamic_topic = f"telemetry/{trade_id}/"  # Dynamic topic with trade ID
 
     if connected:
         while energy_amount > 0:
@@ -71,38 +98,34 @@ def publish_telemetry_data(
             sender_charge_percentage = max(0, (sender_energy / total_capacity) * 100)
             receiver_charge_percentage = min(100, (receiver_energy / total_capacity) * 100)
 
-            # Prepare sender telemetry message
-            sender_message = json.dumps({
-                "id": sender_id,
-                "energy": sender_energy,
-                "voltage": voltage,
-                "current": current,
-                "power": power,
-                "battery_temp": sender_battery_temp,
-                "charge_percentage": sender_charge_percentage,
-                "status": "sending",
+            # Prepare combined telemetry message
+            telemetry_message = json.dumps({
+                "sender": {
+                    "id": sender_id,
+                    "energy": sender_energy,
+                    "voltage": voltage,
+                    "current": current,
+                    "power": power,
+                    "battery_temp": sender_battery_temp,
+                    "charge_percentage": sender_charge_percentage,
+                    "status": "sending"
+                },
+                "receiver": {
+                    "id": receiver_id,
+                    "energy": receiver_energy,
+                    "voltage": voltage,
+                    "current": current,
+                    "power": power,
+                    "battery_temp": receiver_battery_temp,
+                    "charge_percentage": receiver_charge_percentage,
+                    "status": "receiving"
+                },
                 "timestamp": time.time()
             })
 
-            # Prepare receiver telemetry message
-            receiver_message = json.dumps({
-                "id": receiver_id,
-                "energy": receiver_energy,
-                "voltage": voltage,
-                "current": current,
-                "power": power,
-                "battery_temp": receiver_battery_temp,
-                "charge_percentage": receiver_charge_percentage,
-                "status": "receiving",
-                "timestamp": time.time()
-            })
-
-            # Publish messages to the dynamic topic
-            client.publish(dynamic_topic, sender_message)
-            print(f"Published sender message to {dynamic_topic}: {sender_message}")
-
-            client.publish(dynamic_topic, receiver_message)
-            print(f"Published receiver message to {dynamic_topic}: {receiver_message}")
+            # Publish the combined message to the dynamic topic
+            client.publish(dynamic_topic, telemetry_message)
+            print(f"Published telemetry message to {dynamic_topic}: {telemetry_message}")
 
             # Simulate energy transfer by decrementing energy and updating capacities
             energy_amount -= rate_of_transfer
@@ -131,9 +154,19 @@ def trigger_transaction_completion(sender_id, receiver_id, topic):
     print(f"Published transaction completion message to {topic}: {completion_message}")
 
 
-publish_telemetry_data()
+publish_telemetry_data(
+    connected,
+    sender_id,
+    receiver_id,
+    sender_current_capacity,
+    receiver_current_capacity,
+    energy_amount,
+    rate_of_transfer,
+    total_capacity,
+    trade_id
+)
 
 # Disconnect from the broker if connected
-if connected:
+if mqtt_connected:
     client.disconnect()
     client.loop_stop()
