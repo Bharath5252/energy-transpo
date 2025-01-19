@@ -31,6 +31,7 @@ import {
   // addUserMessage,
 } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
+import Charging from "./components/Charging/Charging";
 import "./App.css";
 
 const prompts = [
@@ -163,6 +164,7 @@ function App() {
         <Route path="/homeGrid" exact element={<HomeGrid />} />
         <Route path="/homeGrid/pending" exact element={<HomeGridPending />} />
         <Route path="/homeGrid/past" exact element={<HomeGridHistory />} />
+        <Route path="/charging" exact element={<Charging />} />
       </Routes>
       <SnackbarComp />
 

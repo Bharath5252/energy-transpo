@@ -31,6 +31,18 @@ const sampleTickets = [
     query: 'The charge per unit is incorrect.',
     response: 'We are investigating the issue.',
   },
+  {
+    _id: '1',
+    userId: 'John Doe',
+    query: 'I am unable to complete my transaction.',
+    response: 'Our team is looking into it.',
+  },
+  {
+    _id: '2',
+    userId: 'Jane Smith',
+    query: 'The charge per unit is incorrect.',
+    response: 'We are investigating the issue.',
+  },
 ];
 
 const AdminPage = () => {
