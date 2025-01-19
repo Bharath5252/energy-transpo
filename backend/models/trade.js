@@ -21,7 +21,7 @@ const tradeSchema = new mongoose.Schema({
         },
     },
     createdAt: { type: Date, default: Date.now },
-    transactionId: [{ type: String, default: null }],
+    transactionId: { type: String, default: null },
 });
 
 tradeSchema.index({ location: "2dsphere" });
