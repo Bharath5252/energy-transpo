@@ -19,7 +19,10 @@ const PastTransactions = (props) => {
   },[])
 
   useEffect(()=>{
-    setUserTransactionHis(userTransactionHistory);
+    let transactions = JSON.parse(JSON.stringify(userTransactionHistory));
+    transactions = transactions.filter((item)=>item?.typeOfTransaction===1);
+    transactions.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    setUserTransactionHis(transactions);
   },[userTransactionHistory])
 
   const rows = [
@@ -71,9 +74,10 @@ const PastTransactions = (props) => {
 
   const filteredRows = userTransactionHis.filter(
     (row) =>
-      (transactionFilter === "All" || (row.senderId?._id===userId?"Sell":"Buy") === transactionFilter) &&
+      { console.log(row.updatedAt,dateFilter)
+      return (transactionFilter === "All" || (row.senderId?._id===userId?"Sell":"Buy") === transactionFilter) &&
       (statusFilter === "All" || row.transactionStatus === statusFilter) &&
-      (dateFilter === "" || row.updatedAt === dateFilter)
+      (dateFilter === "" || utils.yyyymmdd(row.updatedAt) === dateFilter)}
   );
 
   return (
@@ -118,19 +122,19 @@ const PastTransactions = (props) => {
             <thead>
               <tr>
                 <th>Transaction Type</th>
-                <th>Name</th>
+                <th>Counter Party Name</th>
                 <th>Committed Energy</th>
                 <th>Transacted Energy</th>
                 <th>Status</th>
                 <th>Date</th>
-                <th>Time</th>
+                <th>Time(24 hrs)</th>
               </tr>
             </thead>
             <tbody>
               {utils.arrayLengthChecker(filteredRows) ? filteredRows.map((row, index) => (
                 <tr key={index}>
                   <td>{row.senderId?._id===userId?"Sell":"Buy"}</td>
-                  <td>{row.senderId?._id===userId?row.senderId?.username:row.receiverId?.username}</td>
+                  <td>{row.senderId?._id===userId?row.receiverId?.username:row.senderId?.username}</td>
                   <td>{row.committedEnergy} Wh</td>
                   <td>{row.transferredEnergy} Wh</td>
                   <td>{row.transactionStatus}</td>
@@ -140,7 +144,7 @@ const PastTransactions = (props) => {
               ))
               :
               <tr> 
-                <td colSpan="6">No Transactions Found</td>
+                <td colSpan="7">No Transactions Found</td>
               </tr>
             }
             </tbody>

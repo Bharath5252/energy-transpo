@@ -95,6 +95,15 @@ export const getTransactionHistoryByUser = createApiThunk(types.USER_TRANSACTION
     method:"GET",
     url:config.USER_TRANSACTION_HISTORY_URL
 })
+export const getTransactionHistoryAdmin = createApiThunk(types.ADMIN_TRANSACTION_HISTORY,{
+    method:"GET",
+    url:config.ADMIN_TRANSACTION_HISTORY_URL
+})
+
+export const updateTransactionAdmin = createApiThunk(types.ADMIN_TRANSACTION_UPDATE,{
+    method:"PUT",
+    url:config.ADMIN_TRANSACTION_HISTORY_URL
+})
 export const editTrade = createApiThunk(types.EDIT_TRADE,{
     method:"POST",
     url:config.EDIT_TRADE_URL
@@ -107,6 +116,16 @@ export const checkTrnStatus = createApiThunk(types.CHECK_TRANSACTION_STATUS,{
 export const createHelp = createApiThunk(types.CREATE_HELP,{
     method:"POST",
     url:config.CREATE_HELP_URL
+})
+
+export const updateHelp = createApiThunk(types.UPDATE_HELP,{
+    method:"PUT",
+    url:config.GET_HELP_URL
+})
+
+export const getAllHelp = createApiThunk(types.GET_HELP,{
+    method:"GET",
+    url:config.GET_HELP_URL
 })
 
 export const toggleSnackbar = (payload) => {

@@ -15,9 +15,10 @@ const HomeGrid = (props) => {
   const [maxPrice, setMaxPrice] = useState("")
   const [vehicles,setVehicles] = useState([]);
   const [vehicleSelected,setVehicle] = useState("");
-  const [location, setLocation] = useState({latitude:"",longitude:""})
+  const [location, setLocation] = useState({latitude:"",longitude:""});
   const [time, setTime] = useState("");
   const [vehicleCap,setVehicleCap] = useState(0);
+  const [dateRange, setDateRange] = useState(1);
   const {userDetails} = props;
 
   useEffect(() => {
@@ -71,44 +72,58 @@ const HomeGrid = (props) => {
     }
 }
 
-function findExtremeTariffDateTime(startDate, endDate, extremeType = "low") {
-    /**
-     * Find the date and time with the lowest or highest tariff within a given date range.
-     * 
-     * Parameters:
-     * - startDate (Date): Start date and time for the search.
-     * - endDate (Date): End date and time for the search.
-     * - extremeType (string): "low" to find the lowest tariff, "high" to find the highest tariff.
-     * 
-     * Returns:
-     * - Object: An object with the optimal date, time, and tariff.
-     */
-    let currentDate = new Date(startDate);
-    let optimalTariff = null;
-    let optimalDateTime = null;
+function findExtremeTariffDateTime(startDate, endDate, extremeType = "low", dateRange = null) {
+  /**
+   * Find the date and time with the lowest or highest tariff within a given date range.
+   * 
+   * Parameters:
+   * - startDate (Date): Start date and time for the search.
+   * - endDate (Date): End date and time for the search.
+   * - extremeType (string): "low" to find the lowest tariff, "high" to find the highest tariff.
+   * - dateRange (number): Number of days from today to limit the search range.
+   * 
+   * Returns:
+   * - Object: An object with the optimal date, time, and tariff.
+   */
+  
+  // Adjust start and end dates based on dateRange if provided
+  if (dateRange !== null) {
+      const today = new Date();
+      const adjustedStartDate = new Date(today);
+      const adjustedEndDate = new Date(today);
+      dateRange>=1 ? adjustedEndDate.setDate(today.getDate() + dateRange-1) : adjustedEndDate.setDate(today.getDate());
 
-    while (currentDate <= endDate) {
-        const currentTariff = getFutureTariffData(currentDate);
+      startDate = adjustedStartDate > startDate ? adjustedStartDate : startDate;
+      endDate = adjustedEndDate < endDate ? adjustedEndDate : endDate;
+  }
 
-        if (
-            optimalTariff === null ||
-            (extremeType === "low" && currentTariff < optimalTariff) ||
-            (extremeType === "high" && currentTariff > optimalTariff)
-        ) {
-            optimalTariff = currentTariff;
-            optimalDateTime = new Date(currentDate);
-        }
+  let currentDate = new Date(startDate);
+  let optimalTariff = null;
+  let optimalDateTime = null;
 
-        // Increment by 1 hour
-        currentDate.setHours(currentDate.getHours() + 1);
-    }
+  while (currentDate <= endDate) {
+      const currentTariff = getFutureTariffData(currentDate);
 
-    return {
-        dateTime: optimalDateTime,
-        tariff: optimalTariff,
-        extremeType: extremeType
-    };
+      if (
+          optimalTariff === null ||
+          (extremeType === "low" && currentTariff < optimalTariff) ||
+          (extremeType === "high" && currentTariff > optimalTariff)
+      ) {
+          optimalTariff = currentTariff;
+          optimalDateTime = new Date(currentDate);
+      }
+
+      // Increment by 1 hour
+      currentDate.setHours(currentDate.getHours() + 1);
+  }
+
+  return {
+      dateTime: optimalDateTime,
+      tariff: optimalTariff,
+      extremeType: extremeType
+  };
 }
+
 
 // Example usage
 const start = new Date();
@@ -116,12 +131,32 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
 
 
   const energyBool = (value) => {
+    if(value.includes(".")){
+      props.toggleSnackbar({ open: true, message: 'Please Enter a  Valid Energy', status: false });
+      return false;
+    }
     if (value < 0) {
       props.toggleSnackbar({ open: true, message: 'Please Enter a Valid Energy', status: false });
       return false;
     }
     if (value > vehicleCap) {
       props.toggleSnackbar({ open: true, message: `Vehicle Capacity is ${vehicleCap} Wh`, status: false });
+      return false;
+    }
+    return true;
+  }
+
+  const daysBool = (value) => {
+    if(value.includes(".")){
+      props.toggleSnackbar({ open: true, message: 'Please Enter a  Valid Date Range', status: false });
+      return false;
+    }
+    if (value < 0) {
+      props.toggleSnackbar({ open: true, message: 'Please Enter a Valid Date Range', status: false });
+      return false;
+    }
+    if (value > 6) {
+      props.toggleSnackbar({ open: true, message: `Maximum range can be 6 days`, status: false });
       return false;
     }
     return true;
@@ -143,6 +178,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
   }
 
   const handleEmptyAllFields = () => {
+    setVehicle('');
     setAvailableEnergy('');
     setBiddingAmount('');
     setBuyContract('');
@@ -150,6 +186,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
     setRequiredEnergy('');
     setMaxPrice('');
     setTime('');
+    setDateRange('')
   }
 
   const handleTimeChange = (e) => {
@@ -202,15 +239,15 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
     }
     if(payload.selectedContract==="Manual"){
       payload.executionTime=time;
-      payload.chargePerUnit=utils.calculateTariff(new Date(time)).toFixed(2);
+      payload.chargePerUnit=utils.calculateTariff(new Date(time)).toFixed(0);
     }
     if(payload.selectedContract==="Automatic" && transactionType==="Buy"){
-      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low")
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low", dateRange)
       payload.executionTime= dateTime;
       payload.chargePerUnit= tariff
     }
     if(payload.selectedContract==="Automatic" && transactionType==="Sell"){
-      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "high")
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "high", dateRange)
       payload.executionTime= dateTime;
       payload.chargePerUnit= tariff
     }
@@ -260,6 +297,11 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                     className="form-control"
                     value={requiredEnergy}
                     onChange={(e) => energyBool(e.target.value)?setRequiredEnergy(e.target.value):{}}
+                    onKeyDown={(e) => {
+                      if (e.key === '.' || e.key === 'e' || e.key === '+' || e.key === '-') {
+                        e.preventDefault(); // Prevent the entry of invalid characters
+                      }
+                    }}
                     required
                 />
                 {/* <label htmlFor="mP" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Max price per Wh*:</label>
@@ -286,6 +328,11 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                     className="form-control"
                     value={availableEnergy}
                     onChange={(e) => energyBool(e.target.value)?setAvailableEnergy(e.target.value):{}}
+                    onKeyDown={(e) => {
+                      if (e.key === '.' || e.key === 'e' || e.key === '+' || e.key === '-') {
+                        e.preventDefault(); // Prevent the entry of invalid characters
+                      }
+                    }}
                     required
                 />
                 {/* <label htmlFor="bA" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Bidding Amount per Wh*:</label>
@@ -318,6 +365,23 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                   required
                 />
               </div>
+              }
+              { transactionType!=='' && transactionStatus && (sellContract==='Automatic' || buyContract==='Automatic') &&
+              <>
+                <label htmlFor="rE" style={{fontWeight:'600', marginTop:'1em', width:'100%'}}>Date Range:</label>
+                <input
+                    type="number"
+                    id="date"
+                    className="form-control"
+                    value={dateRange}
+                    onChange={(e) => daysBool(e.target.value)?setDateRange(e.target.value):{}}
+                    onKeyDown={(e) => {
+                      if (e.key === '.' || e.key === 'e' || e.key === '+' || e.key === '-') {
+                        e.preventDefault(); 
+                      }
+                    }}
+                />
+              </>
               }
               {transactionType!=='' && transactionStatus && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>handleSubmit()}>Submit</button>}
             </div>

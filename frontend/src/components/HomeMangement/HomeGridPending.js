@@ -144,7 +144,7 @@ const HomePendingRequest = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} rupees/Wh.</p>
+      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} coins/Wh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -161,6 +161,7 @@ const HomePendingRequest = (props) => {
                 <th>Vehicle Name</th>
                 <th>Committed Energy</th>
                 <th>Execution Date</th>
+                <th>Contract type</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -186,6 +187,7 @@ const HomePendingRequest = (props) => {
                     :
                     <td>{utils.dateFormat2(row?.executionTime)}</td>
                   }
+                  <td>{row?.selectedContract}</td>
                   <td style={{display:'flex'}}>
                     {row.state==="accepted" && editTradeId===row._id && <div style={{flexGrow:1}}>
                       <Tooltip title="back">
@@ -204,7 +206,7 @@ const HomePendingRequest = (props) => {
               ))
               :
               <tr>
-                <td colSpan="6">No Active Accepted Trades</td>
+                <td colSpan="7">No Active Accepted Trades</td>
               </tr>
             
             }

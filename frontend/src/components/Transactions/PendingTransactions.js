@@ -151,7 +151,7 @@ const CurrentTransactions = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} rupees/Wh.</p>
+      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} coins/Wh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -167,7 +167,7 @@ const CurrentTransactions = (props) => {
             <thead>
               <tr>
                 <th>Transaction Type</th>
-                <th>Transaction With</th>
+                <th>Counter Party Name</th>
                 <th>Committed Energy</th>
                 <th>Charge per unit</th>
                 <th>Date</th>
@@ -196,7 +196,7 @@ const CurrentTransactions = (props) => {
               ))
               :
               <tr>
-                <td colSpan="6">No Active Accepted Trades</td>
+                <td colSpan="7">No Active Accepted Trades</td>
               </tr>
             
             }

@@ -26,7 +26,7 @@ const Posts = (props) => {
         props.getAllTrades()
     },[])
     useEffect(()=>{
-        if(allTrades && utils.arrayLengthChecker(allTrades)){
+        if(allTrades && utils.arrayChecker(allTrades)){
             let userP=allTrades?.filter((trade)=>trade?.userId===localStorage.getItem("userId"))
             setUserPosts(userP);
             let peerP=allTrades?.filter((trade)=>trade?.userId!==localStorage.getItem("userId"))
