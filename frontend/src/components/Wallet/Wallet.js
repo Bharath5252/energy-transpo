@@ -64,6 +64,7 @@ const Wallet = (props) => {
                       <td>{txn.date}</td>
                       <td>{txn.type}</td>
                       <td
+                        style={{color: txn.amount.startsWith("+") ? "green" : "red"}}
                         className={
                           txn.amount.startsWith("+") ? "positive" : "negative"
                         }

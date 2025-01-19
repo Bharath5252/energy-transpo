@@ -107,7 +107,7 @@ const AddVehicle = (props) => {
                   </select>
                   {modelYear && modelYear!=="" && 
                     <div style={{display:'flex',justifyContent:'flex-start', width:'100%',alignItems:'center', marginTop:'1rem'}}>
-                      <b>Capacity</b>: {charge}
+                      <b>Capacity</b>: {charge} kWh
                     </div>
                   }
                 </Paper>

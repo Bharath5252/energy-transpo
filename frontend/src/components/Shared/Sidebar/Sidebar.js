@@ -25,6 +25,18 @@ const Sidebar = () => {
           <Link to="/vehicleDashboard" className="menu-links">
             Vehicle Inventory
           </Link>
+          <Link to="/admin" className="menu-links">
+            Admin
+          </Link>
+          {/* <Link to="/liveStream" className="menu-links">
+            Live Stream
+          </Link> */}
+          <Link to="/support" className="menu-links">
+            Help & Support
+          </Link>
+          <Link to="/charging" className="menu-links">
+            Charging
+          </Link>
     </Menu>
   );
 };

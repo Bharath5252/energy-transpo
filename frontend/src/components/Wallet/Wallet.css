@@ -121,6 +121,7 @@
     color: #28a745; /* Green for positive values */
     font-weight: bold;
   }
+
   
   .negative {
     color: #dc3545; /* Red for negative values */
