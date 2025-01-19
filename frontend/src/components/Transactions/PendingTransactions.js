@@ -32,7 +32,10 @@ const CurrentTransactions = (props) => {
 
   useEffect(()=>{
     if(utils.arrayLengthChecker(acceptTrades)){
-        setAcceptedTrades(acceptTrades.filter((item)=>item?.typeOfPost===1));
+      let trades = JSON.parse(JSON.stringify(acceptTrades));
+      trades = trades.filter((item)=>item?.typeOfPost===1);
+      trades.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      setAcceptedTrades(trades.filter((item)=>item?.typeOfPost===1));
     }
   },[acceptTrades])
 
