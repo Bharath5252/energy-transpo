@@ -28,9 +28,9 @@ const Sidebar = () => {
           <Link to="/admin" className="menu-links">
             Admin
           </Link>
-          {/* <Link to="/liveStream" className="menu-links">
+          {<Link to="/liveStream" className="menu-links">
             Live Stream
-          </Link> */}
+          </Link>}
           <Link to="/support" className="menu-links">
             Help & Support
           </Link>

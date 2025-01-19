@@ -2,6 +2,9 @@ const Transaction = require("../models/transaction");
 const User = require("../models/user");
 const Vehicle = require("../models/vehicle");
 const Trade = require("../models/trade");
+const { exec } = require('child_process');
+const path = require('path');
+
 
 exports.initiateTransaction = async (req, res) => {
     try {
@@ -31,6 +34,18 @@ exports.initiateTransaction = async (req, res) => {
             chargePerUnit,
         } = req.body;
 
+        // Fetch current capacities of sender and receiver vehicles
+        const senderVehicleData = await Vehicle.findById(senderVehicle);
+        const receiverVehicleData = await Vehicle.findById(receiverVehicle);
+
+        if (!senderVehicleData || !receiverVehicleData) {
+            return res.status(404).json({ message: "Sender or receiver vehicle not found." });
+        }
+
+        const senderCurrentCapacity = senderVehicleData.currentCapacity || 0;
+        const receiverCurrentCapacity = receiverVehicleData.currentCapacity || 0;
+        const totalCapacity = senderVehicleData.batteryCapacity || 120; // Default battery capacity
+
         const transaction = new Transaction({
             typeOfTransaction,
             senderId,
@@ -46,6 +61,33 @@ exports.initiateTransaction = async (req, res) => {
         await trade.save();
 
         const savedTransaction = await transaction.save();
+
+        const rateOfTransfer = 10;
+
+        // Resolve paths
+        const venvPythonPath = path.resolve(__dirname, '../mqtt/venv/bin/python3'); // Go up one level to `backend/` and into `mqtt/`
+        const scriptPath = path.resolve(__dirname, '../mqtt/script_mqtt.py'); // Adjust to point to `script_mqtt.py`
+
+        const command = `${venvPythonPath} ${scriptPath} true ${senderId} ${receiverId} ${senderCurrentCapacity} ${receiverCurrentCapacity} ${committedEnergy} ${rateOfTransfer} ${totalCapacity} ${tradeId}`;
+
+        console.log("Resolved Python Path:", venvPythonPath);
+        console.log("Resolved Script Path:", scriptPath);
+
+        console.log("Command to be executed:", command);
+
+
+        exec(command, (error, stdout, stderr) => {
+            console.log("Command executed.");
+            if (error) {
+                console.error(`Error running script: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`Script stderr: ${stderr}`);
+                return;
+            }
+            console.log(`Script stdout: ${stdout}`);
+        });
 
         res.status(200).json({
             message: "Transaction initiated.",
