@@ -144,7 +144,7 @@ const HomePendingRequest = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} coins/Wh.</p>
+      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit} coins/kWh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>
@@ -170,7 +170,7 @@ const HomePendingRequest = (props) => {
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row?.vehicleName}</td>
-                  <td>{row?.energy} Wh</td>
+                  <td>{row?.energy} kWh</td>
                   {editTradeId===row._id?
                     <td>
                       <input

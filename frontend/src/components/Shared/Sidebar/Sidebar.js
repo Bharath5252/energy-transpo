@@ -34,9 +34,9 @@ const Sidebar = () => {
           <Link to="/support" className="menu-links">
             Help & Support
           </Link>
-          <Link to="/charging" className="menu-links">
+          {/* <Link to="/charging" className="menu-links">
             Charging
-          </Link>
+          </Link> */}
     </Menu>
   );
 };

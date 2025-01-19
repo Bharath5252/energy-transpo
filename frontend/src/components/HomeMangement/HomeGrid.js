@@ -140,7 +140,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
       return false;
     }
     if (value > vehicleCap) {
-      props.toggleSnackbar({ open: true, message: `Vehicle Capacity is ${vehicleCap} Wh`, status: false });
+      props.toggleSnackbar({ open: true, message: `Vehicle Capacity is ${vehicleCap} kWh`, status: false });
       return false;
     }
     return true;
@@ -290,7 +290,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
               </div>
               </>}
               {transactionType === 'Buy'&& transactionStatus &&  vehicleSelected!=="" && <>
-                <label htmlFor="rE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Required Energy(in Wh)*:</label>
+                <label htmlFor="rE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Required Energy(in kWh)*:</label>
                 <input
                     type="number"
                     id="rE"
@@ -304,7 +304,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                     }}
                     required
                 />
-                {/* <label htmlFor="mP" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Max price per Wh*:</label>
+                {/* <label htmlFor="mP" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Max price per kWh*:</label>
                 <input
                     type="number"
                     id="bA"
@@ -321,7 +321,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                 </select>
               </>}
               {transactionType === 'Sell' && transactionStatus &&  vehicleSelected!=="" && <>
-                <label htmlFor="aE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Available Energy(in Wh)*:</label>
+                <label htmlFor="aE" style={{fontWeight:'600', marginTop:'2rem', width:'100%'}}>Available Energy(in kWh)*:</label>
                 <input
                     type="number"
                     id="aE"
@@ -335,7 +335,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                     }}
                     required
                 />
-                {/* <label htmlFor="bA" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Bidding Amount per Wh*:</label>
+                {/* <label htmlFor="bA" style={{fontWeight:'600', marginTop:'1em',width:'100%'}}>Bidding Amount per kWh*:</label>
                 <input
                     type="number"
                     id="bA"

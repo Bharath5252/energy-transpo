@@ -23,3 +23,4 @@ export const CHECK_TRANSACTION_STATUS = 'CHECK_TRANSACTION_STATUS';
 export const CREATE_HELP = 'CREATE_HELP';
 export const UPDATE_HELP = 'UPDATE_HELP';
 export const GET_HELP = 'GET_HELP';
+export const SET_TRADE = 'SET_TRADE';

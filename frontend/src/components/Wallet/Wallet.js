@@ -30,9 +30,9 @@ const Wallet = (props) => {
   },[userTransactionHistory])
 
   // const transactions = [
-  //   { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 Wh" },
-  //   { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 Wh" },
-  //   { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 Wh" },
+  //   { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 kWh" },
+  //   { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 kWh" },
+  //   { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 kWh" },
   // ];
 
   return (
@@ -49,7 +49,7 @@ const Wallet = (props) => {
                   <span>Coins:</span> <strong>{userDetails?.user?.balance?userDetails?.user?.balance:"____"} 💰</strong>
                 </div>
                 <div className="wallet-amount">
-                  <span>Energy:</span> <strong>10 Wh ⚡</strong>
+                  <span>Energy:</span> <strong>10 kWh ⚡</strong>
                 </div>
               </div>
               <button className="wallet-action">Recharge</button>

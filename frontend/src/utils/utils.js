@@ -103,7 +103,7 @@ export const calculateTariff = (dateTime) => {
    * - dateTime (Date): A JavaScript Date object representing the specific date and time.
    *
    * Returns:
-   * - Number: The calculated tariff (e.g., in INR/Wh).
+   * - Number: The calculated tariff (e.g., in INR/kWh).
    */
   const hour = dateTime.getHours();
   const weekday = dateTime.getDay(); // 0 = Sunday, 6 = Saturday

@@ -1,10 +1,11 @@
 import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import {Link,} from 'react-router-dom';
 import {Tooltip} from '@mui/material';
 import TransactionNavbar from "./TransactionNavbar";
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, 
-  initiateTransaction, updateTransactionStats, checkTrnStatus} from '../../Redux/Actions/index'
+  initiateTransaction, updateTransactionStats, checkTrnStatus, setTrade} from '../../Redux/Actions/index'
 import "./PastTransactions.css";
 import car from "./charging.jpeg";
 import * as utils from '../../utils/utils';
@@ -20,8 +21,9 @@ const CurrentTransactions = (props) => {
   const [success, setSuccess] = useState(0);
   const userId = localStorage.getItem("userId");
   const [acceptedTrades, setAcceptedTrades] = useState([]);
+  const history = useNavigate()
 
-  const {userDetails, acceptTrades} = props
+  const {userDetails, acceptTrades, setTrade} = props
 
   useEffect(() => {
     if(!userDetails)props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
@@ -44,22 +46,24 @@ const CurrentTransactions = (props) => {
       chargePerUnit : row.chargePerUnit,
     }
     if(row.state==="inProgress"){
-      props.checkTrnStatus({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
-        if(response.payload.status===200){
-          const trnsId = response.payload?.data?.transactionId
-            setSelectedRow(row);
-            setLoading(true);
-            setAnimate(true);
-            setTimeout(() => {
-              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:preCheckPayload.senderId,receiverId:preCheckPayload.receiverId}})
-            }, 9000);
-            setTimeout(() => {
-              setLoading(false);
-              setSuccess(1);
-              // setAnimate(false);  
-            }, 9000);
-        }
-      })
+      setTrade(row);
+      history("/charging");
+      // props.checkTrnStatus({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
+      //   if(response.payload.status===200){
+      //     const trnsId = response.payload?.data?.transactionId
+      //       setSelectedRow(row);
+      //       setLoading(true);
+      //       setAnimate(true);
+      //       setTimeout(() => {
+      //         props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:preCheckPayload.senderId,receiverId:preCheckPayload.receiverId}})
+      //       }, 9000);
+      //       setTimeout(() => {
+      //         setLoading(false);
+      //         setSuccess(1);
+      //         // setAnimate(false);  
+      //       }, 9000);
+      //   }
+      // })
       return;
     }
     props.preCheckTransaction({data:preCheckPayload}).then((response)=>{
@@ -72,9 +76,6 @@ const CurrentTransactions = (props) => {
             setSelectedRow(row);
             setLoading(true);
             setAnimate(true);
-            setTimeout(() => {
-              props.updateTransactionStats({params:{transactionId:trnsId,tradeId:row._id},data:{transactionId:trnsId,transactionStatus:"Completed",transferredEnergy:row.energy,chargePerUnit:row.chargePerUnit,senderId:preCheckPayload.senderId,receiverId:preCheckPayload.receiverId}})
-            }, 9000);
             setTimeout(() => {
               setLoading(false);
               setSuccess(1);
@@ -128,7 +129,7 @@ const CurrentTransactions = (props) => {
     (row) =>
       (transactionFilter === "All" || (row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy") === transactionFilter) &&
       (statusFilter === "All" || row.status === statusFilter) &&
-      (dateFilter === "" || row.date === dateFilter)
+      (dateFilter === "" || utils.yyyymmdd(row.date) === dateFilter)
   );
 
 
@@ -147,13 +148,12 @@ const CurrentTransactions = (props) => {
 
       { success===1 &&
         <div className="loading-screen">
-        <h4>Transaction Complete</h4>
+        <h4>Transaction InProgress</h4>
         <p>
-            Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
+            Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction is in progress.
         </p>
-      <p>{selectedRow.energy} Wh of energy transferred at {selectedRow.chargePerUnit} coins/Wh.</p>
-        <button><Link to="/transactions/past">Close</Link></button>
-
+        <p>Check {selectedRow.energy} kWh of energy transfer staus at {selectedRow.chargePerUnit} coins/kWh in the pending transactions.</p>
+        <button><Link to="/transactions/pending">Go to Pending Transactions</Link></button>
       </div>
       }
       
@@ -171,7 +171,7 @@ const CurrentTransactions = (props) => {
                 <th>Committed Energy</th>
                 <th>Charge per unit</th>
                 <th>Date</th>
-                <th>Time</th>
+                <th>Time (24 hrs)</th>
                 <th>Initiate</th>
               </tr>
             </thead>
@@ -180,8 +180,8 @@ const CurrentTransactions = (props) => {
                 <tr key={index}>
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
-                  <td>{row.energy} Wh</td>
-                  <td>{row.chargePerUnit} coins/Wh</td>
+                  <td>{row.energy} kWh</td>
+                  <td>{row.chargePerUnit} coins/kWh</td>
                   <td>{utils.dateFormat(row.createdAt)}</td>
                   <td>{utils.timeFormat(row.createdAt)}</td>
                   <td style={{display:'flex'}}>
@@ -223,7 +223,8 @@ const mapDispatchToProps =  {
   preCheckTransaction,
   initiateTransaction,
   updateTransactionStats,
-  checkTrnStatus
+  checkTrnStatus,
+  setTrade,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentTransactions)

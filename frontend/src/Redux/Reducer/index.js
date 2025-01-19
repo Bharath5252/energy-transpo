@@ -18,6 +18,7 @@ const initialState = {
     transactionStatus:{},
     allTickets: [],
     adminTransactionHistory:[],
+    tradeRow:{},
 }
 
 export const reducer = (state=initialState, action) => {
@@ -95,6 +96,12 @@ export const reducer = (state=initialState, action) => {
                 ...state,
                 isLoading: false,
                 vehicleSelected: action.payload,
+            }
+        case `${types.SET_TRADE}`:
+            return{
+                ...state,
+                isLoading: false,
+                tradeRow: action.payload,
             }
         case `${types.GET_CAR_LIST}`:
             return{
