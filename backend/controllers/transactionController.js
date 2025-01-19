@@ -59,7 +59,7 @@ exports.initiateTransaction = async (req, res) => {
         });
 
         trade.state = "inProgress";
-        trade.transactionId.push(transaction._id);
+        trade.transactionId = transaction._id;
         await trade.save();
 
         const savedTransaction = await transaction.save();
