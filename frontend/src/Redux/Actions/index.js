@@ -142,6 +142,13 @@ export const setVehicle = (payload) => {
     }
 }
 
+export const setTrade = (payload) => {
+    return{
+        type:types.SET_TRADE,
+        payload
+    }
+}
+
 export const carList = () => {
     return async (dispatch) =>{
         const carsRef = ref(database, 'cars_data');

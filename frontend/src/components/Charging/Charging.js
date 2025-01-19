@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { getUserDetails, setTrade} from "../../Redux/Actions";
 import { Typography, Button, Grid, Box, LinearProgress } from "@mui/material";
 import BoltIcon from "@mui/icons-material/Bolt";
 import Navbar from "../Shared/Navbar/Navbar";
@@ -8,11 +10,13 @@ import ElectricCarImage from "./EVIcon.png";
 import HomeGridImage from "./HomeIcon.png";
 import CarIllustration from "./CarIllu.png";
 
-const VehicleToHomeCharging = () => {
+const VehicleToHomeCharging = (props) => {
   const [charging, setCharging] = useState(false);
   const [vehicleCharge, setVehicleCharge] = useState(80);
   const [homeGridCharge, setHomeGridCharge] = useState(50);
   const [typeCharging, setTypeCharging] = useState(1);
+
+  const {userDetails, tradeRow, setTrade} = props;
 
   useEffect(() => {
     let interval;
@@ -32,6 +36,19 @@ const VehicleToHomeCharging = () => {
   const stopCharging = () => {
     setCharging(false);
   };
+
+  const triggerUpdateTransaction = () => {
+    if(tradeRow.state!=="inProgress" || !tradeRow.transactionId){
+      props.toggleSnackbar({open:true,message:'Invalid transactionId',status:false});
+      return;
+    }
+    props.updateTransactionStats({params:{transactionId:tradeRow?.transactionId,tradeId:tradeRow._id},data:{transactionStatus:"Completed",transferredEnergy:tradeRow?.energy,chargePerUnit:tradeRow?.chargePerUnit}}).then((response)=>{
+      if(response.payload.status===200){
+        props.toggleSnackbar({open:true,message:'Transaction completed',status:true});
+        setTrade({});
+      }
+    })
+  }
 
   return (
     <>
@@ -265,4 +282,17 @@ const VehicleToHomeCharging = () => {
   );
 };
 
-export default VehicleToHomeCharging;
+const mapStateToProps = (state) => ({
+  isLoading: state.isLoading,
+  error: state.error,
+  data: state.data,
+  userDetails: state.userDetails,
+  tradeRow: state.tradeRow,
+});
+
+const mapDispatchToProps = {
+  getUserDetails,
+  setTrade
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VehicleToHomeCharging);

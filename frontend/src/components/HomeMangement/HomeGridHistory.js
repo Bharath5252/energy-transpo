@@ -134,8 +134,8 @@ const PastTransactions = (props) => {
                 <tr key={index}>
                   <td>{row.senderId?._id===userId?"Sell":"Buy"}</td>
                   <td>{row.senderId?._id===userId?row.senderId?.username:row.receiverId?.username}</td>
-                  <td>{row.committedEnergy} Wh</td>
-                  <td>{row.transferredEnergy} Wh</td>
+                  <td>{row.committedEnergy} kWh</td>
+                  <td>{row.transferredEnergy} kWh</td>
                   <td>{row.transactionStatus}</td>
                   <td>{utils.dateFormat(row.updatedAt)}</td>
                   <td>{utils.timeFormat(row.updatedAt)}</td>

@@ -95,11 +95,11 @@ const Vehicle = (props) => {
                                     <div class="battery-text2">Charge Left</div>
                                 </div>
                                 <div>
-                                    <div class="battery-text1">{matchedVehicle?.car_current_battery} Wh</div>
+                                    <div class="battery-text1">{matchedVehicle?.car_current_battery} kWh</div>
                                     <div class="battery-text2">Energy Left</div>
                                 </div>
                                 <div>
-                                    <div class="battery-text1">{matchedVehicle?.car_battery} Wh</div>
+                                    <div class="battery-text1">{matchedVehicle?.car_battery} kWh</div>
                                     <div class="battery-text2">Battery capacity</div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@ const Vehicle = (props) => {
                     <table class="scrolldown">
                         <thead>
                             <tr class="trbody">
-                                <th class="thtd">Energy Transfered (Wh)</th>
+                                <th class="thtd">Energy Transfered (kWh)</th>
                                 <th class="thtd">Price/kwh (Coins)</th>
                                 <th class="thtd">Type</th>
                             </tr>
