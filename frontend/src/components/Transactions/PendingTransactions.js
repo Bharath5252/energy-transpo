@@ -76,6 +76,9 @@ const CurrentTransactions = (props) => {
             setSelectedRow(row);
             setLoading(true);
             setAnimate(true);
+            // setTimeout(() => {
+            //   props.updateTransactionStats({ params: { transactionId: trnsId, tradeId: row._id }, data: { transactionId: trnsId, transactionStatus: "Completed", transferredEnergy: row.energy, chargePerUnit: row.chargePerUnit, senderId: preCheckPayload.senderId, receiverId: preCheckPayload.receiverId } })
+            // }, 9000);
             setTimeout(() => {
               setLoading(false);
               setSuccess(1);
