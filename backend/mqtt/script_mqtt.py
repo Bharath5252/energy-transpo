@@ -122,6 +122,7 @@ def publish_telemetry_data(
                     "charge_percentage": receiver_charge_percentage,
                     "status": "receiving"
                 },
+                "status": "inProgress",
                 "timestamp": time.time()
             })
 
