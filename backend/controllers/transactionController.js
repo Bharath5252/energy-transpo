@@ -4,6 +4,9 @@ const Vehicle = require("../models/vehicle");
 const Trade = require("../models/trade");
 const { exec } = require('child_process');
 const path = require('path');
+const config = require('../config');
+
+const useBlockchainAPI = config.useBlockchainAPI;
 
 
 exports.initiateTransaction = async (req, res) => {
@@ -46,29 +49,11 @@ exports.initiateTransaction = async (req, res) => {
         const receiverCurrentCapacity = receiverVehicleData.currentCapacity || 0;
         const totalCapacity = senderVehicleData.batteryCapacity || 120; // Default battery capacity
 
-        const transaction = new Transaction({
-            typeOfTransaction,
-            senderId,
-            receiverId,
-            senderVehicle,
-            receiverVehicle,
-            committedEnergy,
-            credits,
-            chargePerUnit,
-            tradeId: trade._id,
-        });
-
-        trade.state = "inProgress";
-        trade.transactionId = transaction._id;
-        await trade.save();
-
-        const savedTransaction = await transaction.save();
-
-        const rateOfTransfer = 10;
-
-        // Resolve paths
+        // Trigger Telemetry Data
         const venvPythonPath = path.resolve(__dirname, '../mqtt/venv/bin/python3'); // Go up one level to `backend/` and into `mqtt/`
         const scriptPath = path.resolve(__dirname, '../mqtt/script_mqtt.py'); // Adjust to point to `script_mqtt.py`
+
+        const rateOfTransfer = 10;
 
         const command = `${venvPythonPath} ${scriptPath} true ${senderId} ${receiverId} ${senderCurrentCapacity} ${receiverCurrentCapacity} ${committedEnergy} ${rateOfTransfer} ${totalCapacity} ${tradeId}`;
 
@@ -91,11 +76,34 @@ exports.initiateTransaction = async (req, res) => {
             console.log(`Script stdout: ${stdout}`);
         });
 
-        res.status(200).json({
-            message: "Transaction initiated.",
-            transactionId: savedTransaction._id,
-            transaction: savedTransaction,
-        });
+        if (useBlockchainAPI) {
+
+        } else {
+            const transaction = new Transaction({
+                typeOfTransaction,
+                senderId,
+                receiverId,
+                senderVehicle,
+                receiverVehicle,
+                committedEnergy,
+                credits,
+                chargePerUnit,
+                tradeId: trade._id,
+            });
+
+            const savedTransaction = await transaction.save();
+
+            trade.state = "inProgress";
+            trade.transactionId = transaction._id;
+            await trade.save();
+
+            res.status(200).json({
+                message: "Transaction initiated.",
+                transactionId: savedTransaction._id,
+                transaction: savedTransaction,
+            });
+        }
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -132,24 +140,29 @@ exports.preCheckTransaction = async (req, res) => {
         console.log("senderVehicleData.energyAvailable:", senderVehicleData.energyAvailable);
         console.log("receiver.balance:", receiver.balance);
 
-        if (senderVehicleData.energyAvailable < requiredEnergy) {
-            return res.status(400).json({
-                message: "Sender does not have enough energy available.",
-                available_energy: senderVehicleData.energyAvailable,
+        if (useBlockchainAPI) {
+
+        } else {
+            if (senderVehicleData.energyAvailable < requiredEnergy) {
+                return res.status(400).json({
+                    message: "Sender does not have enough energy available.",
+                    available_energy: senderVehicleData.energyAvailable,
+                });
+            }
+
+            if (receiver.balance < requiredMoney) {
+                return res.status(400).json({
+                    message: "Receiver does not have enough wallet balance.",
+                    available_balance: receiver.balance,
+                    required_balance: requiredMoney,
+                });
+            }
+
+            res.status(200).json({
+                message: "Pre-check successful. Sender has enough energy, and receiver has enough money.",
             });
         }
 
-        if (receiver.balance < requiredMoney) {
-            return res.status(400).json({
-                message: "Receiver does not have enough wallet balance.",
-                available_balance: receiver.balance,
-                required_balance: requiredMoney,
-            });
-        }
-
-        res.status(200).json({
-            message: "Pre-check successful. Sender has enough energy, and receiver has enough money.",
-        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -179,35 +192,40 @@ exports.updateTransactionStats = async (req, res) => {
             return res.status(404).json({ message: "Sender or receiver not found." });
         }
 
-        if (transactionStatus === "Completed" || transactionStatus === "Incomplete") {
-            const energyCost = parseFloat(transferredEnergy) * chargePerUnit;
+        if (useBlockchainAPI) {
 
-            if (sender.balance < energyCost) {
-                return res.status(400).json({ message: "Insufficient funds in sender's wallet." });
+        } else {
+            if (transactionStatus === "Completed" || transactionStatus === "Incomplete") {
+                const energyCost = parseFloat(transferredEnergy) * chargePerUnit;
+
+                if (sender.balance < energyCost) {
+                    return res.status(400).json({ message: "Insufficient funds in sender's wallet." });
+                }
+
+                sender.balance += energyCost;
+                receiver.balance -= energyCost;
+
+                transaction.transferredEnergy = transferredEnergy;
+                transaction.transactionStatus = transactionStatus || transaction.transactionStatus;
+
+                trade.state = "completed";
+                await trade.save();
+
+                await sender.save();
+                await receiver.save();
+            } else if (transactionStatus === "Failed") {
+                transaction.transactionStatus = "Failed";
             }
 
-            sender.balance += energyCost;
-            receiver.balance -= energyCost;
+            transaction.updatedAt = new Date();
+            const updatedTransaction = await transaction.save();
 
-            transaction.transferredEnergy = transferredEnergy;
-            transaction.transactionStatus = transactionStatus || transaction.transactionStatus;
-
-            trade.state = "completed";
-            await trade.save();
-
-            await sender.save();
-            await receiver.save();
-        } else if (transactionStatus === "Failed") {
-            transaction.transactionStatus = "Failed";
+            res.status(200).json({
+                message: `Transaction updated with status: ${transactionStatus}.`,
+                transaction: updatedTransaction,
+            });
         }
 
-        transaction.updatedAt = new Date();
-        const updatedTransaction = await transaction.save();
-
-        res.status(200).json({
-            message: `Transaction updated with status: ${transactionStatus}.`,
-            transaction: updatedTransaction,
-        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -217,19 +235,24 @@ exports.getTransactionHistoryByUser = async (req, res) => {
     try {
         const { userId } = req.query;
 
-        const transactions = await Transaction.find({
-            $or: [{ senderId: userId }, { receiverId: userId }],
-            transactionStatus: { $ne: "InProgress" },
-        }).populate("senderId receiverId senderVehicle receiverVehicle");
+        if (useBlockchainAPI) {
 
-        if (!transactions || transactions.length === 0) {
-            return res.status(404).json({ message: "No transactions found for this user." });
+        } else {
+            const transactions = await Transaction.find({
+                $or: [{ senderId: userId }, { receiverId: userId }],
+                transactionStatus: { $ne: "InProgress" },
+            }).populate("senderId receiverId senderVehicle receiverVehicle");
+
+            if (!transactions || transactions.length === 0) {
+                return res.status(404).json({ message: "No transactions found for this user." });
+            }
+
+            res.status(200).json({
+                message: "Transactions fetched successfully.",
+                transactions: transactions,
+            });
         }
 
-        res.status(200).json({
-            message: "Transactions fetched successfully.",
-            transactions: transactions,
-        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -237,14 +260,18 @@ exports.getTransactionHistoryByUser = async (req, res) => {
 
 exports.getAllTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find()
-            .populate("senderId receiverId senderVehicle receiverVehicle")
-            .sort({ createdAt: -1 });
+        if (useBlockchainAPI) {
 
-        res.status(200).json({
-            message: "All transactions fetched successfully.",
-            transactions: transactions,
-        });
+        } else {
+            const transactions = await Transaction.find()
+                .populate("senderId receiverId senderVehicle receiverVehicle")
+                .sort({ createdAt: -1 });
+
+            res.status(200).json({
+                message: "All transactions fetched successfully.",
+                transactions: transactions,
+            });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -255,23 +282,27 @@ exports.updateTransaction = async (req, res) => {
         const { transactionId } = req.query;
         const updatedFields = req.body;
 
-        const transaction = await Transaction.findById(transactionId);
-        if (!transaction) {
-            return res.status(404).json({ message: "Transaction not found." });
-        }
+        if (useBlockchainAPI) {
 
-        for (const [key, value] of Object.entries(updatedFields)) {
-            if (transaction[key] !== undefined) {
-                transaction[key] = value;
+        } else {
+            const transaction = await Transaction.findById(transactionId);
+            if (!transaction) {
+                return res.status(404).json({ message: "Transaction not found." });
             }
+
+            for (const [key, value] of Object.entries(updatedFields)) {
+                if (transaction[key] !== undefined) {
+                    transaction[key] = value;
+                }
+            }
+
+            const updatedTransaction = await transaction.save();
+
+            res.status(200).json({
+                message: "Transaction updated successfully.",
+                transaction: updatedTransaction,
+            });
         }
-
-        const updatedTransaction = await transaction.save();
-
-        res.status(200).json({
-            message: "Transaction updated successfully.",
-            transaction: updatedTransaction,
-        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error updating transaction.", error: error.message });
