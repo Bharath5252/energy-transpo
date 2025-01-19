@@ -15,7 +15,7 @@ api.interceptors.request.use(
             config.headers['x-bypass-middleware']=true;
         }
         if(getCookie('auth_token')!==""){
-            config.headers['Authorization']=`Bearer ${getCookie('auth_tokeb')}`;
+            config.headers['Authorization']=`Bearer ${getCookie('auth_token')}`;
         }
         return config
     },(error)=>{
