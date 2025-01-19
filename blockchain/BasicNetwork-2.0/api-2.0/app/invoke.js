@@ -74,6 +74,36 @@ const invokeTransaction = async (channelName, chaincodeName, fcn, args, username
                 .setTransient(transientDataBuffer)
                 .submit()
             message = `Successfully submitted transient data`
+        } else if (fcn === "initiateTransaction") {
+            console.log(`args: ${args}`);
+            result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+            console.log(`res: ${result}`);
+            message = `Successfully initiated the transaction with type ${args[0]}`;
+        } else if (fcn === "preCheckTransaction") {
+            console.log(`args: ${args}`);          
+            result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);          
+            console.log(`res: ${result}`);
+            message = `Successfully initiated the pre-check transaction for sender and receiver`;
+        } else if (fcn === "updateTransactionStats") {
+            console.log(`args: ${args}`);          
+            result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);          
+            console.log(`res: ${result}`);
+            message = `Transaction stats updated successfully`;
+        } else if (fcn === "getTransactionHistoryByUser") {
+            console.log(`args: ${args}`);          
+            result = await contract.submitTransaction(fcn, args[0]);          
+            console.log(`res: ${result}`);
+            message = `User transactions fetched successfully`;
+        }  else if (fcn === "getAllTransactions") {
+            console.log(`args: ${args}`);          
+            result = await contract.submitTransaction(fcn);          
+            console.log(`res: ${result}`);
+            message = `All transactions fetched successfully`;
+        } else if(fcn === "updateTransaction") {
+            console.log(`args: ${args}`);          
+            result = await contract.submitTransaction(fcn, args[0], args[1]);          
+            console.log(`res: ${result}`);
+            message = `Transaction updated successfully`;
         }
         else {
             return `Invocation require either createCar or changeCarOwner as function but got ${fcn}`
