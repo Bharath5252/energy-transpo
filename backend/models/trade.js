@@ -8,7 +8,7 @@ const tradeSchema = new mongoose.Schema({
     energy: { type: Number, required: true },
     chargePerUnit: { type: Number, required: false },
     state: { type: String, enum: ["posted", "accepted", "inProgress", "completed"], default: "posted" },
-    acceptantVehicleId: { type: String, default: null },
+    acceptantVehicleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle', default: null },
     acceptedUserId: { type: String,default: null },
     acceptedTime: { type: Date, default: null },
     selectedContract: { type: String, enum: ["Manual", "Automatic"], required: true },
@@ -21,6 +21,7 @@ const tradeSchema = new mongoose.Schema({
         },
     },
     createdAt: { type: Date, default: Date.now },
+    transactionId: [{ type: String, default: null }],
 });
 
 tradeSchema.index({ location: "2dsphere" });

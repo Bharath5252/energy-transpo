@@ -12,6 +12,7 @@ const transactionSchema = new mongoose.Schema(
         transactionStatus: { type: String, enum: ["Completed", "Incomplete", "InProgress", "Failed"], default: "InProgress" },
         chargePerUnit: { type: Number, required: true },
         credits: { type: Number, required: true },
+        tradeId: { type: String, required: true },
     },
     {
         timestamps: true,

@@ -55,9 +55,11 @@ exports.initiateTransaction = async (req, res) => {
             committedEnergy,
             credits,
             chargePerUnit,
+            tradeId: trade._id,
         });
 
         trade.state = "inProgress";
+        trade.transactionId.push(transaction._id);
         await trade.save();
 
         const savedTransaction = await transaction.save();
