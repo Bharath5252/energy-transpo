@@ -10,7 +10,8 @@ const ticketSchema = new mongoose.Schema({
         required: true
     },
     response: {
-        type: String
+        type: String,
+        default: ""
     },
 });
 
