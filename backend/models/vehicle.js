@@ -22,11 +22,11 @@ const vehicleSchema = new mongoose.Schema({
     batteryCapacity: {
         type: Number,
         required: true,
-        default: 100000
+        default: 50
     },
     currentCapacity: {
         type: Number,
-        default: 1000000
+        default: 50
     },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
