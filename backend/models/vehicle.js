@@ -22,7 +22,7 @@ const vehicleSchema = new mongoose.Schema({
     batteryCapacity: {
         type: Number,
         required: true,
-        default: 50
+        default: 120
     },
     currentCapacity: {
         type: Number,

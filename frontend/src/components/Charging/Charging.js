@@ -1,41 +1,77 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getUserDetails, setTrade} from "../../Redux/Actions";
-import { Typography, Button, Grid, Box, LinearProgress } from "@mui/material";
+import { getUserDetails, setTrade } from "../../Redux/Actions";
+import { Typography, Grid, Box, LinearProgress } from "@mui/material";
 import BoltIcon from "@mui/icons-material/Bolt";
 import Navbar from "../Shared/Navbar/Navbar";
+import mqtt from 'mqtt';
+import './Charging.css';
 
-// Import the new images
 import ElectricCarImage from "./EVIcon.png";
 import HomeGridImage from "./HomeIcon.png";
 import CarIllustration from "./CarIllu.png";
 
 const VehicleToHomeCharging = (props) => {
-  const [charging, setCharging] = useState(false);
-  const [vehicleCharge, setVehicleCharge] = useState(80);
-  const [homeGridCharge, setHomeGridCharge] = useState(50);
-  const [typeCharging, setTypeCharging] = useState(1);
+  const [message, setMessage] = useState("");
+  // const [typeCharging, setTypeCharging] = useState(0);
+  // const [messages, setMessages] = useState([]);
+  const url = "ws://localhost:8084/mqtt";
+  const [tradeId, setTradeId] = useState();
 
   const {userDetails, tradeRow, setTrade} = props;
 
   useEffect(() => {
-    let interval;
-    if (charging && vehicleCharge > 0 && homeGridCharge < 100) {
-      interval = setInterval(() => {
-        setVehicleCharge((prev) => Math.max(prev - 3, 0));
-        setHomeGridCharge((prev) => Math.min(prev + 3, 100));
-      }, 500);
+    if (tradeRow && tradeRow._id) {
+      setTradeId(tradeRow._id);
+      // console.log(tradeRow);
     }
-    return () => clearInterval(interval);
-  }, [charging, vehicleCharge, homeGridCharge]);
+  }, [tradeRow]);
 
-  const startCharging = () => {
-    setCharging(true);
-  };
+  useEffect(() => {
+    if (!url || !tradeId) {
+      console.log("Waiting for URL and tradeId...");
+      return;
+    }
 
-  const stopCharging = () => {
-    setCharging(false);
-  };
+    console.log("Connecting to MQTT broker...");
+    let client;
+    try {
+      client = mqtt.connect(url);
+
+      client.on('connect', () => {
+        console.log('Connected to MQTT broker');
+        client.subscribe(`telemetry/${tradeId}/`, (err) => {
+          if (!err) {
+            console.log(`Subscribed to telemetry/${tradeId}/`);
+          } else {
+            console.error('Subscription error:', err);
+          }
+        });
+      });
+
+      client.on('message', (topic, message) => {
+        setMessage(JSON.parse(message.toString()));
+        // Update messages in state
+      //   setMessages((prevMessages) => [
+      //     ...prevMessages,
+      //     `Topic: ${topic}, Message: ${message.toString()}`,
+      // ]);
+      });
+
+      client.on('error', (err) => {
+        console.error('MQTT error:', err);
+      });
+    } catch (error) {
+      console.error('Error connecting to MQTT broker:', error);
+    }
+
+    return () => {
+      if (client) {
+        console.log("Disconnecting from MQTT broker...");
+        client.end();
+      }
+    };
+  }, [url, tradeId]);
 
   const triggerUpdateTransaction = () => {
     if(tradeRow.state!=="inProgress" || !tradeRow.transactionId){
@@ -47,237 +83,224 @@ const VehicleToHomeCharging = (props) => {
         props.toggleSnackbar({open:true,message:'Transaction completed',status:true});
         setTrade({});
       }
-    })
-  }
+    })};
 
   return (
     <>
-    <Navbar/>
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      <Typography variant="h5" gutterBottom>
-        Vehicle-to-Home Grid Charge Transfer
-      </Typography>
-      <Typography style={{margin:"1.5rem 0 3rem"}} variant="subtitle1" color="textSecondary" gutterBottom>
-        Simulate the transfer of charge from a vehicle to a home energy grid
-      </Typography>
-      {typeCharging ? 
-       <Grid container spacing={3} justifyContent="center" alignItems="center">
-       {/* Vehicle */}
-       <Grid item xs={12} sm={5}>
-         <Box
-           sx={{
-             p: 2,
-             border: '1px solid #e0e0e0',
-             padding: '2rem',
-             borderRadius: '8px',
-             boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-             display: 'flex',
-             flexDirection: 'column',
-             alignItems: 'center',
-             textAlign: 'center'
-           }}
-         >
-           <img src={ElectricCarImage} alt="Electric Vehicle" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
-           <Typography variant="subtitle1">Vehicle</Typography>
-           <Typography variant="body2" color="textSecondary">Charge Level: {vehicleCharge}%</Typography>
-           <LinearProgress
-             variant="determinate"
-             value={vehicleCharge}
-             sx={{
-               width: '100%',
-               mt: 1,
-               height: '8px',
-               borderRadius: '4px',
-               bgcolor: '#e0e0e0',
-               '& .MuiLinearProgress-bar': {
-                 bgcolor: '#1a73e8'
-               }
-             }}
-           />
-         </Box>
-       </Grid>
-
-       {/* Charging Animation */}
-       <Grid item xs={12} sm={2} style={{ textAlign: "center" }}>
-         {charging ? (
-           <BoltIcon style={{ fontSize: "40px", color: "#1a73e8" }} />
-         ) : (
-           <BoltIcon style={{ fontSize: "40px", color: "#555" }} />
-         )}
-         <Typography variant="body2" color="textSecondary">
-           {charging ? "Charging in progress..." : "Not Charging"}
-         </Typography>
-       </Grid>
-
-       {/* Home Grid */}
-       <Grid item xs={12} sm={5}>
-         <Box
-           sx={{
-             p: 2,
-             border: '1px solid #e0e0e0',
-             borderRadius: '8px',
-             padding: '2/Users/jagruthamancha/Downloads/CarIllu.pngrem',
-             boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-             display: 'flex',
-             flexDirection: 'column',
-             alignItems: 'center',
-             textAlign: 'center'
-           }}
-         >
-           <img src={HomeGridImage} alt="Home Grid" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
-           <Typography variant="subtitle1">Home Grid</Typography>
-           <Typography variant="body2" color="textSecondary">Charge Level: {homeGridCharge}%</Typography>
-           <LinearProgress
-             variant="determinate"
-             value={homeGridCharge}
-             sx={{
-               width: '100%',
-               mt: 1,
-               height: '8px',
-               borderRadius: '4px',
-               bgcolor: '#e0e0e0',
-               '& .MuiLinearProgress-bar': {
-                 bgcolor: '#1a73e8'
-               }
-             }}
-           />
-         </Box>
-       </Grid>
-
-       
-
-       {/* Action Buttons */}
-       <Grid item xs={12}>
-         <Button
-           variant="contained"
-           color="primary"
-           onClick={startCharging}
-           disabled={charging || vehicleCharge === 0 || homeGridCharge === 100}
-           sx={{ mr: 1 }}
-         >
-           Start Charging
-         </Button>
-         <Button
-           variant="outlined"
-           color="secondary"
-           onClick={stopCharging}
-           disabled={!charging}
-         >
-           Stop Charging
-         </Button>
-       </Grid>
-     </Grid>
-      :
-      <Grid container spacing={3} justifyContent="center" alignItems="center">
-      {/* Vehicle */}
-      <Grid item xs={12} sm={5}>
-        <Box
-          sx={{
-            p: 2,
-            border: '1px solid #e0e0e0',
-            padding: '2rem',
-            borderRadius: '8px',
-            boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-        >
-          <img src={CarIllustration} alt="Electric Vehicle" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
-          <Typography variant="subtitle1">Vehicle</Typography>
-          <Typography variant="body2" color="textSecondary">Charge Level: {vehicleCharge}%</Typography>
-          <LinearProgress
-            variant="determinate"
-            value={vehicleCharge}
-            sx={{
-              width: '100%',
-              mt: 1,
-              height: '8px',
-              borderRadius: '4px',
-              bgcolor: '#e0e0e0',
-              '& .MuiLinearProgress-bar': {
-                bgcolor: '#1a73e8'
-              }
-            }}
-          />
-        </Box>
-      </Grid>
-
-      {/* Charging Animation */}
-      <Grid item xs={12} sm={2} style={{ textAlign: "center" }}>
-        {charging ? (
-          <BoltIcon style={{ fontSize: "40px", color: "#1a73e8" }} />
-        ) : (
-          <BoltIcon style={{ fontSize: "40px", color: "#555" }} />
-        )}
-        <Typography variant="body2" color="textSecondary">
-          {charging ? "Charging in progress..." : "Not Charging"}
+      <Navbar />
+      <div style={{padding:'2rem',textAlign:'center'}}>{JSON.stringify(message)}</div>
+      {console.log(message)}
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <Typography variant="h5" gutterBottom>
+          Vehicle-to-Home Grid Charge Transfer
         </Typography>
-      </Grid>
-
-      {/* Home Grid */}
-      <Grid item xs={12} sm={5}>
-        <Box
-          sx={{
-            p: 2,
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            padding: '2/Users/jagruthamancha/Downloads/CarIllu.pngrem',
-            boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
+        <Typography
+          style={{ margin: "1.5rem 0 3rem" }}
+          variant="subtitle1"
+          color="textSecondary"
+          gutterBottom
         >
-          <img src={ElectricCarImage} alt="Home Grid" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
-          <Typography variant="subtitle1">Vehicle</Typography>
-          <Typography variant="body2" color="textSecondary">Charge Level: {homeGridCharge}%</Typography>
-          <LinearProgress
-            variant="determinate"
-            value={homeGridCharge}
-            sx={{
-              width: '100%',
-              mt: 1,
-              height: '8px',
-              borderRadius: '4px',
-              bgcolor: '#e0e0e0',
-              '& .MuiLinearProgress-bar': {
-                bgcolor: '#1a73e8'
-              }
-            }}
-          />
-        </Box>
-      </Grid>
+          Real-time telemetry of charge transfer between a vehicle and home grid
+        </Typography>
 
-      
+          <Grid container spacing={3} justifyContent="center" alignItems="center">
+          {/* Sender (Vehicle) */}
+          <Grid item xs={12} sm={5}>
+            <Box
+              sx={{
+                p: 2,
+                border: '1px solid #e0e0e0',
+                padding: '2rem',
+                borderRadius: '8px',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+            >
+              <img src={CarIllustration} alt="Electric Vehicle" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
+              <Typography variant="subtitle1">Sender (Vehicle)</Typography>
+              {message && (
+                <>
+                  <Typography variant="body2" color="textSecondary">
+                    Charge Level: {message?.sender.charge_percentage.toFixed(2)}%
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Energy: {message?.sender.energy.toFixed(2)} kWh
+                  </Typography>
+                </>
+              )}
+              <LinearProgress
+                variant="determinate"
+                value={message ? message.sender.charge_percentage : 0}
+                sx={{
+                  width: '100%',
+                  mt: 1,
+                  height: '8px',
+                  borderRadius: '4px',
+                  bgcolor: '#e0e0e0',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: '#1a73e8'
+                  }
+                }}
+              />
+            </Box>
+          </Grid>
 
-      {/* Action Buttons */}
-      <Grid item xs={12}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={startCharging}
-          disabled={charging || vehicleCharge === 0 || homeGridCharge === 100}
-          sx={{ mr: 1 }}
-        >
-          Start Charging
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={stopCharging}
-          disabled={!charging}
-        >
-          Stop Charging
-        </Button>
-      </Grid>
-    </Grid>
-    }
-      
-      
-    </div>
+          {/* Charging Animation */}
+          <Grid item xs={12} sm={2} style={{ textAlign: "center" }}>
+            <BoltIcon style={{ fontSize: "40px", color: "#1a73e8" }} />
+            <Typography variant="body2" color="textSecondary">
+              Charging in progress...
+            </Typography>
+          </Grid>
+
+          {/* Receiver (Home Grid) */}
+          <Grid item xs={12} sm={5}>
+            <Box
+              sx={{
+                p: 2,
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
+                padding: '2rem',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+            >
+              <img src={ElectricCarImage} alt="Home Grid" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
+              <Typography variant="subtitle1">Receiver (Vehicle)</Typography>
+              {message && (
+                <>
+                  <Typography variant="body2" color="textSecondary">
+                    Charge Level: {message?.receiver.charge_percentage.toFixed(2)}%
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Energy: {message?.receiver.energy.toFixed(2)} kWh
+                  </Typography>
+                </>
+              )}
+              <LinearProgress
+                variant="determinate"
+                value={message ? message.receiver.charge_percentage : 0}
+                sx={{
+                  width: '100%',
+                  mt: 1,
+                  height: '8px',
+                  borderRadius: '4px',
+                  bgcolor: '#e0e0e0',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: '#1a73e8'
+                  }
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* {typeCharging===1 &&
+          <Grid container spacing={3} justifyContent="center" alignItems="center">
+          <Grid item xs={12} sm={5}>
+            <Box
+              sx={{
+                p: 2,
+                border: '1px solid #e0e0e0',
+                padding: '2rem',
+                borderRadius: '8px',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+            >
+              <img src={ElectricCarImage} alt="Electric Vehicle" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
+              <Typography variant="subtitle1">Sender (Vehicle)</Typography>
+              {message && (
+                <>
+                  <Typography variant="body2" color="textSecondary">
+                    Charge Level: {message.sender.charge_percentage.toFixed(2)}%
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Energy: {message.sender.energy.toFixed(2)} kWh
+                  </Typography>
+                </>
+              )}
+              <LinearProgress
+                variant="determinate"
+                value={message ? message.sender.charge_percentage : 0}
+                sx={{
+                  width: '100%',
+                  mt: 1,
+                  height: '8px',
+                  borderRadius: '4px',
+                  bgcolor: '#e0e0e0',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: '#1a73e8'
+                  }
+                }}
+              />
+            </Box>
+          </Grid>
+
+
+          <Grid item xs={12} sm={2} style={{ textAlign: "center" }}>
+            <BoltIcon style={{ fontSize: "40px", color: "#1a73e8" }} />
+            <Typography variant="body2" color="textSecondary">
+              Charging in progress...
+            </Typography>
+          </Grid>
+
+
+          <Grid item xs={12} sm={5}>
+            <Box
+              sx={{
+                p: 2,
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
+                padding: '2rem',
+                boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+            >
+              <img src={HomeGridImage} alt="Home Grid" style={{ width: "100%", maxWidth: "300px", marginBottom: '1rem' }} />
+              <Typography variant="subtitle1">Receiver (Home Grid)</Typography>
+              {message && (
+                <>
+                  <Typography variant="body2" color="textSecondary">
+                    Charge Level: {message.receiver.charge_percentage.toFixed(2)}%
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Energy: {message.receiver.energy.toFixed(2)} kWh
+                  </Typography>
+                </>
+              )}
+              <LinearProgress
+                variant="determinate"
+                value={message ? message.receiver.charge_percentage : 0}
+                sx={{
+                  width: '100%',
+                  mt: 1,
+                  height: '8px',
+                  borderRadius: '4px',
+                  bgcolor: '#e0e0e0',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: '#1a73e8'
+                  }
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+        } */}
+
+      </div>
     </>
   );
 };

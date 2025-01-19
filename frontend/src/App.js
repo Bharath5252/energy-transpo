@@ -63,7 +63,7 @@ function App(props) {
   useEffect(() => {
     // Set initial chatbot response
     addResponseMessage("Hi! How can I assist you?");
-    addResponseMessage("Hi! To raise a ticket, type 'raise ticket'. I will guide you through the process.");
+    addResponseMessage("Hi! To raise a ticket, type **raise ticket**. I will guide you through the process.");
     // Set quick action buttons for all prompts
     setQuickButtons(
       prompts.map((prompt) => ({

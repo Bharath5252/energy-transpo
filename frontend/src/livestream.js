@@ -5,7 +5,7 @@ import './livestream.css';
 const LiveStream = () => {
     const [messages, setMessages] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
-    const [url, setUrl] = useState(''); // State to store the URL input
+    const [url, setUrl] = useState("ws://localhost:8084/mqtt"); // State to store the URL input
 
     const handleStartStream = () => {
         if (!url) {
@@ -22,7 +22,7 @@ const LiveStream = () => {
                 console.log('Connected to MQTT broker');
 
                 // Subscribe to a topic
-                client.subscribe('telemetry/1/', (err) => {
+                client.subscribe('telemetry/678d650879c9bdd346220301/', (err) => {
                     if (!err) {
                         console.log('Subscribed to topic');
                     } else {
@@ -35,7 +35,7 @@ const LiveStream = () => {
                 // Update messages in state
                 setMessages(prevMessages => [
                     ...prevMessages,
-                    `Message: ${message.toString()}`
+                    `Message: ${message.toString()}`,
                 ]);
             });
 

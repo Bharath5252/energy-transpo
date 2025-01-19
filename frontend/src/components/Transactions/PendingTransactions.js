@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import {Link,} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {Tooltip} from '@mui/material';
 import TransactionNavbar from "./TransactionNavbar";
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, 
@@ -43,8 +43,8 @@ const CurrentTransactions = (props) => {
     const preCheckPayload = {
       senderId : row.typeOfOrder==="Sell"?row.userId:row.acceptedUserId,
       receiverId : row.typeOfOrder==="Sell"?row.acceptedUserId:row.userId,
-      senderVehicle : row.typeOfOrder==="Sell"?row.vehicleId:row.acceptantVehicleId,
-      receiverVehicle : row.typeOfOrder==="Sell"?row.acceptantVehicleId:row.vehicleId,
+      senderVehicle : row.typeOfOrder==="Sell"?row.vehicleId?._id:row.acceptantVehicleId?._id,
+      receiverVehicle : row.typeOfOrder==="Sell"?row.acceptantVehicleId?._id:row.vehicleId?._id,
       committedEnergy : row.energy,
       chargePerUnit : row.chargePerUnit,
     }
@@ -86,7 +86,7 @@ const CurrentTransactions = (props) => {
               setLoading(false);
               setSuccess(1);
               // setAnimate(false);  
-            }, 9000);
+            }, 5000);
           }
         })
       }
@@ -159,7 +159,7 @@ const CurrentTransactions = (props) => {
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction is in progress.
         </p>
         <p>Check {selectedRow.energy} kWh of energy transfer staus at {selectedRow.chargePerUnit} coins/kWh in the pending transactions.</p>
-        <button><Link to="/transactions/pending">Go to Pending Transactions</Link></button>
+        <button onClick={()=>{setAnimate(0); setSuccess(0); props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}})}}>Go to Pending Transactions</button>
       </div>
       }
       

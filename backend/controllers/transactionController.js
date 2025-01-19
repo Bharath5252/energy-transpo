@@ -53,7 +53,7 @@ exports.initiateTransaction = async (req, res) => {
         const venvPythonPath = path.resolve(__dirname, '../mqtt/venv/bin/python3'); // Go up one level to `backend/` and into `mqtt/`
         const scriptPath = path.resolve(__dirname, '../mqtt/script_mqtt.py'); // Adjust to point to `script_mqtt.py`
 
-        const rateOfTransfer = 10;
+        const rateOfTransfer = 5;
 
         const command = `${venvPythonPath} ${scriptPath} true ${senderId} ${receiverId} ${senderCurrentCapacity} ${receiverCurrentCapacity} ${committedEnergy} ${rateOfTransfer} ${totalCapacity} ${tradeId}`;
 
