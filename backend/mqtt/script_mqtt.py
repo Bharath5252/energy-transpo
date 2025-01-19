@@ -54,8 +54,7 @@ def publish_telemetry_data(
     sender_current_capacity = int(sender_current_capacity)  # Ensure sender_cur_capacity is an integer
     receiver_current_capacity = int(receiver_current_capacity)  # Ensure receiver_current_capacity is an integer
     energy_amount = int(energy_amount)  # Ensure energy_amount is an integer
-    # dynamic_topic = f"telemetry/{trade_id}"  # Dynamic topic with trade ID
-    dynamic_topic = "telemetry/1/"
+    dynamic_topic = f"telemetry/{trade_id}"  # Dynamic topic with trade ID
 
     if connected:
         while energy_amount > 0:

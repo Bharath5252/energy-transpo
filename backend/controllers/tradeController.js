@@ -134,14 +134,16 @@ exports.getAcceptedTrades = async (req, res) => {
         })
 
         const tradesWithUsernames = await Promise.all(trades.map(async (trade) => {
-            const user = await User.findById(trade.userId);
-            const acceptedUser = trade.acceptedUserId ? await User.findById(trade.acceptedUserId) : null;
-            const vehicle = await Vehicle.findById(trade.vehicleId);
+            // Populate fields before converting to object
+            const populatedTrade = await trade.populate("vehicleId acceptantVehicleId"); // No need for execPopulate
+            const user = await User.findById(populatedTrade.userId);
+            const acceptedUser = populatedTrade.acceptedUserId ? await User.findById(populatedTrade.acceptedUserId) : null;
+            const vehicle = await Vehicle.findById(populatedTrade.vehicleId);
 
             const name = vehicle ? `${vehicle?.vehicleDomain} ${vehicle.vehicleName} ${vehicle.vehicleModel} - ${vehicle.nickName}` : null;
 
             return {
-                ...trade.toObject(),
+                ...populatedTrade.toObject(), // Convert to plain object after populating
                 username: user ? user.username : null,
                 acceptedUsername: acceptedUser ? acceptedUser.username : null,
                 vehicleName: name,
