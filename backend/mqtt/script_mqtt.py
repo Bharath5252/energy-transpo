@@ -85,12 +85,14 @@ def publish_telemetry_data(
 
     if connected:
         while energy_amount > 0:
+            energy_transferred = energy_amount * rate_of_transfer
+            energy_amount -= energy_transferred
             # Calculate telemetry data
-            sender_energy = max(0, sender_current_capacity - energy_amount)  # Remaining sender energy
-            receiver_energy = min(receiver_current_capacity, energy_amount)  # Receiver gets transferred energy
+            sender_energy = max(0, sender_current_capacity - energy_transferred)  # Remaining sender energy
+            receiver_energy = min(total_capacity, receiver_current_capacity + energy_transferred)  # Receiver gets transferred energy
             voltage = 230  # Fixed voltage in volts
             current = rate_of_transfer / voltage  # Calculate current in amps
-            power = voltage * current  # Calculate power in watts
+            power = rate_of_transfer  # Calculate power in watts
             sender_battery_temp = 30 + (5 * (rate_of_transfer / 100))  # Simulated sender battery temp
             receiver_battery_temp = 30 + (5 * (rate_of_transfer / 120))  # Simulated receiver battery temp
 
