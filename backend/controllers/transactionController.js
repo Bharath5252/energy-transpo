@@ -205,3 +205,32 @@ exports.getAllTransactions = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.updateTransaction = async (req, res) => {
+    try {
+        const { transactionId } = req.query;
+        const updatedFields = req.body;
+
+        const transaction = await Transaction.findById(transactionId);
+        if (!transaction) {
+            return res.status(404).json({ message: "Transaction not found." });
+        }
+
+        for (const [key, value] of Object.entries(updatedFields)) {
+            if (transaction[key] !== undefined) {
+                transaction[key] = value;
+            }
+        }
+
+        const updatedTransaction = await transaction.save();
+
+        res.status(200).json({
+            message: "Transaction updated successfully.",
+            transaction: updatedTransaction,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating transaction.", error: error.message });
+    }
+};
+
