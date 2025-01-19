@@ -16,6 +16,8 @@ const initialState = {
     userTransactionHistory:[],
     vehicleSelected:{},
     transactionStatus:{},
+    allTickets: [],
+    adminTransactionHistory:[],
 }
 
 export const reducer = (state=initialState, action) => {
@@ -318,15 +320,11 @@ export const reducer = (state=initialState, action) => {
                 isLoading: false,
                 userTransactionHistory: action.payload?.data?.transactions,
             }
-        case `${types.USER_TRANSACTION_HISTORY}/rejected`:
+        case `${types.ADMIN_TRANSACTION_HISTORY}/fulfilled`:
             return {
                 ...state,
                 isLoading: false,
-                snackBarStatus: {
-                    open: true,
-                    message: action.payload?.response?.message,
-                    status: false,
-                },
+                adminTransactionHistory: action.payload?.data?.transactions,
             }
         case `${types.EDIT_TRADE}/fulfilled`:
             return {
@@ -375,6 +373,62 @@ export const reducer = (state=initialState, action) => {
                 },
             }
         case `${types.CREATE_HELP}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.UPDATE_HELP}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.UPDATE_HELP}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.GET_HELP}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                allTickets: action.payload?.data?.tickets,
+            }
+        case `${types.GET_HELP}/rejected`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.response?.message,
+                    status: false,
+                },
+            }
+        case `${types.ADMIN_TRANSACTION_UPDATE}/fulfilled`:
+            return {
+                ...state,
+                isLoading: false,
+                snackBarStatus: {
+                    open: true,
+                    message: action.payload?.data?.message,
+                    status: true,
+                },
+            }
+        case `${types.ADMIN_TRANSACTION_UPDATE}/rejected`:
             return {
                 ...state,
                 isLoading: false,

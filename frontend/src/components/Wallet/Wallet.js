@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Navbar from "../Shared/Navbar/Navbar";
-import { getUserDetails } from "../../Redux/Actions";
+import { getUserDetails, getTransactionHistoryByUser} from "../../Redux/Actions";
+import * as utils from '../../utils/utils';
 import "./Wallet.css";
 
 const Wallet = (props) => {
-  const { userDetails } = props;
+  const { userDetails, userTransactionHistory } = props;
+  const [transactions,setTransactions] = useState([]);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     props.getUserDetails({
@@ -16,13 +19,21 @@ const Wallet = (props) => {
        localStorage.setItem("balance",response?.payload?.data?.user?.balance);
       }
     });
+    props.getTransactionHistoryByUser({params:{userId:localStorage.getItem("userId")}})
   }, []);
 
-  const transactions = [
-    { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 Wh" },
-    { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 Wh" },
-    { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 Wh" },
-  ];
+  useEffect(() => {
+    let transactions = JSON.parse(JSON.stringify(userTransactionHistory));
+    transactions.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    transactions=transactions.slice(0,3)
+    setTransactions(transactions);
+  },[userTransactionHistory])
+
+  // const transactions = [
+  //   { id: 1, date: "01 Jan 2025", type: "Sell", amount: "+500 Coins", energy: "5 Wh" },
+  //   { id: 2, date: "28 Dec 2024", type: "Buy", amount: "-300 Coins", energy: "3 Wh" },
+  //   { id: 3, date: "27 Dec 2024", type: "Sell", amount: "+200 Coins", energy: "2 Wh" },
+  // ];
 
   return (
     <>
@@ -61,17 +72,14 @@ const Wallet = (props) => {
                 <tbody>
                   {transactions.map((txn) => (
                     <tr key={txn.id}>
-                      <td>{txn.date}</td>
-                      <td>{txn.type}</td>
+                      <td>{utils.formatLocalDate(txn.updatedAt)}</td>
+                      <td>{txn.senderId?._id===userId?"Sell":"Buy"}</td>
                       <td
-                        style={{color: txn.amount.startsWith("+") ? "green" : "red"}}
-                        className={
-                          txn.amount.startsWith("+") ? "positive" : "negative"
-                        }
+                        style={{color:txn.senderId?._id===userId?"green":"red", fontWeight:"bold"}}
                       >
-                        {txn.amount}
+                        {`${txn.senderId?._id===userId?'+':'-'}${txn.credits} Coins`}
                       </td>
-                      <td>{txn.energy}</td>
+                      <td>{txn.committedEnergy} kWh</td>
                     </tr>
                   ))}
                 </tbody>
@@ -89,10 +97,12 @@ const mapStateToProps = (state) => ({
   error: state.error,
   data: state.data,
   userDetails: state.userDetails,
+  userTransactionHistory: state.userTransactionHistory,
 });
 
 const mapDispatchToProps = {
   getUserDetails,
+  getTransactionHistoryByUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

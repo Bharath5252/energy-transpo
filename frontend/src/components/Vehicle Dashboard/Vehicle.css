@@ -228,7 +228,7 @@ body {
 
     .tbody {
       display: block;
-      max-height: 150px; /* e.g. */
+      /* max-height: 150px; e.g. */
       overflow-y: scroll;
   }
 

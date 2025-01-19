@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {connect} from 'react-redux'; 
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -33,6 +34,7 @@ import {
 import "react-chat-widget/lib/styles.css";
 import Charging from "./components/Charging/Charging";
 import "./App.css";
+import { createHelp, toggleSnackbar, getUserDetails } from './Redux/Actions';
 
 const prompts = [
   { name: "Home", link: "/home" },
@@ -52,7 +54,7 @@ const prompts = [
 ];
 
 
-function App() {
+function App(props) {
   const navigate = useNavigate();
   const [isRaisingTicket, setIsRaisingTicket] = useState(false);
   const [ticketDescription, setTicketDescription] = useState("");
@@ -121,7 +123,18 @@ function App() {
       addResponseMessage("Description cannot be empty. Please provide a valid description.");
       return;
     }
-
+    const payload = {
+      query:ticketDescription,
+      userId:localStorage.getItem("userId"),
+    }
+    props.createHelp({data:payload}).then((response)=>{
+      if(response.payload.status===200){
+        addResponseMessage("Ticket raised successfully! We'll get back to you soon.");
+        setTicketDescription("");
+      }else{
+        addResponseMessage("Failed to raise the ticket. Please try again.");
+      }
+    })
     // Example API call
     // fetch("/api/raise-ticket", {
     //   method: "POST",
@@ -179,4 +192,15 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  snackBarStatus: state.snackBarStatus,
+  userDetails:state.userDetails,
+});
+
+const mapDispatchToProps = {
+  toggleSnackbar,
+  getUserDetails,
+  createHelp
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(App)

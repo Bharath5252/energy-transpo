@@ -19,7 +19,10 @@ const PastTransactions = (props) => {
   },[])
 
   useEffect(()=>{
-    setUserTransactionHis(userTransactionHistory);
+    let transactions = JSON.parse(JSON.stringify(userTransactionHistory));
+    transactions = transactions.filter((item)=>item?.typeOfTransaction===2);
+    transactions.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    setUserTransactionHis(transactions);
   },[userTransactionHistory])
 
   const rows = [
@@ -73,7 +76,7 @@ const PastTransactions = (props) => {
     (row) =>
       (transactionFilter === "All" || (row.senderId?._id===userId?"Sell":"Buy") === transactionFilter) &&
       (statusFilter === "All" || row.transactionStatus === statusFilter) &&
-      (dateFilter === "" || row.updatedAt === dateFilter)
+      (dateFilter === "" || utils.yyyymmdd(row.updatedAt) === dateFilter)
   );
 
   return (
@@ -118,11 +121,12 @@ const PastTransactions = (props) => {
             <thead>
               <tr>
                 <th>Transaction Type</th>
-                <th>Name</th>
+                <th>Counter Party Name</th>
                 <th>Committed Energy</th>
                 <th>Transacted Energy</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Time(24 hrs)</th>
               </tr>
             </thead>
             <tbody>
@@ -134,11 +138,12 @@ const PastTransactions = (props) => {
                   <td>{row.transferredEnergy} Wh</td>
                   <td>{row.transactionStatus}</td>
                   <td>{utils.dateFormat(row.updatedAt)}</td>
+                  <td>{utils.timeFormat(row.updatedAt)}</td>
                 </tr>
               ))
               :
               <tr> 
-                <td colSpan="6">No Transactions Found</td>
+                <td colSpan="7">No Transactions Found</td>
               </tr>
             }
             </tbody>

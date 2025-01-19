@@ -25,6 +25,10 @@ export const handleFileChange = (event, callback) => {
   }
 };
 
+export const arrayChecker = (arr) => {
+  return arr && Array.isArray(arr);
+}
+
 export const arrayLengthChecker = (arr) => {
   return arr && Array.isArray(arr) && arr?.length>0;
 }
@@ -36,6 +40,15 @@ export const dateFormat = (data) => {
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const day = String(date.getDate()).padStart(2, "0");
   return `${day}-${month}-${year}`;
+}
+
+export const yyyymmdd = (data) => {
+  const date = new Date(data);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 export const dateFormat2 = (data) => {
@@ -60,6 +73,27 @@ export const timeFormat = (data) => {
   const formattedTime = `${hours}:${minutes}`
   return formattedTime;
 }
+
+export const formatLocalDate = (dateString) => {
+  const date = new Date(dateString);
+
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+
+  const daySuffix = (day) => {
+    if (day >= 11 && day <= 13) return "th"; // Special case for 11th, 12th, 13th
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  return `${day}${daySuffix(day)} ${month} ${year}`;
+}
+
 
 export const calculateTariff = (dateTime) => {
   /**

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { toggleSnackbar, getUserDetails } from "../../Redux/Actions";
+import { toggleSnackbar, getUserDetails, getTransactionHistoryByUser } from "../../Redux/Actions";
 import "./Vehicle.css";
 import VehicleNavbar from "./VehicleNavbar";
 import * as utils from '../../utils/utils';
@@ -11,13 +11,16 @@ import vehiclesData from '../../MOCK_DATA.json';
 
 const Vehicle = (props) => {
   const [date,setDate] = useState();
-  const { userDetails, vehicleSelected } = props;
+  const { userDetails, vehicleSelected, userTransactionHistory } = props;
   const [userVehicles, setUserVehicles] = useState({});
+  const [transactions,setTransactions] = useState([]);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
         if(Object.keys(vehicleSelected).length===0){
             props.getUserDetails({params:{userId:localStorage.getItem("userId")}})
         }
+        props.getTransactionHistoryByUser({params:{userId:localStorage.getItem("userId")}})
     },[])
     useEffect(() => { 
         const user = userDetails?.user?.vehicles? userDetails?.user?.vehicles:[];
@@ -29,6 +32,17 @@ const Vehicle = (props) => {
     useEffect(() => {
         setUserVehicles(vehicleSelected);
     },[vehicleSelected])
+
+    useEffect(() => {
+        console.log(vehicleSelected,"ecwcecew",userTransactionHistory)
+        if(userVehicles?._id===undefined || !utils.arrayChecker(userTransactionHistory))return;
+        console.log(vehicleSelected?._id,"ecwcecew")
+        let transactions = JSON.parse(JSON.stringify(userTransactionHistory));
+        transactions = transactions.filter((item)=>(item?.senderVehicle?._id===userVehicles?._id || item?.receiverVehicle?._id===userVehicles?._id));
+        transactions.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        transactions=transactions.slice(0,7)
+        setTransactions(transactions);
+    },[userVehicles,userTransactionHistory])
 
     // const vehicle = props.location.state?.vehicle;
 
@@ -45,7 +59,6 @@ const Vehicle = (props) => {
   const [matchedVehicle, setMatchedVehicle] = useState(null);
 
   useEffect(() => {
-    console.log(userVehicles);
     const match = vehiclesData.find(
         (data) =>
           data.car === userVehicles?.vehicleDomain &&
@@ -100,42 +113,30 @@ const Vehicle = (props) => {
                 </div>
             </div>
             <div class="box2">
-                <div><h5>Transactions</h5></div>
+                <div><h5>Recent Car Transactions</h5></div>
                 <div>
                     <table class="scrolldown">
                         <thead>
                             <tr class="trbody">
                                 <th class="thtd">Energy Transfered (Wh)</th>
-                                <th class="thtd">Price/kwh (Rupees)</th>
+                                <th class="thtd">Price/kwh (Coins)</th>
                                 <th class="thtd">Type</th>
                             </tr>
                         </thead>
                         <tbody class="tbody">
-                            <tr class="trbody">
-                                <td class="thtd">Buy</td>
-                                <td class="thtd">45</td>
-                                <td class="thtd">0.5</td>
-                            </tr>
-                            <tr class="trbody">
-                                <td class="thtd">Sell</td>
-                                <td class="thtd">63</td>
-                                <td class="thtd">0.5</td>
-                            </tr>
-                            <tr class="trbody">
-                                <td class="thtd">Sell</td>
-                                <td class="thtd">63</td>
-                                <td class="thtd">0.5</td>
-                            </tr>
-                            <tr class="trbody">
-                                <td class="thtd">Sell</td>
-                                <td class="thtd">63</td>
-                                <td class="thtd">0.5</td>
-                            </tr>
-                            <tr class="trbody">
-                                <td class="thtd">Sell</td>
-                                <td class="thtd">63</td>
-                                <td class="thtd">0.5</td>
-                            </tr>
+                            {
+                                utils.arrayLengthChecker(transactions) ? transactions?.map((txn)=>(
+                                    <tr class="trbody">
+                                        <td class="thtd">{txn.committedEnergy}</td>
+                                        <td class="thtd">{txn.chargePerUnit}</td>
+                                        <td class="thtd">{txn.senderId?._id===userId?"Sell":"Buy"}</td>
+                                    </tr>
+                                ))
+                                :
+                                    <tr> 
+                                        <td colSpan="3" align="center" class="thtd">No Transactions Found</td>
+                                    </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -166,11 +167,13 @@ const Vehicle = (props) => {
 const mapStateToProps = (state) => ({
   userDetails: state.userDetails,
   vehicleSelected: state.vehicleSelected,
+  userTransactionHistory: state.userTransactionHistory,
 });
 
 const mapDispatchToProps = {
   toggleSnackbar,
   getUserDetails,
+  getTransactionHistoryByUser
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Vehicle);
