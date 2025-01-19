@@ -14,8 +14,8 @@ api.interceptors.request.use(
         if(isRunningLocally()){
             config.headers['x-bypass-middleware']=true;
         }
-        if(getCookie('token')!==""){
-            config.headers['Authorization']=`Bearer ${getCookie('token')}`;
+        if(getCookie('auth_token')!==""){
+            config.headers['Authorization']=`Bearer ${getCookie('auth_tokeb')}`;
         }
         return config
     },(error)=>{
