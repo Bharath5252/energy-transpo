@@ -50,6 +50,7 @@ const CurrentTransactions = (props) => {
     }
     if(row.state==="inProgress"){
       setTrade(row);
+      localStorage.setItem("tradeId",row._id);
       history("/charging");
       // props.checkTrnStatus({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
       //   if(response.payload.status===200){
