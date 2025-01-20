@@ -40,7 +40,7 @@ const VehicleToHomeCharging = (props) => {
 
       client.on('connect', () => {
         console.log('Connected to MQTT broker');
-        client.subscribe(`telemetry/${tradeId}/`, (err) => {
+        client.subscribe(`telemetry/${localStorage.getItem("tradeId")}/`, (err) => {
           if (!err) {
             console.log(`Subscribed to telemetry/${tradeId}/`);
           } else {
