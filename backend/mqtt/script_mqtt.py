@@ -38,7 +38,7 @@ password = "admin"
 
 # Create an MQTT client instance
 # client = mqtt.Client()
-client = mqtt.Client(protocol=mqtt.MQTTv5)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 # Set username and password
 client.username_pw_set(username, password)
@@ -47,7 +47,7 @@ client.username_pw_set(username, password)
 mqtt_connected = False
 
 # Callback function for connection success
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, rc, properties=None):
     global mqtt_connected
     if rc == 0:
         mqtt_connected = True
