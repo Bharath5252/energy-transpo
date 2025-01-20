@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getUserDetails, setTrade } from "../../Redux/Actions";
 import { Typography, Grid, Box, LinearProgress } from "@mui/material";
 import BoltIcon from "@mui/icons-material/Bolt";
@@ -15,6 +16,7 @@ const VehicleToHomeCharging = (props) => {
   const [message, setMessage] = useState("");
   // const [typeCharging, setTypeCharging] = useState(0);
   // const [messages, setMessages] = useState([]);
+  const history = useNavigate();
   const url = "ws://localhost:8084/mqtt";
   const [tradeId, setTradeId] = useState();
 
@@ -51,6 +53,10 @@ const VehicleToHomeCharging = (props) => {
 
       client.on('message', (topic, message) => {
         setMessage(JSON.parse(message.toString()));
+        if(message.status==="completed"){
+          triggerUpdateTransaction();
+          history("/transactions/pending");
+        }
         // Update messages in state
       //   setMessages((prevMessages) => [
       //     ...prevMessages,
