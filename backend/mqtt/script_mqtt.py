@@ -123,7 +123,6 @@ def publish_telemetry_data(
                     "power": power,
                     "battery_temp": sender_battery_temp,
                     "charge_percentage": sender_charge_percentage,
-                    "progress_percent": progress_percent,
                     "status": "sending"
                 },
                 "receiver": {
@@ -134,9 +133,9 @@ def publish_telemetry_data(
                     "power": power,
                     "battery_temp": receiver_battery_temp,
                     "charge_percentage": receiver_charge_percentage,
-                    "progress_percent": progress_percent,
                     "status": "receiving"
                 },
+                "progress_percent": progress_percent,
                 "status": "inProgress",
                 "timestamp": time.time()
             })
