@@ -21,7 +21,7 @@ const triggerScheduledJobs = async() => {
         try {
             console.log(`Processing vehicle-grid transfer for trade ID: ${trade._id}`);
 
-            const vehicle = await Vehicle.findById(trade.vehicleId);
+            const vehicle = await Vehicle.findById(trade.vehicleId._id);
             const user = await User.findById(trade.userId);
 
             if (!vehicle || !user) {
@@ -55,6 +55,7 @@ const triggerScheduledJobs = async() => {
                 committedEnergy: requiredEnergy,
                 chargePerUnit: trade.chargePerUnit,
                 credits: totalCost,
+                tradeId: trade._id
             });
 
             trade.state = "inProgress";
