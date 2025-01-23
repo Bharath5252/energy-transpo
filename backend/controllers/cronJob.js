@@ -58,9 +58,11 @@ const triggerScheduledJobs = async() => {
                 tradeId: trade._id
             });
 
-            trade.state = "inProgress";
-            await trade.save();
             const savedTransaction = await transaction.save();
+
+            trade.state = "inProgress";
+            trade.transactionId = savedTransaction._id;
+            await trade.save();
 
             console.log(`Trade ${trade._id}: Transaction initiated.`);
 
