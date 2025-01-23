@@ -3,6 +3,7 @@
 # dependencies
 /backend/node_modules
 /frontend/node_modules
+/backend/mqtt/venv
 /.pnp
 .pnp.js
 
