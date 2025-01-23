@@ -49,32 +49,6 @@ exports.initiateTransaction = async (req, res) => {
         const receiverCurrentCapacity = receiverVehicleData.currentCapacity || 0;
         const totalCapacity = senderVehicleData.batteryCapacity || 120; // Default battery capacity
 
-        // Trigger Telemetry Data
-        const venvPythonPath = path.resolve(__dirname, '../mqtt/venv/bin/python3'); // Go up one level to `backend/` and into `mqtt/`
-        const scriptPath = path.resolve(__dirname, '../mqtt/script_mqtt.py'); // Adjust to point to `script_mqtt.py`
-
-        const rateOfTransfer = 0.01;
-
-        const command = `${venvPythonPath} ${scriptPath} true ${senderId} ${receiverId} ${senderCurrentCapacity} ${receiverCurrentCapacity} ${committedEnergy} ${rateOfTransfer} ${totalCapacity} ${tradeId}`;
-
-        console.log("Resolved Python Path:", venvPythonPath);
-        console.log("Resolved Script Path:", scriptPath);
-
-        console.log("Command to be executed:", command);
-
-
-        exec(command, (error, stdout, stderr) => {
-            console.log("Command executed.");
-            if (error) {
-                console.error(`Error running script: ${error.message}`);
-                return;
-            }
-            if (stderr) {
-                console.error(`Script stderr: ${stderr}`);
-                return;
-            }
-            console.log(`Script stdout: ${stdout}`);
-        });
 
         if (useBlockchainAPI) {
 
@@ -103,6 +77,32 @@ exports.initiateTransaction = async (req, res) => {
                 transaction: savedTransaction,
             });
         }
+
+        // Trigger Telemetry Data
+        const venvPythonPath = path.resolve(__dirname, '../mqtt/venv/bin/python3'); // Go up one level to `backend/` and into `mqtt/`
+        const scriptPath = path.resolve(__dirname, '../mqtt/script_mqtt.py'); // Adjust to point to `script_mqtt.py`
+
+        const rateOfTransfer = 0.01;
+
+        const command = `${venvPythonPath} ${scriptPath} true ${senderId} ${receiverId} ${senderCurrentCapacity} ${receiverCurrentCapacity} ${committedEnergy} ${rateOfTransfer} ${totalCapacity} ${tradeId} ${trade.transactionId} ${committedEnergy} ${chargePerUnit}`;
+
+        console.log("Resolved Python Path:", venvPythonPath);
+        console.log("Resolved Script Path:", scriptPath);
+
+        console.log("Command to be executed:", command);
+
+        exec(command, (error, stdout, stderr) => {
+            console.log("Command executed.");
+            if (error) {
+                console.error(`Error running script: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`Script stderr: ${stderr}`);
+                return;
+            }
+            console.log(`Script stdout: ${stdout}`);
+        });
 
     } catch (error) {
         res.status(500).json({ error: error.message });

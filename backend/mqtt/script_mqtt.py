@@ -2,6 +2,7 @@ import time
 import paho.mqtt.client as mqtt
 import json
 import random
+import requests
 import sys
 
 
@@ -10,12 +11,15 @@ if len(sys.argv) > 1:
     connected = sys.argv[1].lower() == 'true'
     sender_id = sys.argv[2]
     receiver_id = sys.argv[3]
-    sender_current_capacity = int(sys.argv[4])
-    receiver_current_capacity = int(sys.argv[5])
-    energy_amount = int(sys.argv[6])
+    sender_current_capacity = float(sys.argv[4])
+    receiver_current_capacity = float(sys.argv[5])
+    energy_amount = float(sys.argv[6])
     rate_of_transfer = float(sys.argv[7])
-    total_capacity = int(sys.argv[8])
+    total_capacity = float(sys.argv[8])
     trade_id = sys.argv[9]
+    transaction_id = sys.argv[10]
+    transferredEnergy = sys.argv[11]
+    chargePerUnit = sys.argv[12]
 else:
     # Fallback to default values if no arguments are passed
     connected = True
@@ -27,6 +31,9 @@ else:
     rate_of_transfer = 0.1
     total_capacity = 120
     trade_id = "trade_001"
+    transaction_id = "transaction_001"
+    transferredEnergy = 1
+    chargePerUnit = 10
 
 
 # MQTT broker details
@@ -75,11 +82,15 @@ def publish_telemetry_data(
         energy_amount,
         rate_of_transfer,
         total_capacity,
-        trade_id
+        trade_id,
+        transaction_id,
+        transferredEnergy,
+        chargePerUnit
 ):
     print("Energy transfer started")
     sender_current_capacity = int(sender_current_capacity)  # Ensure sender_cur_capacity is an integer
     receiver_current_capacity = int(receiver_current_capacity)  # Ensure receiver_current_capacity is an integer
+    tot_commited_energy = int(energy_amount)  # Ensure tot_commited_energy is an integer
     energy_amount = int(energy_amount)  # Ensure energy_amount is an integer
     dynamic_topic = f"telemetry/{trade_id}/"  # Dynamic topic with trade ID
 
@@ -93,12 +104,14 @@ def publish_telemetry_data(
             voltage = 230  # Fixed voltage in volts
             current = rate_of_transfer / voltage  # Calculate current in amps
             power = rate_of_transfer  # Calculate power in watts
-            sender_battery_temp = 30 + (5 * (rate_of_transfer / 100))  # Simulated sender battery temp
-            receiver_battery_temp = 30 + (5 * (rate_of_transfer / 120))  # Simulated receiver battery temp
+            sender_battery_temp = 30 + (energy_amount / 100)  # Simulated sender battery temp
+            receiver_battery_temp = 30 + (energy_amount / 120) # Simulated receiver battery temp
 
             # Calculate charge percentages based on total capacity (fixed at 120)
             sender_charge_percentage = max(0, (sender_energy / total_capacity) * 100)
             receiver_charge_percentage = min(100, (receiver_energy / total_capacity) * 100)
+
+            progress_percent = 100 - round((energy_amount / tot_commited_energy) * 100, 2)
 
             # Prepare combined telemetry message
             telemetry_message = json.dumps({
@@ -110,6 +123,7 @@ def publish_telemetry_data(
                     "power": power,
                     "battery_temp": sender_battery_temp,
                     "charge_percentage": sender_charge_percentage,
+                    "progress_percent": progress_percent,
                     "status": "sending"
                 },
                 "receiver": {
@@ -120,6 +134,7 @@ def publish_telemetry_data(
                     "power": power,
                     "battery_temp": receiver_battery_temp,
                     "charge_percentage": receiver_charge_percentage,
+                    "progress_percent": progress_percent,
                     "status": "receiving"
                 },
                 "status": "inProgress",
@@ -141,11 +156,39 @@ def publish_telemetry_data(
             time.sleep(1)
 
         print("Energy transfer completed.")
-        trigger_transaction_completion(sender_id, receiver_id, dynamic_topic)
+        trigger_transaction_completion(sender_id, receiver_id, dynamic_topic, trade_id, transaction_id, tot_commited_energy, chargePerUnit)
     else:
         print(f"Cannot publish message: Not connected to MQTT broker.")
 
-def trigger_transaction_completion(sender_id, receiver_id, topic):
+def trigger_transaction_completion(sender_id, receiver_id, topic, trade_id, transaction_id, transferredEnergy, chargePerUnit):
+    print("Triggering transaction completion..., sender_id:", sender_id, "receiver_id:", receiver_id, "topic:", topic, "transaction_id:", transaction_id, "trade_id:", trade_id, "transferredEnergy:", transferredEnergy, "chargePerUnit:", chargePerUnit)
+
+    api_url = "http://localhost:8000/api/transactions/update"
+
+    # Query parameters
+    query_params = {
+        "transactionId": transaction_id,
+        "tradeId": trade_id
+    }
+
+    # Body payload
+    payload = {
+        "transferredEnergy": transferredEnergy,
+        "transactionStatus": "Completed",
+        "chargePerUnit": chargePerUnit 
+    }
+
+    try:
+        response = requests.put(api_url, params=query_params, json=payload)
+        if response.status_code == 200:
+            print("API call successful. Response:")
+            print(response.json())
+        else:
+            print(f"API call failed with status code: {response.status_code}")
+            print(response.text)
+    except Exception as e:
+        print(f"Error occurred while making API call: {str(e)}")
+
     print(f"Transaction complete between sender: {sender_id} and receiver: {receiver_id}")
     completion_message = json.dumps({
         "status": "completed",
@@ -166,7 +209,10 @@ publish_telemetry_data(
     energy_amount,
     rate_of_transfer,
     total_capacity,
-    trade_id
+    trade_id,
+    transaction_id,
+    transferredEnergy,
+    chargePerUnit
 )
 
 # Disconnect from the broker if connected

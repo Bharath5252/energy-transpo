@@ -35,9 +35,17 @@ const getTicketById = async (req, res) => {
 
 const getAllTickets = async (req, res) => {
     try {
-        const tickets = await Ticket.find().populate("userId");
+        const tickets= await Ticket.find();
 
-        res.status(200).json({ tickets });
+        ticketsWithUserNames = await Promise.all(tickets.map(async (ticket) => {
+            const user = await User.findById(ticket.userId);
+            return {
+                ...ticket.toObject(),
+                username: user ? user.username : null,
+            };
+        }));
+
+        res.status(200).json({ ticketsWithUserNames });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error fetching tickets", error: error.message });
