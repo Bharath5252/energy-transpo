@@ -46,7 +46,7 @@ const Wallet = (props) => {
               <h1 className="wallet-title">Your Wallet</h1>
               <div className="wallet-balance">
                 <div className="wallet-amount">
-                  <span>Coins:</span> <strong>{userDetails?.user?.balance?userDetails?.user?.balance:"____"} 💰</strong>
+                  <span>Coins:</span> <strong>{userDetails?.user?.balance?userDetails?.user?.balance?.toFixed(2):"____"} 💰</strong>
                 </div>
                 <div className="wallet-amount">
                   <span>Energy:</span> <strong>10 kWh ⚡</strong>

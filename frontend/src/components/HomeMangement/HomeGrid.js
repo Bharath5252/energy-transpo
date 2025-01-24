@@ -242,12 +242,12 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
       payload.chargePerUnit=utils.calculateTariff(new Date(time)).toFixed(0);
     }
     if(payload.selectedContract==="Automatic" && transactionType==="Buy"){
-      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low", dateRange)
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "low", 2)
       payload.executionTime= dateTime;
       payload.chargePerUnit= tariff
     }
     if(payload.selectedContract==="Automatic" && transactionType==="Sell"){
-      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "high", dateRange)
+      const {tariff, dateTime} = findExtremeTariffDateTime(start, end, "high", 2)
       payload.executionTime= dateTime;
       payload.chargePerUnit= tariff
     }
@@ -366,7 +366,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                 />
               </div>
               }
-              { transactionType!=='' && transactionStatus && (sellContract==='Automatic' || buyContract==='Automatic') &&
+              {/* { transactionType!=='' && transactionStatus && (sellContract==='Automatic' || buyContract==='Automatic') &&
               <>
                 <label htmlFor="rE" style={{fontWeight:'600', marginTop:'1em', width:'100%'}}>Date Range:</label>
                 <input
@@ -382,7 +382,7 @@ const end = new Date(start.getTime() + 2 * 24 * 60 * 60 * 1000);
                     }}
                 />
               </>
-              }
+              } */}
               {transactionType!=='' && transactionStatus && <button style={{marginTop:'1rem', width:'100%', background:'teal'}} className="btn btn-primary" onClick={()=>handleSubmit()}>Submit</button>}
             </div>
         </div>

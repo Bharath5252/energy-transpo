@@ -35,7 +35,7 @@ const CurrentTransactions = (props) => {
       let trades = JSON.parse(JSON.stringify(acceptTrades));
       trades = trades.filter((item)=>item?.typeOfPost===1);
       trades.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setAcceptedTrades(trades.filter((item)=>item?.typeOfPost===1));
+      setAcceptedTrades(trades);
     }
   },[acceptTrades])
 
