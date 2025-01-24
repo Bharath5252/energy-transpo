@@ -1,7 +1,7 @@
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import {connect} from 'react-redux';
 import {Link,} from 'react-router-dom';
-import {Tooltip} from '@mui/material';
+import {Box, Grid, LinearProgress, Tooltip, Typography} from '@mui/material';
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, initiateTransaction, updateTransactionStats, editTrade} from '../../Redux/Actions/index'
 import "../Transactions/PastTransactions.css";
 import car from "../Transactions/charging.jpeg";
@@ -9,6 +9,8 @@ import * as utils from '../../utils/utils';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import HomeManagementNavbar from "./HomeManagementNavbar";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import HomeGridImage from "../Charging/HomeIcon.png";
+import CarIllustration from "../Charging/CarIllu.png";
 
 const HomePendingRequest = (props) => {
   const [transactionFilter, setTransactionFilter] = useState("All");
@@ -16,12 +18,15 @@ const HomePendingRequest = (props) => {
   const [dateFilter, setDateFilter] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [animate, setAnimate] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(0);
   const userId = localStorage.getItem("userId");
   const [acceptedTrades, setAcceptedTrades] = useState([]);
   const [editTradeId, setEditTradeId] = useState("");
   const [time, setTime] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [buffer, setBuffer] = useState(10);
+  const progressRef = useRef(() => {});
+  const [isLoading, setIsLoading] = useState(false);
 
   const {userDetails, acceptTrades} = props
 
@@ -32,13 +37,49 @@ const HomePendingRequest = (props) => {
 
   useEffect(()=>{
     if(utils.arrayLengthChecker(acceptTrades)){
-        setAcceptedTrades(acceptTrades.filter((item)=>item?.typeOfPost===2));
+      let trades = JSON.parse(JSON.stringify(acceptTrades));
+      trades = trades.filter((item)=>item?.typeOfPost===2);
+      trades.sort((a, b) => new Date(b.executionTime) - new Date(a.executionTime));
+      setAcceptedTrades(acceptTrades);
     }
   },[acceptTrades])
 
+  useEffect(() => {
+    if (!isLoading) return;
+
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 100);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isLoading]);
+
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress === 100) {
+        setProgress(0);
+        setBuffer(10);
+        setIsLoading(false);
+        wiindow.location.reload();
+      } else {
+        setProgress((prevProgress) => prevProgress + 1);
+        if (buffer < 100 && progress % 5 === 0) {
+          setBuffer((prevBuffer) => {
+            const newBuffer = prevBuffer + 1 + Math.random() * 10;
+            return newBuffer > 100 ? 100 : newBuffer;
+          });
+        }
+      }
+    };
+  }, [progress, buffer]);
+
   const handleButtonClick = (row) => {
     if(row.state==="inProgress"){
-      props.toggleSnackbar({open:'true',message:'Trade is in progress',status:false});
+      setSelectedRow(row);
+      setProgress(0);
+      setBuffer(10);
+      setIsLoading(true);
       return;
     }
     if(editTradeId!==row._id){
@@ -128,13 +169,46 @@ const HomePendingRequest = (props) => {
 
   return (
     <div>
-      <HomeManagementNavbar />
-      {loading && (
-        <div className="loading-screen">
-          <img style={{width:'300px'}} src={car} alt="Loading..." />
-          <div className="loading-bar-container">
-            <div className="loading-bar"></div>
-          </div>
+      {!isLoading && <HomeManagementNavbar />}
+      {isLoading && (
+        <div style={{display:'flex',alignItems:'center', justifyContent:'space-around', height:'100vh'}}>
+          <Box
+            sx={{
+              p: 2,
+              border: '1px solid #e0e0e0',
+              padding: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center'
+            }}
+          >
+            {selectedRow.typeOfOrder === "Sell" ? <img src={CarIllustration} alt="Electric Vehicle" style={{ height: "200px", marginBottom: '1rem' }} /> : <img src={HomeGridImage} alt="Home Grid" style={{ height: "200px", marginBottom: '1rem' }} />}
+            <Typography variant="subtitle1">Sender ({selectedRow.typeOfOrder === "Sell"?"Vehicle":"Home Grid"})</Typography>
+          </Box>
+          <Box sx={{ width: '40%', marginTop: 2 }}>
+            <Typography width='100%' color="success" sx={{textAlign:'center',fontWeight:'bold'}}>INPROGRESS</Typography>
+            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} color="success" width='100%'/>
+            <Typography width='100%' color="success" sx={{textAlign:'center'}}>{progress}%</Typography>
+          </Box>
+          <Box
+            sx={{
+              p: 2,
+              border: '1px solid #e0e0e0',
+              padding: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center'
+            }}
+          >
+            {selectedRow.typeOfOrder === "Buy" ? <img src={CarIllustration} alt="Electric Vehicle" style={{ height: "200px", marginBottom: '1rem' }} /> : <img src={HomeGridImage} alt="Home Grid" style={{ height: "200px", marginBottom: '1rem' }} />}
+            <Typography variant="subtitle1">Receiver ({selectedRow.typeOfOrder === "Buy"?"Vehicle":"Home Grid"})</Typography>
+          </Box>
         </div>
       )}
 
@@ -151,7 +225,7 @@ const HomePendingRequest = (props) => {
       }
       
 
-      <div className={animate ? 'fade-out' : ''} style={{ margin: "4rem 2rem 4rem 4rem" }}>
+      {!isLoading &&<div className={animate ? 'fade-out' : ''} style={{ margin: "4rem 2rem 4rem 4rem" }}>
         <h2>Pending Transactions</h2>
         <div className="table-container">
           <table className="past-transactions-table">
@@ -213,7 +287,7 @@ const HomePendingRequest = (props) => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };
