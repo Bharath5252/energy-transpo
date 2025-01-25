@@ -77,7 +77,7 @@ const Wallet = (props) => {
                       <td
                         style={{color:txn.senderId?._id===userId?"green":"red", fontWeight:"bold"}}
                       >
-                        {`${txn.senderId?._id===userId?'+':'-'}${txn.credits} Coins`}
+                        {`${txn.senderId?._id===userId?'+':'-'}${txn.credits?.toFixed(2)} Coins`}
                       </td>
                       <td>{txn.committedEnergy} kWh</td>
                     </tr>

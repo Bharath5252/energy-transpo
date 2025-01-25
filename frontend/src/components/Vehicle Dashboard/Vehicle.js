@@ -34,9 +34,7 @@ const Vehicle = (props) => {
     },[vehicleSelected])
 
     useEffect(() => {
-        console.log(vehicleSelected,"ecwcecew",userTransactionHistory)
         if(userVehicles?._id===undefined || !utils.arrayChecker(userTransactionHistory))return;
-        console.log(vehicleSelected?._id,"ecwcecew")
         let transactions = JSON.parse(JSON.stringify(userTransactionHistory));
         transactions = transactions.filter((item)=>(item?.senderVehicle?._id===userVehicles?._id || item?.receiverVehicle?._id===userVehicles?._id));
         transactions.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
@@ -128,7 +126,7 @@ const Vehicle = (props) => {
                                 utils.arrayLengthChecker(transactions) ? transactions?.map((txn)=>(
                                     <tr class="trbody">
                                         <td class="thtd">{txn.committedEnergy}</td>
-                                        <td class="thtd">{txn.chargePerUnit}</td>
+                                        <td class="thtd">{txn.chargePerUnit?.toFixed(2)}</td>
                                         <td class="thtd">{txn.senderId?._id===userId?"Sell":"Buy"}</td>
                                     </tr>
                                 ))

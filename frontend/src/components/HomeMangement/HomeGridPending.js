@@ -40,7 +40,7 @@ const HomePendingRequest = (props) => {
       let trades = JSON.parse(JSON.stringify(acceptTrades));
       trades = trades.filter((item)=>item?.typeOfPost===2);
       trades.sort((a, b) => new Date(b.executionTime) - new Date(a.executionTime));
-      setAcceptedTrades(acceptTrades);
+      setAcceptedTrades(trades);
     }
   },[acceptTrades])
 
@@ -61,7 +61,7 @@ const HomePendingRequest = (props) => {
         setProgress(0);
         setBuffer(10);
         setIsLoading(false);
-        wiindow.location.reload();
+        window.location.reload();
       } else {
         setProgress((prevProgress) => prevProgress + 1);
         if (buffer < 100 && progress % 5 === 0) {
@@ -218,7 +218,7 @@ const HomePendingRequest = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction has been completed successfully.
         </p>
-      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit} coins/kWh.</p>
+      <p>{selectedRow.energy} kWh of energy transferred at {selectedRow.chargePerUnit?.toFixed(2)} coins/kWh.</p>
         <button><Link to="/transactions/past">Close</Link></button>
 
       </div>

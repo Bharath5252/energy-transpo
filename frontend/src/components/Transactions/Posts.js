@@ -90,7 +90,7 @@ const Posts = (props) => {
               <br/>
               Transaction Energy: {post?.energy}
               <br/>
-              Charge per Unit: {post?.chargePerUnit}
+              Charge per Unit: {post?.chargePerUnit?.toFixed(2)}
               <br/>
               Car Model: {`${post?.vehicleId?.vehicleDomain} ${post?.vehicleId?.vehicleName} ${post?.vehicleId?.vehicleModel} - ${post?.vehicleId?.nickName}`}
               <br/>
@@ -132,7 +132,7 @@ const Posts = (props) => {
               <br/>
               Transaction Energy: {request?.energy}
               <br/>
-              Charge per Unit: {request?.chargePerUnit}
+              Charge per Unit: {request?.chargePerUnit?.toFixed(2)}
               <br/>
               Car Model: {`${request?.vehicleId?.vehicleDomain} ${request?.vehicleId?.vehicleName} ${request?.vehicleId?.vehicleModel} - ${request?.vehicleId?.nickName}`}
               <br/>
