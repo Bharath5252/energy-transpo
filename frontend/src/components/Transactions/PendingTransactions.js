@@ -159,7 +159,7 @@ const CurrentTransactions = (props) => {
         <p>
             Your <span style={{color: "green"}}>{selectedRow.userId===userId?selectedRow.typeOfOrder:selectedRow.typeOfOrder==="Buy"?"Sell":"Buy"}</span> transaction is in progress.
         </p>
-        <p>Check {selectedRow.energy} kWh of energy transfer staus at {selectedRow.chargePerUnit} coins/kWh in the pending transactions.</p>
+        <p>Check {selectedRow.energy} kWh of energy transfer staus at {selectedRow.chargePerUnit?.toFixed(2)} coins/kWh in the pending transactions.</p>
         <button onClick={()=>{setAnimate(0); setSuccess(0); props.getAcceptedTrades({params:{userId:localStorage.getItem("userId")}})}}>Go to Pending Transactions</button>
       </div>
       }
@@ -188,7 +188,7 @@ const CurrentTransactions = (props) => {
                   <td>{row.userId===userId?row.typeOfOrder:row.typeOfOrder==="Buy"?"Sell":"Buy"}</td>
                   <td>{row.userId===userId?row.acceptedUsername:row.username}</td>
                   <td>{row.energy} kWh</td>
-                  <td>{row.chargePerUnit} coins/kWh</td>
+                  <td>{row.chargePerUnit?.toFixed(2)} coins/kWh</td>
                   <td>{utils.dateFormat(row.createdAt)}</td>
                   <td>{utils.timeFormat(row.createdAt)}</td>
                   <td style={{display:'flex'}}>
