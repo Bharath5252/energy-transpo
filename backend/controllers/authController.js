@@ -55,7 +55,7 @@ const signup = async (req, res) => {
                     httpOnly: false, // Ensures the cookie is only accessible by the server
                     secure: process.env.NODE_ENV === 'production', // Set secure cookies only in production (over HTTPS)
                     maxAge: 3600000, // Cookie expiration time in milliseconds (e.g., 1 hour)
-                    sameSite: 'Strict' // Helps protect against CSRF attacks
+                    sameSite: 'None' // Helps protect against CSRF attacks
                 });
 
                 // Send response with a success message
