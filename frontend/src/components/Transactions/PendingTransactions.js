@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import {connect} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import {Link} from 'react-router-dom';
-import {Tooltip} from '@mui/material';
+import {Tooltip, Typography} from '@mui/material';
 import TransactionNavbar from "./TransactionNavbar";
 import {getAcceptedTrades, getUserDetails, toggleSnackbar, cancelAcceptedTrade, preCheckTransaction, 
   initiateTransaction, updateTransactionStats, checkTrnStatus, setTrade} from '../../Redux/Actions/index'
@@ -150,6 +150,7 @@ const CurrentTransactions = (props) => {
           <div className="loading-bar-container">
             <div className="loading-bar"></div>
           </div>
+          <Typography style={{fontWeight:'bold', color:'green', marginTop:'1rem'}}>Pre-Checks are in progress...</Typography>
         </div>
       )}
 

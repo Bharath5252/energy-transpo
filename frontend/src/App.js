@@ -61,12 +61,13 @@ function App(props) {
   const [ticketDescription, setTicketDescription] = useState("");
   const [isConfirmingSubmit, setIsConfirmingSubmit] = useState(false); // Track if confirmation is needed
 
-  useEffect(()=>{
-    if(utils.getCookie('auth_token')===""){
-      navigate('/login',{replace:true});
-      localStorage.clear();
-    }
-  },[localStorage,utils.getCookie('auth_token')])
+  // Uncomment this if you want to redirect to login page if user is not logged in
+  // useEffect(()=>{
+  //   if(utils.getCookie('auth_token')===""){
+  //     navigate('/login',{replace:true});
+  //     localStorage.clear();
+  //   }
+  // },[localStorage,utils.getCookie('auth_token')])
 
   useEffect(() => {
     // Set initial chatbot response
