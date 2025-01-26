@@ -81,9 +81,10 @@ const VehicleToHomeCharging = (props) => {
         setMessage(msgObj);
         console.log(msgObj);
         if (msgObj.status === "completed") {
-          triggerUpdateTransaction();
+          // triggerUpdateTransaction();
           setShowPopup(true); // Show the popup
           setTimeout(() => {
+            setTrade({});
             setShowPopup(false); // Hide the popup after 2 seconds
             history("/transactions/past"); // Redirect to past transactions page
           }, 2000);
