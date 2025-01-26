@@ -34,7 +34,7 @@ const sampleMessage = {
     charge_percentage: 44.144705293075184,
     status: "receiving",
   },
-  progress_percent: 52.25,
+  progress_percent: 2.24,
   status: "inProgress",
   timestamp: 1737672814.249024,
 };
@@ -194,7 +194,7 @@ const VehicleToHomeCharging = (props) => {
                   Voltage: {message?.sender?.voltage || 'N/A'} V
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Current: {message?.sender?.current?.toFixed(6) || 'N/A'} A
+                  Current: {(message?.sender?.current*100000).toFixed(2) || 'N/A'} µA
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   Temperature: {message?.sender?.battery_temp?.toFixed(4) || 'N/A'} °C
@@ -367,7 +367,7 @@ const VehicleToHomeCharging = (props) => {
                   Voltage: {message?.receiver?.voltage || 'N/A'} V
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Current: {message?.receiver?.current.toFixed(6) || 'N/A'} A
+                  Current: {(message?.receiver?.current*100000).toFixed(2) || 'N/A'} µA
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   Temperature: {message?.receiver?.battery_temp.toFixed(4) || 'N/A'} °C
