@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./components/Login/Login";
 import UserTxn from "./components/userTxn/userTxn";
+import * as utils from './utils/utils';
 
 import PendingTransactions from "./components/Transactions/PendingTransactions";
 import PastTransactions from "./components/Transactions/PastTransactions";
@@ -59,6 +60,13 @@ function App(props) {
   const [isRaisingTicket, setIsRaisingTicket] = useState(false);
   const [ticketDescription, setTicketDescription] = useState("");
   const [isConfirmingSubmit, setIsConfirmingSubmit] = useState(false); // Track if confirmation is needed
+
+  useEffect(()=>{
+    if(utils.getCookie('auth_token')===""){
+      navigate('/login',{replace:true});
+      localStorage.clear();
+    }
+  },[localStorage,utils.getCookie('auth_token')])
 
   useEffect(() => {
     // Set initial chatbot response
