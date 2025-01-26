@@ -70,16 +70,15 @@ const CurrentTransactions = (props) => {
       // })
       return;
     }
+    setSelectedRow(row);
+    setLoading(true);
+    setAnimate(true);
     props.preCheckTransaction({data:preCheckPayload}).then((response)=>{
       if(response.payload.status===200){
         preCheckPayload.typeOfTransaction = row.typeOfPost;
         preCheckPayload.credits = row.energy*row.chargePerUnit;
         props.initiateTransaction({data:preCheckPayload,params:{tradeId:row._id}}).then((response)=>{
           if(response.payload.status===200){
-            const trnsId = response.payload?.data?.transactionId
-            setSelectedRow(row);
-            setLoading(true);
-            setAnimate(true);
             // setTimeout(() => {
             //   props.updateTransactionStats({ params: { transactionId: trnsId, tradeId: row._id }, data: { transactionId: trnsId, transactionStatus: "Completed", transferredEnergy: row.energy, chargePerUnit: row.chargePerUnit, senderId: preCheckPayload.senderId, receiverId: preCheckPayload.receiverId } })
             // }, 9000);
