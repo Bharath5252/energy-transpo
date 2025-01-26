@@ -162,7 +162,7 @@ const AdminPage = (props) => {
               <tbody>
                 {utils.arrayLengthChecker(tickets) ? tickets?.map((ticket) => (
                   <tr key={ticket._id}>
-                    <td>{ticket.userId || 'Sample User'}</td>
+                    <td>{ticket.username || 'Sample User'}</td>
                     <td>{ticket.query || 'Sample query text'}</td>
                     <td>{ticket.response || 'No response yet'}</td>
                     <td className="ticket-action-cell">

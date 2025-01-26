@@ -413,7 +413,7 @@ export const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                allTickets: action.payload?.data?.tickets,
+                allTickets: action.payload?.data?.ticketsWithUserNames,
             }
         case `${types.GET_HELP}/rejected`:
             return {
