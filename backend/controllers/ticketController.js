@@ -1,4 +1,6 @@
 const Ticket = require("../models/ticket");
+const User = require("../models/user");
+
 
 const createTicket = async (req, res) => {
     try {
