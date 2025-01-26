@@ -137,7 +137,7 @@ exports.preCheckTransaction = async (req, res) => {
 
         const requiredEnergy = parseFloat(committedEnergy);
         const requiredMoney = requiredEnergy * chargePerUnit;
-        console.log("senderVehicleData.energyAvailable:", senderVehicleData.energyAvailable);
+        console.log("senderVehicleData.energyAvailable:", senderVehicleData.currentCapacity);
         console.log("receiver.balance:", receiver.balance);
 
         if (useBlockchainAPI) {
@@ -146,7 +146,7 @@ exports.preCheckTransaction = async (req, res) => {
             if (senderVehicleData.energyAvailable < requiredEnergy) {
                 return res.status(400).json({
                     message: "Sender does not have enough energy available.",
-                    available_energy: senderVehicleData.energyAvailable,
+                    available_energy: senderVehicleData.currentCapacity,
                 });
             }
 
