@@ -168,7 +168,6 @@ app.post('/users/login', async function (req, res) {
     }
 
     var token = jwt.sign({
-        exp: Math.floor(Date.now() / 1000) + parseInt(constants.jwt_expiretime),
         username: username,
         orgName: orgName
     }, app.get('secret'));
